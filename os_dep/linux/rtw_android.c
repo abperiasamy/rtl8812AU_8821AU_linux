@@ -304,7 +304,7 @@ int rtw_android_set_block(struct net_device *net, char *command, int total_len)
 	return 0;
 }
 
-int get_int_from_command( char* pcmd )
+int get_int_from_command(char* pcmd )
 {
 	int i = 0;
 

@@ -316,6 +316,474 @@ static int	rtw_proc_cnt = 0;
 
 #define RTW_PROC_NAME DRV_NAME
 
+/*
+ * seq_file wrappers for procfile show routines, kernel >= 3.10
+ */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
+
+static int proc_get_drv_version_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_drv_version, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_drv_version_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_drv_version_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_write_reg_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_write_reg, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_write_reg_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_write_reg_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.write = proc_set_write_reg,
+	.release = seq_release,
+};
+
+static int proc_get_read_reg_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_read_reg, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_read_reg_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_read_reg_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.write = proc_set_read_reg,
+	.release = seq_release,
+};
+
+static int proc_get_fwstate_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_fwstate, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_fwstate_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_fwstate_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_sec_info_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_sec_info, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_sec_info_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_sec_info_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_mlmext_state_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_mlmext_state, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_mlmext_state_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_mlmext_state_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_qos_option_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_qos_option, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_qos_option_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_qos_option_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_ht_option_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_ht_option, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_ht_option_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_ht_option_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_rf_info_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_rf_info, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_rf_info_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_rf_info_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_ap_info_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_ap_info, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_ap_info_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_ap_info_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_adapter_state_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_adapter_state, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_adapter_state_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_adapter_state_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_trx_info_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_trx_info, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_trx_info_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_trx_info_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_mac_reg_dump1_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_mac_reg_dump1, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_mac_reg_dump1_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_mac_reg_dump1_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_mac_reg_dump2_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_mac_reg_dump2, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_mac_reg_dump2_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_mac_reg_dump2_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_mac_reg_dump3_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_mac_reg_dump3, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_mac_reg_dump3_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_mac_reg_dump3_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_bb_reg_dump1_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_bb_reg_dump1, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_bb_reg_dump1_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_bb_reg_dump1_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_bb_reg_dump2_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_bb_reg_dump2, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_bb_reg_dump2_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_bb_reg_dump2_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_bb_reg_dump3_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_bb_reg_dump3, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_bb_reg_dump3_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_bb_reg_dump3_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_rf_reg_dump1_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_rf_reg_dump1, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_rf_reg_dump1_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_rf_reg_dump1_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_rf_reg_dump2_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_rf_reg_dump2, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_rf_reg_dump2_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_rf_reg_dump2_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_rf_reg_dump3_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_rf_reg_dump3, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_rf_reg_dump3_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_rf_reg_dump3_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_rf_reg_dump4_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_rf_reg_dump4, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_rf_reg_dump4_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_rf_reg_dump4_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+#endif /* for kernel ver > 3.10.x */
+
+#ifdef CONFIG_AP_MODE
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
+
+static int proc_get_all_sta_info_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_all_sta_info, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_all_sta_info_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_all_sta_info_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+#endif
+#endif
+
+#ifdef DBG_MEMORY_LEAK
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
+
+static int proc_get_malloc_cnt_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_malloc_cnt_info, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_malloc_cnt_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_malloc_cnt_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+#endif
+#endif
+
+#ifdef CONFIG_FIND_BEST_CHANNEL
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
+
+static int proc_get_best_channel_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_best_channel, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_best_channel_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_best_channel_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+#endif
+#endif
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
+static int proc_get_rx_signal_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_rx_signal, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_rx_signal_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_rx_signal_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.write = proc_set_rx_signal,
+	.release = seq_release,
+};
+#endif
+
+#ifdef CONFIG_80211N_HT
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
+
+static int proc_get_ht_enable_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_ht_enable, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_ht_enable_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_ht_enable_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.write = proc_set_ht_enable,
+	.release = seq_release,
+};
+
+static int proc_get_bw_mode_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_bw_mode, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_bw_mode_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_bw_mode_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.write = proc_set_bw_mode,
+	.release = seq_release,
+};
+
+static int proc_get_ampdu_enable_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_ampdu_enable, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_ampdu_enable_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_ampdu_enable_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.write = proc_set_ampdu_enable,
+	.release = seq_release,
+};
+
+static int proc_get_rx_stbc_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_rx_stbc, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_rx_stbc_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_rx_stbc_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.write = proc_set_rx_stbc,
+	.release = seq_release,
+};
+
+#endif
+#endif
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
+
+static int proc_get_two_path_rssi_open(struct inode *inode, struct file *file){
+	return single_open(file, proc_get_two_path_rssi, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_two_path_rssi_fops = {
+	.owner = THIS_MODULE,
+	.open = proc_get_two_path_rssi_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int proc_get_rssi_disp_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_rssi_disp, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_rssi_disp_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_rssi_disp_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.write = proc_set_rssi_disp,
+	.release = seq_release,
+};
+
+#endif
+
+#ifdef CONFIG_BT_COEXIST
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
+
+static int proc_get_btcoex_dbg_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_btcoex_dbg, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_btcoex_dbg_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_btcoex_dbg_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.write = proc_set_btcoex_dbg,
+	.release = seq_release,
+};
+
+#endif
+#endif //CONFIG_BT_COEXIST
+
+#if defined(DBG_CONFIG_ERROR_DETECT)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
+
+static int proc_get_sreset_open(struct inode *inode, struct file *file){
+        return single_open(file, proc_get_sreset, PDE_DATA(inode));
+}
+
+static const struct file_operations proc_get_sreset_fops = {
+        .owner = THIS_MODULE,
+	.open = proc_get_sreset_open,
+        .read = seq_read,
+        .llseek = seq_lseek,
+	.write = proc_set_sreset,
+	.release = seq_release,
+};
+
+#endif
+#endif /* DBG_CONFIG_ERROR_DETECT */
+
+#endif //CONFIG_PROC_DEBUG
+
 void rtw_proc_init_one(struct net_device *dev)
 {
 	struct proc_dir_entry *dir_dev = NULL;
@@ -348,15 +816,22 @@ void rtw_proc_init_one(struct net_device *dev)
 
 #if(LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24))
 		rtw_proc=create_proc_entry(rtw_proc_name, S_IFDIR, proc_net);
-#else
+#elif(LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0))
 		rtw_proc=create_proc_entry(rtw_proc_name, S_IFDIR, init_net.proc_net);
+#else
+		rtw_proc=proc_mkdir(rtw_proc_name, init_net.proc_net);
 #endif
 		if (rtw_proc == NULL) {
 			DBG_871X(KERN_ERR "Unable to create rtw_proc directory\n");
 			return;
 		}
 
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 		entry = create_proc_read_entry("ver_info", S_IFREG | S_IRUGO, rtw_proc, proc_get_drv_version, dev);
+#else
+		entry = proc_create_data("ver_info", S_IFREG | S_IRUGO, rtw_proc, &proc_get_drv_version_fops, dev);
+#endif
 		if (!entry) {
 			DBG_871X("Unable to create_proc_read_entry!\n");
 			return;
@@ -364,12 +839,15 @@ void rtw_proc_init_one(struct net_device *dev)
 	}
 
 
-
 	if(padapter->dir_dev == NULL)
 	{
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 		padapter->dir_dev = create_proc_entry(dev->name,
 					  S_IFDIR | S_IRUGO | S_IXUGO,
 					  rtw_proc);
+#else
+		padapter->dir_dev = proc_mkdir(dev->name,rtw_proc);
+#endif
 
 		dir_dev = padapter->dir_dev;
 
@@ -398,140 +876,252 @@ void rtw_proc_init_one(struct net_device *dev)
 
 	rtw_proc_cnt++;
 
-	entry = create_proc_read_entry("write_reg", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_write_reg, dev);
-	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
-		return;
-	}
-	entry->write_proc = proc_set_write_reg;
 
-	entry = create_proc_read_entry("read_reg", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_read_reg, dev);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+	entry = create_proc_read_entry("write_reg", S_IFREG | S_IRUGO,
+				       dir_dev, proc_get_write_reg, dev);
+#else
+	entry = proc_create_data("write_reg", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_write_reg_fops, dev);  
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
+
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+	entry->write_proc = proc_set_write_reg;
+	
+	entry = create_proc_read_entry("read_reg", S_IFREG | S_IRUGO,
+				       dir_dev, proc_get_read_reg, dev);
+#else
+	entry = proc_create_data("read_reg", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_read_reg_fops, dev);   
+#endif
+	if (!entry) {
+		DBG_871X("Unable to create_proc_read_entry!\n");
+		return;
+	}
+
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry->write_proc = proc_set_read_reg;
 
-
 	entry = create_proc_read_entry("fwstate", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_fwstate, dev);
+				       dir_dev, proc_get_fwstate, dev);
+#else
+	entry = proc_create_data("fwstate", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_fwstate_fops, dev);   
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("sec_info", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_sec_info, dev);
+				       dir_dev, proc_get_sec_info, dev);
+#else
+	entry = proc_create_data("sec_info", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_sec_info_fops, dev);   
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("mlmext_state", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_mlmext_state, dev);
+#else
+	entry = proc_create_data("mlmext_state", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_mlmext_state_fops, dev);   
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("qos_option", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_qos_option, dev);
+				       dir_dev, proc_get_qos_option, dev);
+#else
+	entry = proc_create_data("qos_option", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_qos_option_fops, dev);   
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
-	entry = create_proc_read_entry("ht_option", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_ht_option, dev);
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+        entry = create_proc_read_entry("ht_option", S_IFREG | S_IRUGO,
+				       dir_dev, proc_get_ht_option, dev);
+#else
+	entry = proc_create_data("ht_option", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_ht_option_fops, dev);   
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("rf_info", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_rf_info, dev);
+				       dir_dev, proc_get_rf_info, dev);
+#else
+	entry = proc_create_data("rf_info", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_rf_info_fops, dev);   
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("ap_info", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_ap_info, dev);
+				       dir_dev, proc_get_ap_info, dev);
+#else
+	entry = proc_create_data("ap_info", S_IFREG | S_IRUGO,
+				    dir_dev, &proc_get_ap_info_fops, dev);   
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("adapter_state", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_adapter_state, dev);
+				       dir_dev, proc_get_adapter_state, dev);
+#else
+	entry = proc_create_data("adapter_state", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_adapter_state_fops, dev);   
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("trx_info", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_trx_info, dev);
+				       dir_dev, proc_get_trx_info, dev);
+#else
+	entry = proc_create_data("trx_info", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_trx_info_fops, dev);   
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("mac_reg_dump1", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_mac_reg_dump1, dev);
+				       dir_dev, proc_get_mac_reg_dump1, dev);
+#else
+	entry = proc_create_data("mac_reg_dump1", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_mac_reg_dump1_fops, dev);
+#endif
+
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
-	entry = create_proc_read_entry("mac_reg_dump2", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_mac_reg_dump2, dev);
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+entry = create_proc_read_entry("mac_reg_dump2", S_IFREG | S_IRUGO,
+			       dir_dev, proc_get_mac_reg_dump2, dev);
+#else
+	entry = proc_create_data("mac_reg_dump2", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_mac_reg_dump2_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("mac_reg_dump3", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_mac_reg_dump3, dev);
+				       dir_dev, proc_get_mac_reg_dump3, dev);
+#else
+	entry = proc_create_data("mac_reg_dump3", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_mac_reg_dump3_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("bb_reg_dump1", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_bb_reg_dump1, dev);
+				       dir_dev, proc_get_bb_reg_dump1, dev);
+#else
+	entry = proc_create_data("bb_reg_dump1", S_IFREG | S_IRUGO,
+				       dir_dev, &proc_get_bb_reg_dump1_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("bb_reg_dump2", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_bb_reg_dump2, dev);
+				       dir_dev, proc_get_bb_reg_dump2, dev);
+#else
+	entry = proc_create_data("bb_reg_dump2", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_bb_reg_dump2_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("bb_reg_dump3", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_bb_reg_dump3, dev);
+				       dir_dev, proc_get_bb_reg_dump3, dev);
+#else
+	entry = proc_create_data("bb_reg_dump3", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_bb_reg_dump3_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("rf_reg_dump1", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_rf_reg_dump1, dev);
+				       dir_dev, proc_get_rf_reg_dump1, dev);
+#else
+	entry = proc_create_data("rf_reg_dump1", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_rf_reg_dump1_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("rf_reg_dump2", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_rf_reg_dump2, dev);
+				       dir_dev, proc_get_rf_reg_dump2, dev);
+#else
+	entry = proc_create_data("rf_reg_dump2", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_rf_reg_dump2_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
@@ -539,15 +1129,25 @@ void rtw_proc_init_one(struct net_device *dev)
 
 	rtw_hal_get_hwreg(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
 	if((RF_1T2R == rf_type) ||(RF_1T1R ==rf_type ))	{
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 		entry = create_proc_read_entry("rf_reg_dump3", S_IFREG | S_IRUGO,
-					   dir_dev, proc_get_rf_reg_dump3, dev);
+					       dir_dev, proc_get_rf_reg_dump3, dev);
+#else
+		entry = proc_create_data("rf_reg_dump3", S_IFREG | S_IRUGO,
+					 dir_dev, &proc_get_rf_reg_dump3_fops, dev);
+#endif
 		if (!entry) {
 			DBG_871X("Unable to create_proc_read_entry!\n");
 			return;
 		}
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 		entry = create_proc_read_entry("rf_reg_dump4", S_IFREG | S_IRUGO,
-					   dir_dev, proc_get_rf_reg_dump4, dev);
+					       dir_dev, proc_get_rf_reg_dump4, dev);
+#else
+		entry = proc_create_data("rf_reg_dump4", S_IFREG | S_IRUGO,
+					 dir_dev, &proc_get_rf_reg_dump4_fops, dev);
+#endif
 		if (!entry) {
 			DBG_871X("Unable to create_proc_read_entry!\n");
 			return;
@@ -555,9 +1155,13 @@ void rtw_proc_init_one(struct net_device *dev)
 	}
 
 #ifdef CONFIG_AP_MODE
-
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("all_sta_info", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_all_sta_info, dev);
+				       dir_dev, proc_get_all_sta_info, dev);
+#else
+	entry = proc_create_data("all_sta_info", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_all_sta_info_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
@@ -565,8 +1169,13 @@ void rtw_proc_init_one(struct net_device *dev)
 #endif
 
 #ifdef DBG_MEMORY_LEAK
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("_malloc_cnt", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_malloc_cnt, dev);
+				       dir_dev, proc_get_malloc_cnt, dev);
+#else
+	entry = proc_create_data("_malloc_cnt", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_malloc_cnt_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
@@ -574,85 +1183,140 @@ void rtw_proc_init_one(struct net_device *dev)
 #endif
 
 #ifdef CONFIG_FIND_BEST_CHANNEL
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("best_channel", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_best_channel, dev);
+				       dir_dev, proc_get_best_channel, dev);
+#else
+	entry = proc_create_data("best_channel", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_best_channel_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
 #endif
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("rx_signal", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_rx_signal, dev);
+				       dir_dev, proc_get_rx_signal, dev);
+#else
+	entry = proc_create_data("rx_signal", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_rx_signal_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
-	entry->write_proc = proc_set_rx_signal;
+
 #ifdef CONFIG_80211N_HT
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+	entry->write_proc = proc_set_rx_signal;
+
 	entry = create_proc_read_entry("ht_enable", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_ht_enable, dev);
+				       dir_dev, proc_get_ht_enable, dev);
+#else
+	entry = proc_create_data("ht_enable", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_ht_enable_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry->write_proc = proc_set_ht_enable;
 
 	entry = create_proc_read_entry("bw_mode", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_bw_mode, dev);
+				       dir_dev, proc_get_bw_mode, dev);
+#else
+	entry = proc_create_data("bw_mode", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_bw_mode_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
-	entry->write_proc = proc_set_bw_mode;
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry = create_proc_read_entry("ampdu_enable", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_ampdu_enable, dev);
+				       dir_dev, proc_get_ampdu_enable, dev);
+#else
+	entry = proc_create_data("ampdu_enable", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_ampdu_enable_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+	entry->write_proc = proc_set_bw_mode;
 	entry->write_proc = proc_set_ampdu_enable;
 
 	entry = create_proc_read_entry("rx_stbc", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_rx_stbc, dev);
+				       dir_dev, proc_get_rx_stbc, dev);
+#else
+	entry = proc_create_data("rx_stbc", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_rx_stbc_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
-	entry->write_proc = proc_set_rx_stbc;
 #endif //CONFIG_80211N_HT
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+	entry->write_proc = proc_set_rx_stbc;
+
 	entry = create_proc_read_entry("path_rssi", S_IFREG | S_IRUGO,
-					dir_dev, proc_get_two_path_rssi, dev);
+				       dir_dev, proc_get_two_path_rssi, dev);
 
 	entry = create_proc_read_entry("rssi_disp", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_rssi_disp, dev);
+				       dir_dev, proc_get_rssi_disp, dev);
+#else
+	entry = proc_create_data("path_rssi", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_two_path_rssi_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
-	entry->write_proc = proc_set_rssi_disp;
+
 #ifdef CONFIG_BT_COEXIST
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+	entry->write_proc = proc_set_rssi_disp;
+
 	entry = create_proc_read_entry("btcoex_dbg", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_btcoex_dbg, dev);
+				       dir_dev, proc_get_btcoex_dbg, dev);
+#else
+	entry = proc_create_data("btcoex_dbg", S_IFREG | S_IRUGO,
+				       dir_dev, &proc_get_btcoex_dbg_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
-	entry->write_proc = proc_set_btcoex_dbg;
 #endif /*CONFIG_BT_COEXIST*/
 
 #if defined(DBG_CONFIG_ERROR_DETECT)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+	entry->write_proc = proc_set_btcoex_dbg;
+
 	entry = create_proc_read_entry("sreset", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_sreset, dev);
+				       dir_dev, proc_get_sreset, dev);
+#else
+	entry = proc_create_data("sreset", S_IFREG | S_IRUGO,
+				 dir_dev, &proc_get_sreset_fops, dev);
+#endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
-	entry->write_proc = proc_set_sreset;
 #endif /* DBG_CONFIG_ERROR_DETECT */
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)	
+	entry->write_proc = proc_set_sreset;
+#endif
 }
 
 void rtw_proc_remove_one(struct net_device *dev)
@@ -749,7 +1413,6 @@ void rtw_proc_remove_one(struct net_device *dev)
 		}
 	}
 }
-#endif
 
 uint loadparam( _adapter *padapter,  _nic_hdl	pnetdev)
 {
