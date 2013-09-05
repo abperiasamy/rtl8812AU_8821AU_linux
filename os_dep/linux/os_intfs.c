@@ -782,8 +782,6 @@ static const struct file_operations proc_get_sreset_fops = {
 #endif
 #endif /* DBG_CONFIG_ERROR_DETECT */
 
-#endif //CONFIG_PROC_DEBUG
-
 void rtw_proc_init_one(struct net_device *dev)
 {
 	struct proc_dir_entry *dir_dev = NULL;
@@ -1413,6 +1411,9 @@ void rtw_proc_remove_one(struct net_device *dev)
 		}
 	}
 }
+
+#endif //CONFIG_PROC_DEBUG
+
 
 uint loadparam( _adapter *padapter,  _nic_hdl	pnetdev)
 {
