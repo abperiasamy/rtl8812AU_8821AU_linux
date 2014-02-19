@@ -461,7 +461,12 @@ static int rtw_cfg80211_inform_bss(_adapter *padapter, struct wlan_network *pnet
 	}
 */
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,9,0)
 	cfg80211_put_bss(bss);
+#else
+	//See 5b112d3d098c97b867cc580f590395cd1e72f18c
+	cfg80211_put_bss(wiphy, bss);
+#endif
 
 exit:	
 	return ret;
@@ -535,14 +540,14 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
 	else 
 	#endif
 	{
-		DBG_8192C("pwdev->sme_state(b)=%d\n", pwdev->sme_state);
+		//DBG_8192C("pwdev->sme_state(b)=%d\n", pwdev->sme_state);
 		cfg80211_connect_result(padapter->pnetdev, cur_network->network.MacAddress
 			, pmlmepriv->assoc_req+sizeof(struct rtw_ieee80211_hdr_3addr)+2
 			, pmlmepriv->assoc_req_len-sizeof(struct rtw_ieee80211_hdr_3addr)-2
 			, pmlmepriv->assoc_rsp+sizeof(struct rtw_ieee80211_hdr_3addr)+6
 			, pmlmepriv->assoc_rsp_len-sizeof(struct rtw_ieee80211_hdr_3addr)-6
 			, WLAN_STATUS_SUCCESS, GFP_ATOMIC);
-		DBG_8192C("pwdev->sme_state(a)=%d\n", pwdev->sme_state);
+		//DBG_8192C("pwdev->sme_state(a)=%d\n", pwdev->sme_state);
 	}
 }
 
@@ -585,17 +590,21 @@ void rtw_cfg80211_indicate_disconnect(_adapter *padapter)
 #endif //CONFIG_P2P
 
 	if (!padapter->mlmepriv.not_indic_disco) {
-		DBG_8192C("pwdev->sme_state(b)=%d\n", pwdev->sme_state);
+		// see ceca7b7121795ef81bd598a240d53a925662d0c1, which removed sme_state variable in 3.11
+		
+		//DBG_8192C("pwdev->sme_state(b)=%d\n", pwdev->sme_state);
 
-		if(pwdev->sme_state==CFG80211_SME_CONNECTING)
-			cfg80211_connect_result(padapter->pnetdev, NULL, NULL, 0, NULL, 0, 
-				WLAN_STATUS_UNSPECIFIED_FAILURE, GFP_ATOMIC/*GFP_KERNEL*/);
-		else if(pwdev->sme_state==CFG80211_SME_CONNECTED)
-			cfg80211_disconnected(padapter->pnetdev, 0, NULL, 0, GFP_ATOMIC);
-		//else
-			//DBG_8192C("pwdev->sme_state=%d\n", pwdev->sme_state);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,11,0)
+		if(pwdev->sme_state==CFG80211_SME_CONNECTING)^M
+			cfg80211_connect_result(padapter->pnetdev, NULL, NULL, 0, NULL, 0, ^M
+				WLAN_STATUS_UNSPECIFIED_FAILURE, GFP_ATOMIC/*GFP_KERNEL*/);^M
+		else if(pwdev->sme_state==CFG80211_SME_CONNECTED)^M
+			cfg80211_disconnected(padapter->pnetdev, 0, NULL, 0, GFP_ATOMIC);^M
+#else
+		cfg80211_disconnected(padapter->pnetdev, 0, NULL, 0, GFP_ATOMIC);
+#endif
 
-		DBG_8192C("pwdev->sme_state(a)=%d\n", pwdev->sme_state);
+		//DBG_8192C("pwdev->sme_state(a)=%d\n", pwdev->sme_state);
 	}
 }
  	
