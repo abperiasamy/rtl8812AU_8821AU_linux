@@ -880,7 +880,7 @@ void rtw_proc_init_one(struct net_device *dev)
 				       dir_dev, proc_get_write_reg, dev);
 #else
 	entry = proc_create_data("write_reg", S_IFREG | S_IRUGO,
-				 dir_dev, &proc_get_write_reg_fops, dev);  
+				 dir_dev, &proc_get_write_reg_fops, dev);
 #endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
@@ -890,12 +890,12 @@ void rtw_proc_init_one(struct net_device *dev)
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry->write_proc = proc_set_write_reg;
-	
+
 	entry = create_proc_read_entry("read_reg", S_IFREG | S_IRUGO,
 				       dir_dev, proc_get_read_reg, dev);
 #else
 	entry = proc_create_data("read_reg", S_IFREG | S_IRUGO,
-				 dir_dev, &proc_get_read_reg_fops, dev);   
+				 dir_dev, &proc_get_read_reg_fops, dev);
 #endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
@@ -910,7 +910,7 @@ void rtw_proc_init_one(struct net_device *dev)
 				       dir_dev, proc_get_fwstate, dev);
 #else
 	entry = proc_create_data("fwstate", S_IFREG | S_IRUGO,
-				 dir_dev, &proc_get_fwstate_fops, dev);   
+				 dir_dev, &proc_get_fwstate_fops, dev);
 #endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
@@ -923,7 +923,7 @@ void rtw_proc_init_one(struct net_device *dev)
 				       dir_dev, proc_get_sec_info, dev);
 #else
 	entry = proc_create_data("sec_info", S_IFREG | S_IRUGO,
-				 dir_dev, &proc_get_sec_info_fops, dev);   
+				 dir_dev, &proc_get_sec_info_fops, dev);
 #endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
@@ -936,7 +936,7 @@ void rtw_proc_init_one(struct net_device *dev)
 				   dir_dev, proc_get_mlmext_state, dev);
 #else
 	entry = proc_create_data("mlmext_state", S_IFREG | S_IRUGO,
-				 dir_dev, &proc_get_mlmext_state_fops, dev);   
+				 dir_dev, &proc_get_mlmext_state_fops, dev);
 #endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
@@ -949,7 +949,7 @@ void rtw_proc_init_one(struct net_device *dev)
 				       dir_dev, proc_get_qos_option, dev);
 #else
 	entry = proc_create_data("qos_option", S_IFREG | S_IRUGO,
-				 dir_dev, &proc_get_qos_option_fops, dev);   
+				 dir_dev, &proc_get_qos_option_fops, dev);
 #endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
@@ -962,7 +962,7 @@ void rtw_proc_init_one(struct net_device *dev)
 				       dir_dev, proc_get_ht_option, dev);
 #else
 	entry = proc_create_data("ht_option", S_IFREG | S_IRUGO,
-				 dir_dev, &proc_get_ht_option_fops, dev);   
+				 dir_dev, &proc_get_ht_option_fops, dev);
 #endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
@@ -974,7 +974,7 @@ void rtw_proc_init_one(struct net_device *dev)
 				       dir_dev, proc_get_rf_info, dev);
 #else
 	entry = proc_create_data("rf_info", S_IFREG | S_IRUGO,
-				 dir_dev, &proc_get_rf_info_fops, dev);   
+				 dir_dev, &proc_get_rf_info_fops, dev);
 #endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
@@ -987,7 +987,7 @@ void rtw_proc_init_one(struct net_device *dev)
 				       dir_dev, proc_get_ap_info, dev);
 #else
 	entry = proc_create_data("ap_info", S_IFREG | S_IRUGO,
-				    dir_dev, &proc_get_ap_info_fops, dev);   
+				    dir_dev, &proc_get_ap_info_fops, dev);
 #endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
@@ -1000,7 +1000,7 @@ void rtw_proc_init_one(struct net_device *dev)
 				       dir_dev, proc_get_adapter_state, dev);
 #else
 	entry = proc_create_data("adapter_state", S_IFREG | S_IRUGO,
-				 dir_dev, &proc_get_adapter_state_fops, dev);   
+				 dir_dev, &proc_get_adapter_state_fops, dev);
 #endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
@@ -1013,7 +1013,7 @@ void rtw_proc_init_one(struct net_device *dev)
 				       dir_dev, proc_get_trx_info, dev);
 #else
 	entry = proc_create_data("trx_info", S_IFREG | S_IRUGO,
-				 dir_dev, &proc_get_trx_info_fops, dev);   
+				 dir_dev, &proc_get_trx_info_fops, dev);
 #endif
 	if (!entry) {
 		DBG_871X("Unable to create_proc_read_entry!\n");
@@ -1294,7 +1294,6 @@ entry = create_proc_read_entry("mac_reg_dump2", S_IFREG | S_IRUGO,
 		DBG_871X("Unable to create_proc_read_entry!\n");
 		return;
 	}
-#endif /*CONFIG_BT_COEXIST*/
 
 #if defined(DBG_CONFIG_ERROR_DETECT)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
@@ -1311,8 +1310,9 @@ entry = create_proc_read_entry("mac_reg_dump2", S_IFREG | S_IRUGO,
 		return;
 	}
 #endif /* DBG_CONFIG_ERROR_DETECT */
+#endif /* CONFIG_BT_COEXIST */
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)	
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
 	entry->write_proc = proc_set_sreset;
 #endif
 }
@@ -1443,7 +1443,7 @@ _func_enter_;
 		&& (registry_par->channel <= 14)) {
 		registry_par->channel = 36;
 	}
-	
+
 	registry_par->vrtl_carrier_sense = (u8)rtw_vrtl_carrier_sense ;
 	registry_par->vcs_type = (u8)rtw_vcs_type;
 	registry_par->rts_thresh=(u16)rtw_rts_thresh;
@@ -2798,7 +2798,7 @@ static const struct net_device_ops rtw_netdev_if2_ops = {
 };
 #endif
 
-_adapter *rtw_drv_if2_init(_adapter *primary_padapter, 
+_adapter *rtw_drv_if2_init(_adapter *primary_padapter,
 	void (*set_intf_ops)(_adapter *primary_padapter,struct _io_ops *pops))
 {
 	int res = _FAIL;
@@ -3431,4 +3431,3 @@ void rtw_ndev_destructor(struct net_device *ndev)
 #endif
 	free_netdev(ndev);
 }
-
