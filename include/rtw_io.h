@@ -143,7 +143,7 @@ struct _io_ops
 		void (*_read_port_cancel)(struct intf_hdl *pintfhdl);
 		void (*_write_port_cancel)(struct intf_hdl *pintfhdl);
 		
-};
+} __no_const;
 
 struct io_req {	
 	_list	list;
