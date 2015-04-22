@@ -276,8 +276,8 @@ static struct usb_device_id rtw_usb_id_tbl[] ={
 	{USB_DEVICE(0x2001, 0x3316),.driver_info = RTL8812}, /* D-Link - Cameo */
 	{USB_DEVICE(0x20F4, 0x805B),.driver_info = RTL8812}, /* TRENDnet - Cameo */
 	{USB_DEVICE(0x13B1, 0x003F),.driver_info = RTL8812}, /* Linksys - SerComm */
-	{USB_DEVICE(0x2357, 0x0101),.driver_info = RTL8812}, /* TP-Link - T4U */        {USB_DEVICE(0x148F, 0x9097),.driver_info = RTL8812}, /* Amped Wireless ACA1 */
-        {USB_DEVICE(0x148F, 0x9097),.driver_info = RTL8812}, /* Amped Wireless ACA1 */
+	{USB_DEVICE(0x2357, 0x0101),.driver_info = RTL8812}, /* TP-Link - T4U */       
+	{USB_DEVICE(0x148F, 0x9097),.driver_info = RTL8812}, /* Amped Wireless ACA1 */
 #endif
 
 #ifdef CONFIG_RTL8821A
