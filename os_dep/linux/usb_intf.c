@@ -276,8 +276,9 @@ static struct usb_device_id rtw_usb_id_tbl[] ={
 	{USB_DEVICE(0x2001, 0x3316),.driver_info = RTL8812}, /* D-Link - Cameo */
 	{USB_DEVICE(0x20F4, 0x805B),.driver_info = RTL8812}, /* TRENDnet - Cameo */
 	{USB_DEVICE(0x13B1, 0x003F),.driver_info = RTL8812}, /* Linksys - SerComm */
-	{USB_DEVICE(0x2357, 0x0101),.driver_info = RTL8812}, /* TP-Link - T4U */       
+	{USB_DEVICE(0x2357, 0x0101),.driver_info = RTL8812}, /* TP-Link - T4U */
 	{USB_DEVICE(0x148F, 0x9097),.driver_info = RTL8812}, /* Amped Wireless ACA1 */
+        {USB_DEVICE(0x2357, 0x0103),.driver_info = RTL8812}, /* TP-Link - T4UH */
 #endif
 
 #ifdef CONFIG_RTL8821A
@@ -1218,7 +1219,7 @@ int rtw_resume_process(_adapter *padapter)
 		_exit_pwrlock(&pwrpriv->lock);
 		goto exit;
 	}
-	
+
 	netif_device_attach(pnetdev);
 	netif_carrier_on(pnetdev);
 
@@ -1470,7 +1471,7 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	padapter->iface_type = IFACE_PORT0;
 	#else
 	padapter->iface_type = IFACE_PORT1;
-	#endif	
+	#endif
 #endif
 
 	//step 1-1., decide the chip_type via driver_info
@@ -2049,4 +2050,3 @@ _adapter  *rtw_usb_get_sw_pointer(void)
 }
 EXPORT_SYMBOL(rtw_usb_get_sw_pointer);
 #endif	//CONFIG_INTEL_PROXIM
-
