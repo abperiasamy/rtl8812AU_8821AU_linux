@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2012 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -30,7 +30,7 @@ enum RTL871X_HCI_TYPE {
 
 enum _CHIP_TYPE {
 
-	NULL_CHIP_TYPE,	
+	NULL_CHIP_TYPE,
 	RTL8188C_8192C,
 	RTL8192D,
 	RTL8723A,
@@ -96,7 +96,7 @@ typedef enum _HW_VARIABLES{
 	HW_VAR_INITIAL_GAIN,
 	HW_VAR_TRIGGER_GPIO_0,
 	HW_VAR_BT_SET_COEXIST,
-	HW_VAR_BT_ISSUE_DELBA,	
+	HW_VAR_BT_ISSUE_DELBA,
 	HW_VAR_CURRENT_ANTENNA,
 	HW_VAR_ANTENNA_DIVERSITY_LINK,
 	HW_VAR_ANTENNA_DIVERSITY_SELECT,
@@ -116,7 +116,7 @@ typedef enum _HW_VARIABLES{
 	HW_VAR_NAV_UPPER,
 	HW_VAR_C2H_HANDLE,
 	HW_VAR_RPT_TIMER_SETTING,
-	HW_VAR_TX_RPT_MAX_MACID,	
+	HW_VAR_TX_RPT_MAX_MACID,
 	HW_VAR_H2C_MEDIA_STATUS_RPT,
 	HW_VAR_CHK_HI_QUEUE_EMPTY,
 	HW_VAR_DL_BCN_SEL,
@@ -148,11 +148,11 @@ typedef enum _HAL_DEF_VARIABLE{
 	HAL_DEF_TX_PAGE_BOUNDARY,
 	HAL_DEF_TX_PAGE_BOUNDARY_WOWLAN,
 	HAL_DEF_ANT_DETECT,//to do for 8723a
-	
+
 }HAL_DEF_VARIABLE;
 
 typedef enum _HAL_ODM_VARIABLE{
-	HAL_ODM_STA_INFO,	
+	HAL_ODM_STA_INFO,
 	HAL_ODM_P2P_STATE,
 	HAL_ODM_WIFI_DISPLAY_STATE,
 }HAL_ODM_VARIABLE;
@@ -216,7 +216,7 @@ struct hal_ops {
 	void	(*SetBeaconRelatedRegistersHandler)(_adapter *padapter);
 
 	void	(*Add_RateATid)(_adapter *padapter, u32 bitmap, u8* arg, u8 rssi_level);
-#ifdef CONFIG_CONCURRENT_MODE	
+#ifdef CONFIG_CONCURRENT_MODE
 	void	(*clone_haldata)(_adapter *dst_padapter, _adapter *src_padapter);
 #endif
 	void	(*run_thread)(_adapter *padapter);
@@ -249,10 +249,10 @@ struct hal_ops {
 	int 	(*Efuse_PgPacketWrite)(_adapter *padapter, u8 offset, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
 	u8	(*Efuse_WordEnableDataWrite)(_adapter *padapter, u16 efuse_addr, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
 	BOOLEAN	(*Efuse_PgPacketWrite_BT)(_adapter *padapter, u8 offset, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
-	
+
 #ifdef DBG_CONFIG_ERROR_DETECT
 	void (*sreset_init_value)(_adapter *padapter);
-	void (*sreset_reset_value)(_adapter *padapter);		
+	void (*sreset_reset_value)(_adapter *padapter);
 	void (*silentreset)(_adapter *padapter);
 	void (*sreset_xmit_status_check)(_adapter *padapter);
 	void (*sreset_linked_status_check) (_adapter *padapter);
@@ -271,7 +271,7 @@ struct hal_ops {
 	void (*hal_reset_security_engine)(_adapter * adapter);
 	s32 (*c2h_handler)(_adapter *padapter, struct c2h_evt_hdr *c2h_evt);
 	c2h_id_filter c2h_id_filter_ccx;
-} __no_const;
+};
 
 typedef	enum _RT_EEPROM_TYPE{
 	EEPROM_93C46,
@@ -320,7 +320,7 @@ typedef enum _HARDWARE_TYPE{
 	HARDWARE_TYPE_RTL8723BE,
 	HARDWARE_TYPE_RTL8723BU,
 	HARDWARE_TYPE_RTL8723BS,
-	
+
 	HARDWARE_TYPE_MAX,
 }HARDWARE_TYPE;
 
@@ -398,7 +398,7 @@ typedef enum _HARDWARE_TYPE{
 
 #define IS_HARDWARE_TYPE_8723B(_Adapter) \
 	(IS_HARDWARE_TYPE_8723BE(_Adapter) || IS_HARDWARE_TYPE_8723BU(_Adapter) ||IS_HARDWARE_TYPE_8723BS(_Adapter))
-	
+
 typedef struct eeprom_priv EEPROM_EFUSE_PRIV, *PEEPROM_EFUSE_PRIV;
 #define GET_EEPROM_EFUSE_PRIV(adapter) (&adapter->eeprompriv)
 #define is_boot_from_eeprom(adapter) (adapter->eeprompriv.EepromOrEfuse)
@@ -461,7 +461,7 @@ u8 rtw_hal_get_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, PVOID pVa
 
 void rtw_hal_set_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, PVOID pValue1,BOOLEAN bSet);
 void	rtw_hal_get_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, PVOID pValue1,BOOLEAN bSet);
-	
+
 void rtw_hal_enable_interrupt(_adapter *padapter);
 void rtw_hal_disable_interrupt(_adapter *padapter);
 
@@ -539,4 +539,3 @@ s32 rtw_hal_c2h_handler(_adapter *adapter, struct c2h_evt_hdr *c2h_evt);
 c2h_id_filter rtw_hal_c2h_id_filter_ccx(_adapter *adapter);
 
 #endif //__HAL_INTF_H__
-
