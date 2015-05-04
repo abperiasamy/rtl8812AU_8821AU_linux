@@ -271,7 +271,7 @@ struct hal_ops {
 	void (*hal_reset_security_engine)(_adapter * adapter);
 	s32 (*c2h_handler)(_adapter *padapter, struct c2h_evt_hdr *c2h_evt);
 	c2h_id_filter c2h_id_filter_ccx;
-};
+} __no_const;
 
 typedef	enum _RT_EEPROM_TYPE{
 	EEPROM_93C46,
