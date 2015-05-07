@@ -650,7 +650,7 @@ EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 SUBARCH := $(shell uname -m | sed -e s/i.86/i386/)
 ARCH ?= $(SUBARCH)
 CROSS_COMPILE ?=
-KVER  := $(shell uname -r)
+KVER  ?= $(shell uname -r)
 KSRC := /lib/modules/$(KVER)/build
 MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
 INSTALL_PREFIX :=
@@ -1072,4 +1072,16 @@ clean:
 	rm -fr *.mod.c *.mod *.o .*.cmd *.ko *~
 	rm -fr .tmp_versions
 endif
+
+check:
+	vagrant up || vagrant init ubuntu/vivid32; vagrant up # need gcc-4.9 to avoid error `cc1: error: -Werror=date-time: no option -Wdate-time` (trusty only has gcc-4.9-base which doesn't provide /usr/bin/gcc-4.9)
+	vagrant ssh -c 'if ! [ -e linux-headers-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb ] ; then wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.0.1-vivid/linux-headers-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb; fi'
+	vagrant ssh -c 'if ! [ -e linux-image-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb ] ; then wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.0.1-vivid/linux-image-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb; fi'
+	vagrant ssh -c 'if ! [ -e linux-headers-4.0.1-040001_4.0.1-040001.201504290935_all.deb ] ; then wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.0.1-vivid/linux-headers-4.0.1-040001_4.0.1-040001.201504290935_all.deb; fi'
+	vagrant ssh -c 'sudo dpkg -i linux-headers-4.0.1-040001_4.0.1-040001.201504290935_all.deb linux-headers-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb linux-image-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb'
+	vagrant ssh -c 'sudo apt-get update && sudo apt-get install --yes git make'
+	#vagrant ssh -c 'sudo apt-get upgrade --yes gcc'
+	vagrant ssh -c 'if ! [ -d rtl8812AU_8821AU_linux ] ; then git clone https://github.com/abperiasamy/rtl8812AU_8821AU_linux.git; fi'
+	vagrant ssh -c 'cd rtl8812AU_8821AU_linux; make KVER=4.0.1-040001-generic'
+	vagrant ssh -c 'cd rtl8812AU_8821AU_linux; sudo make install'
 
