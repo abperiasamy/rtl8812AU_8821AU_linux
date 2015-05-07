@@ -1432,7 +1432,7 @@ static int cfg80211_rtw_get_station(struct wiphy *wiphy,
 		sinfo->filled |= BIT(NL80211_STA_INFO_RX_PACKETS);
 		sinfo->rx_packets = sta_rx_data_pkts(psta);
 
-		sinfo->filled |= BIT(BL80211_STA_INFO_TX_PACKETS);
+		sinfo->filled |= BIT(NL80211_STA_INFO_TX_PACKETS);
 		sinfo->tx_packets = psta->sta_stats.tx_pkts;
 #else
                 sinfo->filled |= STATION_INFO_SIGNAL;
