@@ -1075,9 +1075,8 @@ endif
 
 check:
 	vagrant up || vagrant init ubuntu/vivid32; vagrant up # need gcc-4.9 to avoid error `cc1: error: -Werror=date-time: no option -Wdate-time` (trusty only has gcc-4.9-base which doesn't provide /usr/bin/gcc-4.9)
-	vagrant ssh -c 'if ! [ -e linux-headers-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb ] ; then wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.0.1-vivid/linux-headers-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb; fi'
-	vagrant ssh -c 'if ! [ -e linux-image-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb ] ; then wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.0.1-vivid/linux-image-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb; fi'
-	vagrant ssh -c 'if ! [ -e linux-headers-4.0.1-040001_4.0.1-040001.201504290935_all.deb ] ; then wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.0.1-vivid/linux-headers-4.0.1-040001_4.0.1-040001.201504290935_all.deb; fi'
+	TMP=$$(vagrant ssh-config | grep Port | cut -d ' ' -f 4);\
+	ssh -p $$TMP -i $(HOME)/.vagrant.d/insecure_private_key vagrant@localhost 'bash -s' < fetch.sh
 	vagrant ssh -c 'sudo dpkg -i linux-headers-4.0.1-040001_4.0.1-040001.201504290935_all.deb linux-headers-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb linux-image-4.0.1-040001-generic_4.0.1-040001.201504290935_i386.deb'
 	vagrant ssh -c 'sudo apt-get update && sudo apt-get install --yes git make'
 	#vagrant ssh -c 'sudo apt-get upgrade --yes gcc'
