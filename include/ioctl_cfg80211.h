@@ -105,11 +105,9 @@ bool rtw_cfg80211_pwr_mgmt(_adapter *adapter);
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,4,0))  && !defined(COMPAT_KERNEL_RELEASE)
   #define rtw_cfg80211_rx_mgmt(adapter, freq, sig_dbm, buf, len, gfp) cfg80211_rx_mgmt((adapter)->pnetdev, freq, buf, len, gfp)
-#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0))
+#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0)) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
   #define rtw_cfg80211_rx_mgmt(adapter, freq, sig_dbm, buf, len, gfp) cfg80211_rx_mgmt((adapter)->pnetdev, freq, sig_dbm, buf, len, gfp)
-#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,12,0))
-  #define rtw_cfg80211_rx_mgmt(adapter, freq, sig_dbm, buf, len, gfp) cfg80211_rx_mgmt((adapter)->rtw_wdev, freq, sig_dbm, buf, len, gfp)
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,12,0)) && (LINUX_VERSION_CODE < KERNEL_VERSION(3,19,0))
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,12,0)) && (LINUX_VERSION_CODE <= KERNEL_VERSION(3,17,0))
   #define rtw_cfg80211_rx_mgmt(adapter, freq, sig_dbm, buf, len, gfp) cfg80211_rx_mgmt((adapter)->rtw_wdev, freq, sig_dbm, buf, len, 0, gfp)
 #else
   #define rtw_cfg80211_rx_mgmt(adapter, freq, sig_dbm, buf, len, gfp) cfg80211_rx_mgmt((adapter)->rtw_wdev, freq, sig_dbm, buf, len, gfp)
