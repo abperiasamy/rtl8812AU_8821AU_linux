@@ -224,10 +224,14 @@ int rtw_android_cmdstr_to_num(char *cmdstr)
 {
 	int cmd_num;
 	for(cmd_num=0 ; cmd_num<ANDROID_WIFI_CMD_MAX; cmd_num++)
-		if(0 == strnicmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
-			break;
-		
-	return cmd_num;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,0,0))
+        if(0 == strncasecmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
+#else
+        if(0 == strnicmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
+#endif
+            break;
+
+    return cmd_num;
 }
 
 int rtw_android_get_rssi(struct net_device *net, char *command, int total_len)
@@ -816,4 +820,3 @@ static void wifi_del_dev(void)
 	platform_driver_unregister(&wifi_device_legacy);
 }
 #endif /* defined(RTW_ENABLE_WIFI_CONTROL_FUNC) */
-
