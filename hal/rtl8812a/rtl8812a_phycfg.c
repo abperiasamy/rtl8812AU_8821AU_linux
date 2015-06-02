@@ -921,7 +921,10 @@ PHY_ConvertPowerLimitToPowerIndex(
 							// obtain the base dBm values in 5G band
 							// OFDM => 54M, HT 1T => MCS7, HT 2T => MCS15, 
 							// VHT => 1SSMCS7, VHT 2T => 2SSMCS7
-							if ( rateSection == 1 ) { //OFDM
+							if ( rateSection == 0 ) { //CCK - Unused by 5g, but if baseIndex5G is undefined, causes crash
+								baseIndex5G = phy_getPowerByRateBaseIndex( BAND_ON_5G, MGN_11M );
+							}
+							else if ( rateSection == 1 ) { //OFDM
 								baseIndex5G = phy_getPowerByRateBaseIndex( BAND_ON_5G, MGN_54M );
 							}
 							else if ( rateSection == 2 ) { //HT 1T
@@ -1043,7 +1046,10 @@ PHY_ConvertPowerLimitToPowerIndex(
 							// obtain the base dBm values in 5G band
 							// OFDM => 54M, HT 1T => MCS7, HT 2T => MCS15, 
 							// VHT => 1SSMCS7, VHT 2T => 2SSMCS7
-							if ( rateSection == 1 ) { //OFDM
+							if ( rateSection == 0 ) { //CCK - Unused by 5g, but if baseIndex5G is undefined, causes crash
+								baseIndex5G = phy_getPowerByRateBaseIndex( BAND_ON_5G, MGN_11M );
+							}
+							else if ( rateSection == 1 ) { //OFDM
 								baseIndex5G = phy_getPowerByRateBaseIndex( BAND_ON_5G, MGN_54M );
 							}
 							else if ( rateSection == 2 ) { //HT 1T
