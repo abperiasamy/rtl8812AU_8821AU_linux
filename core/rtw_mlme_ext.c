@@ -11748,7 +11748,7 @@ u8 setkey_hdl(_adapter *padapter, u8 *pbuf)
 	//write cam
 	ctrl = BIT(15) | ((pparm->algorithm) << 2) | pparm->keyid;	
 
-	DBG_871X_LEVEL(_drv_always_, "set group key to hw: alg:%d(WEP40-1 WEP104-5 TKIP-2 AES-4) "
+	DBG_871X_LEVEL(_drv_info_, "set group key to hw: alg:%d(WEP40-1 WEP104-5 TKIP-2 AES-4) "
 			"keyid:%d\n", pparm->algorithm, pparm->keyid);
 	write_cam(padapter, pparm->keyid, ctrl, null_sta, pparm->key);
 	
