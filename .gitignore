@@ -1,7 +1,9 @@
-*.o
-*.cmd
-.tmp_versions/
-8812au.ko
-8812au.mod.c
-Module.symvers
-modules.order
+# ignore all bin directories
+# matches "bin" in any subfolder
+bin/
+
+# ignore all target directories
+target/
+
+# ignore all files ending with ~
+*~ 
