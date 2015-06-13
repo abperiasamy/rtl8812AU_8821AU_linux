@@ -543,7 +543,7 @@ void _IQK_ConfigureMAC_8821A(
 	ODM_SetBBReg(pDM_Odm, 0x838, 0xf, 0xc);		//		CCA off
 }
 
-#define cal_num 3
+#define cal_num 10
 
 void _IQK_Tx_8821A(
 	IN PDM_ODM_T		pDM_Odm,
