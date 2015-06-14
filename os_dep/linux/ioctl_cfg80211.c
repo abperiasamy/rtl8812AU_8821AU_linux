@@ -4564,28 +4564,41 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy,
 #else
 	struct net_device *ndev,
 #endif
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,14,0)) || defined(COMPAT_KERNEL_RELEASE)
 	struct ieee80211_channel *chan,
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38)) || defined(COMPAT_KERNEL_RELEASE)
+	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38)) || defined(COMPAT_KERNEL_RELEASE)
 	bool offchan,
-#endif
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,8,0))
+	#endif
+	#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,8,0))
 	enum nl80211_channel_type channel_type,
 	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE)
 	bool channel_type_valid,
 	#endif
-#endif
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38)) || defined(COMPAT_KERNEL_RELEASE)
+	#endif
+	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38)) || defined(COMPAT_KERNEL_RELEASE)
 	unsigned int wait,
-#endif
+	#endif
 	const u8 *buf, size_t len,
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
+	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
 	bool no_cck,
-#endif
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
+	#endif
+	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
 	bool dont_wait_for_ack,
+	#endif
+#else
+	struct cfg80211_mgmt_tx_params *params,
 #endif
 	u64 *cookie)
 {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0)) || defined(COMPAT_KERNEL_RELEASE)
+	struct ieee80211_channel *chan = params->chan;
+	bool offchan = params->offchan;
+	unsigned int wait = params->wait;
+	const u8 *buf = params->buf;
+	size_t len = params->len;
+	bool no_cck = params->no_cck;
+	bool dont_wait_for_ack = params->dont_wait_for_ack;
+#endif
 	_adapter *padapter = (_adapter *)wiphy_to_adapter(wiphy);
 	struct rtw_wdev_priv *pwdev_priv = wdev_to_priv(padapter->rtw_wdev);
 	int ret = 0;
