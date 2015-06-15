@@ -77,6 +77,8 @@ struct rtw_wdev_priv
 
 #define wiphy_to_wdev(x) (struct wireless_dev *)(((struct rtw_wdev_priv*)wiphy_priv(x))->rtw_wdev)
 
+#define wdev_to_ndev(w) ((w)->netdev)
+
 int rtw_wdev_alloc(_adapter *padapter, struct device *dev);
 void rtw_wdev_free(struct wireless_dev *wdev);
 void rtw_wdev_unregister(struct wireless_dev *wdev);
