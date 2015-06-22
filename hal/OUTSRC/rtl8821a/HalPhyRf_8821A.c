@@ -552,7 +552,7 @@ void _IQK_Tx_8821A(
 {
 	u4Byte 		TX_fail, RX_fail, delay_count, IQK_ready, cal_retry, cal = 0, temp_reg65;
 	int 		TX_X = 0, TX_Y = 0, RX_X = 0, RX_Y = 0, TX_Average = 0, RX_Average = 0;
-	int 		TX_X0[cal_num], TX_Y0[cal_num], TX_X0_RXK[cal_num], TX_Y0_RXK[cal_num], RX_X0[cal_num], RX_Y0[cal_num];
+	int 		TX_X0[10], TX_Y0[10], TX_X0_RXK[10], TX_Y0_RXK[10], RX_X0[10], RX_Y0[10];
     	BOOLEAN 	TX0IQKOK = FALSE, RX0IQKOK = FALSE;
 	BOOLEAN  	VDF_enable = FALSE;
 	int 			i, k, VDF_Y[3], VDF_X[3], Tx_dt[3], Rx_dt[3], ii, dx = 0, dy = 0, TX_finish = 0, RX_finish = 0;

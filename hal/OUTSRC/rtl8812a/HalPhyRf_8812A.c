@@ -703,9 +703,9 @@ void _IQK_Tx_8812A(
 {
 	u4Byte 		TX_fail,RX_fail, delay_count, IQK_ready, cal_retry, cal = 0, temp_reg65;
     	int 			TX_X = 0, TX_Y = 0, RX_X = 0, RX_Y = 0, TX_Average = 0, RX_Average = 0;
-    	int 			TX_X0[cal_num], TX_Y0[cal_num], RX_X0[cal_num], RX_Y0[cal_num];
+    	int 			TX_X0[10], TX_Y0[10], RX_X0[10], RX_Y0[10];
     	BOOLEAN 	TX0IQKOK = FALSE, RX0IQKOK = FALSE;
-	int 			TX_X1[cal_num], TX_Y1[cal_num], RX_X1[cal_num], RX_Y1[cal_num];
+	int 			TX_X1[10], TX_Y1[10], RX_X1[10], RX_Y1[10];
 	BOOLEAN  	TX1IQKOK = FALSE, RX1IQKOK = FALSE, VDF_enable = FALSE;
 	int 			i, k, VDF_Y[3], VDF_X[3], Tx_dt[3], Rx_dt[3], ii, dx = 0, dy = 0, TX_finish = 0, RX_finish = 0, dt = 0;
 	PODM_RF_CAL_T  pRFCalibrateInfo = &(pDM_Odm->RFCalibrateInfo);
