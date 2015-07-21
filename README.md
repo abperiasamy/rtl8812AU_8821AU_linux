@@ -22,6 +22,7 @@ sudo apt-get install linux-image-rpi-rpfv linux-headers-rpi-rpfv dkms build-esse
 kernel=vmlinuz-3.10-3-rpi
 initramfs initrd.img-3.10-3-rpi followkernel
 ```
+#### Edit Makefile and turn on pi and off x86
 #### Cd to the directory where your source is and compile
 ```
 cd /usr/src/rtl8812AU_8821AU_linux
