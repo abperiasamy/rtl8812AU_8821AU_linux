@@ -357,7 +357,12 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		ret = -EFAULT;
 		goto exit;
 	 }
+	/* compat makes it a u32 instead of char * */ 
+#ifdef CONFIG_COMPAT
+	if (copy_from_user(command, (void *)&priv_cmd.buf, priv_cmd.total_len)) {
+#else
 	if (copy_from_user(command, (void *)priv_cmd.buf, priv_cmd.total_len)) {
+#endif
 		ret = -EFAULT;
 		goto exit;
 	}
