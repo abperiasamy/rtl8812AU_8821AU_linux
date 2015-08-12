@@ -2003,7 +2003,7 @@ static void traffic_status_watchdog(_adapter *padapter)
 #ifdef CONFIG_LPS
 	u8	bEnterPS;
 #endif
-	u16	BusyThreshold = 100;
+	u16	BusyThreshold = 20;
 	u8	bBusyTraffic = _FALSE, bTxBusyTraffic = _FALSE, bRxBusyTraffic = _FALSE;
 	u8	bHigherBusyTraffic = _FALSE, bHigherBusyRxTraffic = _FALSE, bHigherBusyTxTraffic = _FALSE;
 #ifdef CONFIG_FTP_PROTECT
@@ -2027,7 +2027,7 @@ static void traffic_status_watchdog(_adapter *padapter)
 #else // !CONFIG_BT_COEXIST
 		// if we raise bBusyTraffic in last watchdog, using lower threshold.
 		if (pmlmepriv->LinkDetectInfo.bBusyTraffic)
-			BusyThreshold = 75;
+			BusyThreshold = 15;
 		if( pmlmepriv->LinkDetectInfo.NumRxOkInPeriod > BusyThreshold ||
 			pmlmepriv->LinkDetectInfo.NumTxOkInPeriod > BusyThreshold )
 #endif // !CONFIG_BT_COEXIST
