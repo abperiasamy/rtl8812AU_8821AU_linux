@@ -55,7 +55,7 @@ inline int RTW_STATUS_CODE(int error_code){
 }
 #endif
 
-u32 rtw_atoi(u8* s)
+u32 rtw_atoi(const u8* s)
 {
 
 	int num=0,flag=0;

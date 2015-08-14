@@ -1382,7 +1382,7 @@ static int cfg80211_rtw_set_default_key(struct wiphy *wiphy,
 
 static int cfg80211_rtw_get_station(struct wiphy *wiphy,
 				    struct net_device *ndev,
-				    u8 *mac, struct station_info *sinfo)
+				    const u8 *mac, struct station_info *sinfo)
 {
 	int ret = 0;
 	_adapter *padapter = wiphy_to_adapter(wiphy);
@@ -2488,7 +2488,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 	NDIS_802_11_AUTHENTICATION_MODE authmode;
 	NDIS_802_11_SSID ndis_ssid;
 	u8 *dst_ssid, *src_ssid;
-	u8 *dst_bssid, *src_bssid;
+	const u8 *dst_bssid, *src_bssid;
 	//u8 matched_by_bssid=_FALSE;
 	//u8 matched_by_ssid=_FALSE;
 	u8 matched=_FALSE;
@@ -3331,7 +3331,11 @@ static const struct net_device_ops rtw_cfg80211_monitor_if_ops = {
 };
 #endif
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,1,0))
+static int rtw_cfg80211_add_monitor_if(_adapter *padapter, char *name, unsigned char name_assign_type, struct net_device **ndev)
+#else
 static int rtw_cfg80211_add_monitor_if(_adapter *padapter, char *name, struct net_device **ndev)
+#endif
 {
 	int ret = 0;
 	struct net_device* mon_ndev = NULL;
@@ -3362,6 +3366,9 @@ static int rtw_cfg80211_add_monitor_if(_adapter *padapter, char *name, struct ne
 	mon_ndev->type = ARPHRD_IEEE80211_RADIOTAP;
 	strncpy(mon_ndev->name, name, IFNAMSIZ);
 	mon_ndev->name[IFNAMSIZ - 1] = 0;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,1,0))
+	mon_ndev->name_assign_type = name_assign_type;
+#endif
 	mon_ndev->destructor = rtw_ndev_destructor;
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
@@ -3426,6 +3433,9 @@ static int
 	#else
 		char *name,
 	#endif
+	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,1,0))
+		unsigned char name_assign_type,
+	#endif
 		enum nl80211_iftype type, u32 *flags, struct vif_params *params)
 {
 	int ret = 0;
@@ -3443,7 +3453,11 @@ static int
 		ret = -ENODEV;
 		break;
 	case NL80211_IFTYPE_MONITOR:
+	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,1,0))
+		ret = rtw_cfg80211_add_monitor_if(padapter, (char *)name, name_assign_type, &ndev);
+	#else
 		ret = rtw_cfg80211_add_monitor_if(padapter, (char *)name, &ndev);
+	#endif
 		break;
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE)
@@ -3713,13 +3727,21 @@ static int	cfg80211_rtw_add_station(struct wiphy *wiphy, struct net_device *ndev
 	return 0;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,1,0))
+static int cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev, struct station_del_parameters *params)
+#else
 static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev,
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0)) && (LINUX_VERSION_CODE < KERNEL_VERSION(3,16,0)) && !defined(COMPAT_KERNEL_RELEASE)
 			       u8 *mac)
 #else
 			       const u8 *mac)
 #endif
+#endif
 {
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,1,0))
+	const u8 *mac = params->mac;
+#endif
 	int ret=0;
 	_irqL irqL;
 	_list	*phead, *plist;
@@ -3809,7 +3831,7 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 }
 
 static int	cfg80211_rtw_change_station(struct wiphy *wiphy, struct net_device *ndev,
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0)) && !defined(COMPAT_KERNEL_RELEASE)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0)) && !defined(COMPAT_KERNEL_RELEASE) && (LINUX_VERSION_CODE <= KERNEL_VERSION(4,0,0))
 				  u8 *mac, struct station_parameters *params)
 #else
 				  const u8 *mac, struct station_parameters *params)
