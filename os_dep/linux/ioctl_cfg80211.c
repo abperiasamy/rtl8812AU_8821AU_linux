@@ -601,7 +601,11 @@ void rtw_cfg80211_indicate_disconnect(_adapter *padapter)
 		else if(pwdev->sme_state==CFG80211_SME_CONNECTED)
 			cfg80211_disconnected(padapter->pnetdev, 0, NULL, 0, GFP_ATOMIC);
 #else
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,2,0)
+		cfg80211_disconnected(padapter->pnetdev, 0, NULL, 0, 0, GFP_ATOMIC);
+#else
 		cfg80211_disconnected(padapter->pnetdev, 0, NULL, 0, GFP_ATOMIC);
+#endif
 #endif
 
 		//DBG_8192C("pwdev->sme_state(a)=%d\n", pwdev->sme_state);
