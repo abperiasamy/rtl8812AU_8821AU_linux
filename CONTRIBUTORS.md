@@ -8,6 +8,7 @@
 - Anton 
 - archshift 
 - bits3rpent 
+- Chen Minqiang
 - Daiki Tamada 
 - HackDefendr 
 - Harshavardhana 
