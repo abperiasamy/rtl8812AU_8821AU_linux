@@ -1402,33 +1402,33 @@ void _IQK_Tx_8812A(
 			ODM_SetBBReg(pDM_Odm, 0x82c, BIT(31), 0x1); // [31] = 1 --> Page C1
 			
 			if (TX1IQKOK == FALSE)
-			    	break;				// TXK fail, Don't do RXK
+				break;				// TXK fail, Don't do RXK
 			
-				if (VDF_enable == 1){
+			if (VDF_enable == 1) {
 				ODM_SetBBReg(pDM_Odm, 0xee8, BIT(31), 0x0);    // TX VDF Disable
 				ODM_RT_TRACE(pDM_Odm, ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("RXVDF Start\n"));
 				
-					//====== RX IQK ======
-			            	ODM_SetBBReg(pDM_Odm, 0x82c, BIT(31), 0x0); // [31] = 0 --> Page C
-					ODM_SetRFReg(pDM_Odm, Path, 0xef, bRFRegOffsetMask, 0x80000);
-					ODM_SetRFReg(pDM_Odm, Path, 0x30, bRFRegOffsetMask, 0x30000);
-					ODM_SetRFReg(pDM_Odm, Path, 0x31, bRFRegOffsetMask, 0x3f7ff);
-					ODM_SetRFReg(pDM_Odm, Path, 0x32, bRFRegOffsetMask, 0xfe7bf);
-					ODM_SetRFReg(pDM_Odm, Path, 0x8f, bRFRegOffsetMask, 0x88001);
-					ODM_SetRFReg(pDM_Odm, Path, 0x65, bRFRegOffsetMask, 0x931d0);
-					ODM_SetRFReg(pDM_Odm, Path, 0xef, bRFRegOffsetMask, 0x00000);
-					
-					ODM_SetBBReg(pDM_Odm, 0x978, BIT(31), 0x1);
-					ODM_SetBBReg(pDM_Odm, 0x97c, BIT(31), 0x0);
-					ODM_Write4Byte(pDM_Odm, 0x984, 0x0046a911);
-					ODM_SetBBReg(pDM_Odm, 0x82c, BIT(31), 0x1); // [31] = 1 --> Page C1
-					ODM_Write4Byte(pDM_Odm, 0xe88, 0x02140119);
-					ODM_Write4Byte(pDM_Odm, 0xe8c, 0x28161420);
-					
+				//====== RX IQK ======
+				ODM_SetBBReg(pDM_Odm, 0x82c, BIT(31), 0x0); // [31] = 0 --> Page C
+				ODM_SetRFReg(pDM_Odm, Path, 0xef, bRFRegOffsetMask, 0x80000);
+				ODM_SetRFReg(pDM_Odm, Path, 0x30, bRFRegOffsetMask, 0x30000);
+				ODM_SetRFReg(pDM_Odm, Path, 0x31, bRFRegOffsetMask, 0x3f7ff);
+				ODM_SetRFReg(pDM_Odm, Path, 0x32, bRFRegOffsetMask, 0xfe7bf);
+				ODM_SetRFReg(pDM_Odm, Path, 0x8f, bRFRegOffsetMask, 0x88001);
+				ODM_SetRFReg(pDM_Odm, Path, 0x65, bRFRegOffsetMask, 0x931d0);
+				ODM_SetRFReg(pDM_Odm, Path, 0xef, bRFRegOffsetMask, 0x00000);
+				
+				ODM_SetBBReg(pDM_Odm, 0x978, BIT(31), 0x1);
+				ODM_SetBBReg(pDM_Odm, 0x97c, BIT(31), 0x0);
+				ODM_Write4Byte(pDM_Odm, 0x984, 0x0046a911);
+				ODM_SetBBReg(pDM_Odm, 0x82c, BIT(31), 0x1); // [31] = 1 --> Page C1
+				ODM_Write4Byte(pDM_Odm, 0xe88, 0x02140119);
+				ODM_Write4Byte(pDM_Odm, 0xe8c, 0x28161420);
+				
 				for (k = 0;k <= 2; k++){
 					ODM_SetBBReg(pDM_Odm, 0x82c, BIT(31), 0x0); // [31] = 0 --> Page C
 					ODM_SetBBReg(pDM_Odm, 0x978, 0x03FF8000, (VDF_X[k])>>21&0x000007ff);
-			              ODM_SetBBReg(pDM_Odm, 0x978, 0x000007FF, (VDF_Y[k])>>21&0x000007ff);
+					ODM_SetBBReg(pDM_Odm, 0x978, 0x000007FF, (VDF_Y[k])>>21&0x000007ff);
 					ODM_SetBBReg(pDM_Odm, 0x82c, BIT(31), 0x1); // [31] = 1 --> Page C1
 					switch (k){
 						case 0:
