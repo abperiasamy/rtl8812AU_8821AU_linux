@@ -1708,9 +1708,9 @@ void rtw_cfg80211_indicate_scan_done(struct rtw_wdev_priv *pwdev_priv, bool abor
                     
                                 cfg80211_scan_done(pwdev_priv->scan_request, &info);
                         }
-                }
+                
 #else
-                cfg80211_scan_done(pwdev_priv->scan_request, aborted);
+                        cfg80211_scan_done(pwdev_priv->scan_request, aborted);
 #endif
 		}
 
