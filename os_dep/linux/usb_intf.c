@@ -1682,7 +1682,7 @@ static void rtw_usb_if1_deinit(_adapter *if1)
 
 }
 
-static void dump_usb_interface(struct usb_interface *usb_intf)
+static inline void dump_usb_interface(struct usb_interface *usb_intf)
 {
 	int	i;
 	//u8	val8;

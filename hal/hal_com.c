@@ -316,7 +316,7 @@ static VOID _ThreeOutPipeMapping(
 	}
 
 }
-static VOID _FourOutPipeMapping(
+static inline VOID _FourOutPipeMapping(
 	IN	PADAPTER	pAdapter,
 	IN	BOOLEAN	 	bWIFICfg
 	)

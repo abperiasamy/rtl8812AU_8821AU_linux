@@ -359,7 +359,7 @@ static void usb_bulkout_zero_complete(struct urb *purb, struct pt_regs *regs)
 
 }
 
-static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
+static inline u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 {	
 	int pipe, status, len;
 	u32 ret;

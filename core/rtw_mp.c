@@ -208,7 +208,7 @@ static int init_mp_priv_by_os(struct mp_priv *pmp_priv)
 #endif
 
 #ifdef PLATFORM_LINUX
-static int init_mp_priv_by_os(struct mp_priv *pmp_priv)
+static inline int init_mp_priv_by_os(struct mp_priv *pmp_priv)
 {
 	int i, res;
 	struct mp_xmit_frame *pmp_xmitframe;
@@ -886,19 +886,19 @@ static VOID mpt_AdjustRFRegByRateByChan92CU(PADAPTER pAdapter, u8 RateIdx, u8 Ch
  * 01/09/2009	MHC		Add CCK modification for 40MHZ. Suggestion from SD3.
  *
  *---------------------------------------------------------------------------*/
-static void mpt_SwitchRfSetting(PADAPTER pAdapter)
+static inline void mpt_SwitchRfSetting(PADAPTER pAdapter)
 {
 	Hal_mpt_SwitchRfSetting(pAdapter);
     }
 
 /*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
 /*---------------------------hal\rtl8192c\MPT_HelperFunc.c---------------------------*/
-static void MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
+static inline void MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
 {
 	Hal_MPT_CCKTxPowerAdjust(Adapter,bInCH14);
 }
 
-static void MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
+static inline void MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
 {
 	Hal_MPT_CCKTxPowerAdjustbyIndex(pAdapter,beven);
 	}
@@ -926,12 +926,12 @@ void SetBandwidth(PADAPTER pAdapter)
 
 }
 
-static void SetCCKTxPower(PADAPTER pAdapter, u8 *TxPower)
+static inline void SetCCKTxPower(PADAPTER pAdapter, u8 *TxPower)
 {
 	Hal_SetCCKTxPower(pAdapter,TxPower);
 }
 
-static void SetOFDMTxPower(PADAPTER pAdapter, u8 *TxPower)
+static inline void SetOFDMTxPower(PADAPTER pAdapter, u8 *TxPower)
 {
 	Hal_SetOFDMTxPower(pAdapter,TxPower);
 	}
@@ -1011,12 +1011,12 @@ s32 SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
 	return Hal_SetThermalMeter( pAdapter, target_ther);
 }
 
-static void TriggerRFThermalMeter(PADAPTER pAdapter)
+static inline void TriggerRFThermalMeter(PADAPTER pAdapter)
 {
 	Hal_TriggerRFThermalMeter(pAdapter);
 }
 
-static u8 ReadRFThermalMeter(PADAPTER pAdapter)
+static inline u8 ReadRFThermalMeter(PADAPTER pAdapter)
 {
 	return Hal_ReadRFThermalMeter(pAdapter);
 }

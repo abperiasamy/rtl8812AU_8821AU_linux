@@ -477,7 +477,7 @@ void Switch_DM_Func(_adapter *padapter, u32 mode, u8 enable)
 
 }
 
-static void Set_NETYPE1_MSR(_adapter *padapter, u8 type)
+static inline void Set_NETYPE1_MSR(_adapter *padapter, u8 type)
 {
 	rtw_hal_set_hwreg(padapter, HW_VAR_MEDIA_STATUS1, (u8 *)(&type));
 }

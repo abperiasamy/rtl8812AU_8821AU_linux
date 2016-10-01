@@ -793,7 +793,7 @@ _PageWrite_8812(
 	return _BlockWrite_8812(padapter,buffer,size);
 }
 
-static VOID
+static inline VOID
 _FillDummy_8812(
 	u8*		pFwBuf,
 	u32*	pFwLen
@@ -2193,7 +2193,7 @@ rtl8812_EfusePowerSwitch(
 	Hal_EfusePowerSwitch8812A(pAdapter, bWrite, PwrState);	
 }
 
-static BOOLEAN
+static inline BOOLEAN
 Hal_EfuseSwitchToBank8812A(
 	IN		PADAPTER	pAdapter,
 	IN		u1Byte		bank,
@@ -4438,7 +4438,7 @@ static void hw_var_set_bcn_func(PADAPTER Adapter, u8 variable, u8* val)
 
 }
 
-static void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
+static inline void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 	u64	tsf;
@@ -4533,7 +4533,7 @@ static void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
 #endif
 }
 
-static void hw_var_set_mlme_disconnect(PADAPTER Adapter, u8 variable, u8* val)
+static inline void hw_var_set_mlme_disconnect(PADAPTER Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 				
@@ -4664,7 +4664,7 @@ static void hw_var_set_mlme_sitesurvey(PADAPTER Adapter, u8 variable, u8* val)
 	}		
 }
 
-static void hw_var_set_mlme_join(PADAPTER Adapter, u8 variable, u8* val)
+static inline void hw_var_set_mlme_join(PADAPTER Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 	u8	RetryLimit = 0x30;

@@ -3416,7 +3416,7 @@ fail:
 
 }
 
-static void rtw_cfg80211_monitor_if_set_multicast_list(struct net_device *ndev)
+static inline void rtw_cfg80211_monitor_if_set_multicast_list(struct net_device *ndev)
 {
 	DBG_8192C("%s\n", __func__);
 }
@@ -3986,7 +3986,7 @@ static int	cfg80211_rtw_change_bss(struct wiphy *wiphy, struct net_device *ndev,
 
 }
 
-static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
+static inline int	cfg80211_rtw_set_channel(struct wiphy *wiphy
 	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
 	, struct net_device *ndev
 	#endif
@@ -3999,7 +3999,7 @@ static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
 	return 0;
 }
 
-static int	cfg80211_rtw_auth(struct wiphy *wiphy, struct net_device *ndev,
+static inline int	cfg80211_rtw_auth(struct wiphy *wiphy, struct net_device *ndev,
 			struct cfg80211_auth_request *req)
 {
 	DBG_871X(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
@@ -4007,7 +4007,7 @@ static int	cfg80211_rtw_auth(struct wiphy *wiphy, struct net_device *ndev,
 	return 0;
 }
 
-static int	cfg80211_rtw_assoc(struct wiphy *wiphy, struct net_device *ndev,
+static inline int	cfg80211_rtw_assoc(struct wiphy *wiphy, struct net_device *ndev,
 			 struct cfg80211_assoc_request *req)
 {
 	DBG_871X(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));

@@ -416,7 +416,7 @@ _func_exit_;
 }
 #endif
 
-static s32 pre_recv_entry(union recv_frame *precvframe, u8 *pphy_status)
+static inline s32 pre_recv_entry(union recv_frame *precvframe, u8 *pphy_status)
 {	
 	s32 ret=_SUCCESS;
 #ifdef CONFIG_CONCURRENT_MODE	

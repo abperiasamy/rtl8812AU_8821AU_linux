@@ -29,7 +29,7 @@
 #endif
 
 
-static void _dbg_dump_macreg(_adapter *padapter)
+static inline void _dbg_dump_macreg(_adapter *padapter)
 {
 	u32 offset = 0;
 	u32 val32 = 0;
@@ -673,7 +673,7 @@ _InitQueuePriority_8812AUsb(
 
 
 
-static VOID
+static inline VOID
 _InitHardwareDropIncorrectBulkOut_8812A(
 	IN  PADAPTER Adapter
 	)
@@ -1180,7 +1180,7 @@ _InitOperationMode_8812A(
 
 
 // Set CCK and OFDM Block "ON"
-static VOID _BBTurnOnBlock(
+static inline VOID _BBTurnOnBlock(
 	IN	PADAPTER		Adapter
 	)
 {
@@ -1192,7 +1192,7 @@ static VOID _BBTurnOnBlock(
 	PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bOFDMEn, 0x1);
 }
 
-static VOID _RfPowerSave(
+static inline VOID _RfPowerSave(
 	IN	PADAPTER		Adapter
 	)
 {
@@ -1259,7 +1259,7 @@ _InitAntenna_Selection_8812A(IN	PADAPTER Adapter)
 // If Efuse 0x0e bit1 is not enabled, we can not support selective suspend for Minicard and
 // slim card.
 //
-static VOID
+static inline VOID
 HalDetectSelectiveSuspendMode(
 	IN PADAPTER				Adapter
 	)
@@ -1313,7 +1313,7 @@ HalDetectSelectiveSuspendMode(
  *	When		Who		Remark
  *	08/23/2010	MHC		HW suspend mode switch test..
  *---------------------------------------------------------------------------*/
-static VOID 
+static inline VOID 
 HwSuspendModeEnable_8812AU(
 	IN	PADAPTER	pAdapter,
 	IN	u8			Type

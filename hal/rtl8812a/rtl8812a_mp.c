@@ -50,7 +50,7 @@ void Hal_GetPowerTracking(PADAPTER padapter, u8 *enable)
 	*enable = pDM_Odm->RFCalibrateInfo.TxPowerTrackControl;
 }
 
-static void Hal_disable_dm(PADAPTER padapter)
+static inline void Hal_disable_dm(PADAPTER padapter)
 {
 	u8 v8;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);

@@ -2210,7 +2210,7 @@ storePwrIndexDiffRateOffset(
 	}
 }
 
-static u8
+static inline u8
 phy_DbmToTxPwrIdx(
 	IN	PADAPTER		Adapter,
 	IN	WIRELESS_MODE	WirelessMode,
@@ -2268,7 +2268,7 @@ phy_DbmToTxPwrIdx(
 	return TxPwrIdx;
 }
 
-static int
+static inline int
 phy_TxPwrIdxToDbm(
 	IN	PADAPTER		Adapter,
 	IN	WIRELESS_MODE	WirelessMode,

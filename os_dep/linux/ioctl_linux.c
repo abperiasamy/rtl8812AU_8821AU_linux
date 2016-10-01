@@ -88,7 +88,7 @@ static int hex2num_i(char c)
 	return -1;
 }
 
-static int hex2byte_i(const char *hex)
+static inline int hex2byte_i(const char *hex)
 {
 	int a, b;
 	a = hex2num_i(*hex++);
@@ -127,7 +127,7 @@ static int hwaddr_aton_i(const char *txt, u8 *addr)
 	return 0;
 }
 
-static void indicate_wx_custom_event(_adapter *padapter, char *msg)
+static inline void indicate_wx_custom_event(_adapter *padapter, char *msg)
 {
 	u8 *buff;
 	union iwreq_data wrqu;
@@ -156,7 +156,7 @@ static void indicate_wx_custom_event(_adapter *padapter, char *msg)
 }
 
 
-static void request_wps_pbc_event(_adapter *padapter)
+static inline void request_wps_pbc_event(_adapter *padapter)
 {
 	u8 *buff, *p;
 	union iwreq_data wrqu;
@@ -11023,7 +11023,7 @@ static int rtw_mp_QueryDrv(struct net_device *dev,
 }
 
 /* update Tx AGC offset */
-static int rtw_mp_antBdiff(struct net_device *dev,
+static inline int rtw_mp_antBdiff(struct net_device *dev,
 			struct iw_request_info *info,
 			struct iw_point *wrqu, char *extra)
 {
@@ -11390,7 +11390,7 @@ return 0;
 
 #endif //#if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_MP_IWPRIV_SUPPORT)
 
-static int rtw_wfd_tdls_enable(struct net_device *dev,
+static inline int rtw_wfd_tdls_enable(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
@@ -11418,7 +11418,7 @@ static int rtw_wfd_tdls_enable(struct net_device *dev,
 	return ret;
 }
 
-static int rtw_tdls_weaksec(struct net_device *dev,
+static inline int rtw_tdls_weaksec(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
@@ -11445,7 +11445,7 @@ static int rtw_tdls_weaksec(struct net_device *dev,
 }
 
 
-static int rtw_tdls_enable(struct net_device *dev,
+static inline int rtw_tdls_enable(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
@@ -11514,7 +11514,7 @@ static int rtw_tdls_enable(struct net_device *dev,
 	return ret;
 }
 
-static int rtw_tdls_setup(struct net_device *dev,
+static inline int rtw_tdls_setup(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
@@ -11560,7 +11560,7 @@ static int rtw_tdls_setup(struct net_device *dev,
 	return ret;
 }
 
-static int rtw_tdls_teardown(struct net_device *dev,
+static inline int rtw_tdls_teardown(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
@@ -11592,7 +11592,7 @@ static int rtw_tdls_teardown(struct net_device *dev,
 	return ret;
 }
 
-static int rtw_tdls_discovery(struct net_device *dev,
+static inline int rtw_tdls_discovery(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
@@ -11613,7 +11613,7 @@ static int rtw_tdls_discovery(struct net_device *dev,
 	return ret;
 }
 
-static int rtw_tdls_ch_switch(struct net_device *dev,
+static inline int rtw_tdls_ch_switch(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
@@ -11644,7 +11644,7 @@ static int rtw_tdls_ch_switch(struct net_device *dev,
 		return ret;
 }
 	
-static int rtw_tdls_pson(struct net_device *dev,
+static inline int rtw_tdls_pson(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
@@ -11673,7 +11673,7 @@ static int rtw_tdls_pson(struct net_device *dev,
 		return ret;
 }
 	
-static int rtw_tdls_psoff(struct net_device *dev,
+static inline int rtw_tdls_psoff(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
@@ -11702,7 +11702,7 @@ static int rtw_tdls_psoff(struct net_device *dev,
 	return ret;
 }
 
-static int rtw_tdls_setip(struct net_device *dev,
+static inline int rtw_tdls_setip(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
@@ -11878,7 +11878,7 @@ static int rtw_wfd_tdls_status(struct net_device *dev,
 		
 }
 
-static int rtw_tdls_ch_switch_off(struct net_device *dev,
+static inline int rtw_tdls_ch_switch_off(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
