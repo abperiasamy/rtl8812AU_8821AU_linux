@@ -2480,7 +2480,7 @@ unsigned int OnDeAuth(_adapter *padapter, union recv_frame *precv_frame)
 		psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));	
 		if(psta)
 		{
-			u8 updated;
+			u8 updated = 0;
 		
 			_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
 			if(rtw_is_list_empty(&psta->asoc_list)==_FALSE)
@@ -2555,7 +2555,7 @@ unsigned int OnDisassoc(_adapter *padapter, union recv_frame *precv_frame)
 		psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));	
 		if(psta)
 		{
-			u8 updated;
+			u8 updated = 0;
 			
 			_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
 			if(rtw_is_list_empty(&psta->asoc_list)==_FALSE)

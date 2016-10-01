@@ -716,7 +716,8 @@ _func_exit_;
 union recv_frame * portctrl(_adapter *adapter,union recv_frame * precv_frame);
 union recv_frame * portctrl(_adapter *adapter,union recv_frame * precv_frame)
 {
-	u8   *psta_addr, *ptr;
+	//FIXME psta_addr
+	u8   *psta_addr = NULL, *ptr;
 	uint  auth_alg;
 	struct recv_frame_hdr *pfhdr;
 	struct sta_info *psta;

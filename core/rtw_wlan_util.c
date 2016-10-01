@@ -1018,7 +1018,7 @@ int WMM_param_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE)
 
 void WMMOnAssocRsp(_adapter *padapter)
 {
-	u8	ACI, ACM, AIFS, ECWMin, ECWMax, aSifsTime;
+	u8	ACI, ACM, AIFS, ECWMin = 0, ECWMax, aSifsTime;
 	u8	acm_mask;
 	u16	TXOP;
 	u32	acParm, i;

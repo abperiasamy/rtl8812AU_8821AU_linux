@@ -2583,8 +2583,9 @@ exit:
 
 s32 rtw_free_xmitframe(struct xmit_priv *pxmitpriv, struct xmit_frame *pxmitframe)
 {	
+	//FIXME queue
 	_irqL irqL;
-	_queue *queue;
+	_queue *queue = NULL;
 	_adapter *padapter = pxmitpriv->adapter;
 	_pkt *pndis_pkt = NULL;
 

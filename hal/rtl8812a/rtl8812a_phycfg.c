@@ -790,11 +790,12 @@ PHY_ConvertPowerLimitToPowerIndex(
 	IN	PADAPTER			Adapter
 	)
 {
+	//FIXME baseIndex5G baseIndex2_4G
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	u8 				BW40PwrBasedBm2_4G, BW40PwrBasedBm5G;
 	u8 				regulation, bw, channel, rateSection, group;	
-	u8 				baseIndex2_4G;
-	u8				baseIndex5G;
+	u8 				baseIndex2_4G = 0;
+	u8				baseIndex5G = 0;
 	s8 				tempValue = 0, tempPwrLmt = 0;
 	u8 				rfPath = 0;
 
@@ -1353,8 +1354,9 @@ PHY_StorePwrByRateIndexVhtSeries(
 	IN	u32			Data
 	)
 {
+	//FIXME rf_path
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u8			rf_path, rate_section;
+	u8			rf_path = 0, rate_section;
 
 	//
 	// For VHT series TX power by rate table.
@@ -1468,8 +1470,9 @@ VOID phy_PreprocessVHTPGDataFromExactToRelativeValue(
 	IN	u32*		pData
 	)
 {
+	//FIXME rf_path
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u8			rf_path, rate_section, BaseValue = 0;
+	u8			rf_path = 0, rate_section, BaseValue = 0;
 	//
 	// For VHT series TX power by rate table.
 	// VHT TX power by rate off setArray = 

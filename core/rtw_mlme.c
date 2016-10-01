@@ -1963,7 +1963,7 @@ _func_exit_;
 
 u8 search_max_mac_id(_adapter *padapter)
 {
-	u8 mac_id;
+	u8 mac_id = 0;
 #if (RATE_ADAPTIVE_SUPPORT==1)	//for 88E RA		
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct mlme_ext_priv *pmlmeext = &(padapter->mlmeextpriv);

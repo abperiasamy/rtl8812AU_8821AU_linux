@@ -48,7 +48,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 {	
       int	pull=0;
 	//uint	qsel;
-	u8 offset;
+	u8 offset = 0;
 	_adapter			*padapter = pxmitframe->padapter;
 	//struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;		
 	struct pkt_attrib	*pattrib = &pxmitframe->attrib;

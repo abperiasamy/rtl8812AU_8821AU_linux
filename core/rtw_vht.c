@@ -527,7 +527,7 @@ u32	rtw_build_vht_cap_ie(_adapter *padapter, u8 *pbuf)
 u32 rtw_restructure_vht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, uint in_len, uint *pout_len)
 {
 	u32	ielen, out_len;
-	u8	cap_len, notify_len, operation_bw, supported_chnl_width;
+	u8	cap_len, notify_len, operation_bw = CHANNEL_WIDTH_MAX, supported_chnl_width;
 	u8	*p, *pframe;
 	//struct registry_priv *pregistrypriv = &padapter->registrypriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;

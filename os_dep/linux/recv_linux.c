@@ -394,7 +394,7 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, struct rx_pkt_attri
 void rtw_handle_tkip_mic_err(_adapter *padapter,u8 bgroup)
 {
 #ifdef CONFIG_IOCTL_CFG80211
-	enum nl80211_key_type key_type;
+	enum nl80211_key_type key_type = 0;
 #endif
 	union iwreq_data wrqu;
 	struct iw_michaelmicfailure    ev;

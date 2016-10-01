@@ -8007,7 +8007,7 @@ static int rtw_del_sta(struct net_device *dev, struct ieee_param *param)
 	psta = rtw_get_stainfo(pstapriv, param->sta_addr);
 	if(psta)
 	{
-		u8 updated;
+		u8 updated = 0;
 	
 		//DBG_871X("free psta=%p, aid=%d\n", psta, psta->aid);
 
@@ -8779,7 +8779,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	struct iw_point *wrqu;
 	
 	u8	*PROMContent = pEEPROM->efuse_eeprom_data;
-	u8 ips_mode,lps_mode;
+	u8 ips_mode = 0, lps_mode = 0;
 	struct pwrctrl_priv *pwrctrlpriv ;
 	u8 *data = NULL;
 	u8 *rawdata = NULL;
@@ -9354,7 +9354,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	PHAL_DATA_TYPE pHalData;
 	PEFUSE_HAL pEfuseHal;
 
-	u8 ips_mode,lps_mode;
+	u8 ips_mode = 0, lps_mode = 0;
 	u32 i, jj, kk;
 	u8 *setdata = NULL;
 	u8 *ShadowMapBT = NULL;

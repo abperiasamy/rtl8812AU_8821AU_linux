@@ -230,7 +230,7 @@ void rtl8812_query_rx_phy_status(
 	PODM_PHY_INFO_T 	pPHYInfo  = (PODM_PHY_INFO_T)(&pattrib->phy_info);
 	u8					*wlanhdr;
 	ODM_PACKET_INFO_T	pkt_info;
-	u8 *sa;
+	u8 *sa = NULL;
 	struct sta_priv *pstapriv;
 	struct sta_info *psta;
 	//_irqL		irqL;

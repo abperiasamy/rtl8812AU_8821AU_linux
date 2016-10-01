@@ -214,11 +214,12 @@ static void update_BCNTIM(_adapter *padapter)
 
 void rtw_add_bcn_ie(_adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 index, u8 *data, u8 len)
 {
+	//FIXME dst_ie ielen
 	PNDIS_802_11_VARIABLE_IEs	pIE;
 	u8	bmatch = _FALSE;
 	u8	*pie = pnetwork->IEs;
-	u8	*p, *dst_ie, *premainder_ie=NULL, *pbackup_remainder_ie=NULL;
-	u32	i, offset, ielen, ie_offset, remainder_ielen = 0;
+	u8	*p, *dst_ie = NULL, *premainder_ie=NULL, *pbackup_remainder_ie=NULL;
+	u32	i, offset, ielen = 0, ie_offset, remainder_ielen = 0;
 
 	for (i = sizeof(NDIS_802_11_FIXED_IEs); i < pnetwork->IELength;)
 	{
@@ -284,7 +285,8 @@ void rtw_add_bcn_ie(_adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 index, u8 *d
 
 void rtw_remove_bcn_ie(_adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 index)
 {
-	u8 *p, *dst_ie, *premainder_ie=NULL, *pbackup_remainder_ie=NULL;
+	//FIXME dst_ie
+	u8 *p, *dst_ie = NULL, *premainder_ie=NULL, *pbackup_remainder_ie=NULL;
 	uint offset, ielen, ie_offset, remainder_ielen = 0;
 	u8	*pie = pnetwork->IEs;
 
@@ -361,7 +363,7 @@ void	expire_timeout_chk(_adapter *padapter)
 {
 	_irqL irqL;
 	_list	*phead, *plist;
-	u8 updated;
+	u8 updated = 0;
 	struct sta_info *psta=NULL;	
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	//u8 chk_alive_num = 0;

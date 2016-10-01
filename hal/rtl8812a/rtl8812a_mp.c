@@ -196,7 +196,7 @@ void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
 void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
 {
 	s32		TempCCk;
-	u8		CCK_index, CCK_index_old;
+	u8		CCK_index, CCK_index_old = 0;
 	u8		Action = 0;	//0: no action, 1: even->odd, 2:odd->even
 	//u8		TimeOut = 100;
 	s32		i = 0;

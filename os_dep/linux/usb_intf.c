@@ -1178,8 +1178,9 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 
 int rtw_resume_process(_adapter *padapter)
 {
+	//FIXME pwrpriv
 	struct net_device *pnetdev;
-	struct pwrctrl_priv *pwrpriv;
+	struct pwrctrl_priv *pwrpriv = NULL;
 	int ret = -1;
 #ifdef CONFIG_DEBUG
 	u32 start_time = rtw_get_current_time();
@@ -1805,7 +1806,7 @@ static inline void dump_usb_interface(struct usb_interface *usb_intf)
 static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device_id *pdid)
 {
 	_adapter *if1 = NULL, *if2 = NULL;
-	int status;
+	int status = _FAIL;
 	struct dvobj_priv *dvobj;
 #ifdef CONFIG_MULTI_VIR_IFACES
 	int i;

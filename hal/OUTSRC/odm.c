@@ -2316,7 +2316,7 @@ odm_Adaptivity(
 	s4Byte TH_H_dmc, TH_L_dmc;
 	s4Byte TH_H, TH_L, Diff, IGI_target;
 	//u4Byte value32;
-	BOOLEAN EDCCA_State;
+	BOOLEAN EDCCA_State = 0;
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 	PADAPTER		pAdapter	= pDM_Odm->Adapter;

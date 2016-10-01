@@ -1964,8 +1964,9 @@ CardDisableRTL8812AU(
 	IN	PADAPTER			Adapter 
 )
 {
+	//FIXME val8
 	u8	u1bTmp;
-	u8 	val8;
+	u8 	val8 = 0;
 	//u16	val16;
 	//u32	val32;
 	

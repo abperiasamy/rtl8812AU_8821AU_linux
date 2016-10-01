@@ -260,7 +260,7 @@ exit:
 
 void rtw_spt_band_free(struct ieee80211_supported_band *spt_band)
 {
-	u32 size;
+	u32 size = 0;
 
 	if(!spt_band)
 		return;
@@ -3856,7 +3856,7 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 	int ret=0;
 	_irqL irqL;
 	_list	*phead, *plist;
-	u8 updated;
+	u8 updated = 0;
 	struct sta_info *psta = NULL;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(ndev);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
