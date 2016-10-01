@@ -613,7 +613,7 @@ _func_enter_;
 
 	rtw_os_recv_indicate_pkt(padapter, skb, pattrib);
 
-_recv_indicatepkt_end:
+//_recv_indicatepkt_end:
 
 	precv_frame->u.hdr.pkt = NULL; // pointers to NULL before rtw_free_recvframe()
 

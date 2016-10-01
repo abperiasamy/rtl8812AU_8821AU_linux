@@ -1592,7 +1592,7 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 free_hal_data:
 	if(status != _SUCCESS && padapter->HalData)
 		rtw_mfree(padapter->HalData, sizeof(*(padapter->HalData)));
-free_wdev:
+//free_wdev:
 	if(status != _SUCCESS) {
 		#ifdef CONFIG_IOCTL_CFG80211
 		rtw_wdev_unregister(padapter->rtw_wdev);
@@ -1884,7 +1884,9 @@ free_if2:
 		rtw_drv_if2_free(if2);
 		#endif
 	}
+#ifdef CONFIG_CONCURRENT_MODE
 free_if1:
+#endif
 	if (status != _SUCCESS && if1) {
 		rtw_usb_if1_deinit(if1);
 	}
