@@ -16,7 +16,7 @@ EXTRA_CFLAGS += -Werror
 
 #EXTRA_CFLAGS += -Wno-uninitialized
 
-EXTRA_CFLAGS += -I$(src)/include -DCONFIG_DEBUG
+EXTRA_CFLAGS += -I$(src)/include
 
 CONFIG_AUTOCFG_CP = n
 
