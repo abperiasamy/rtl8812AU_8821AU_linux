@@ -6358,7 +6358,7 @@ static int rtw_p2p_get2(struct net_device *dev,
 
 	if (copy_from_user(buffer, wrqu->data.pointer, wrqu->data.length))
 	{
-		ret - EFAULT;
+		ret = -EFAULT;
 		goto bad;
 	}
 
@@ -10907,7 +10907,7 @@ static int rtw_mp_dump(struct net_device *dev,
 				if((j++)%4 == 0)	DBG_871X("\n");	
 			}
 			
-			i,j=1;
+			j=1;
 			rtw_hal_get_hwreg(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
 				
 			DBG_871X("\n======= RF REG =======\n");
