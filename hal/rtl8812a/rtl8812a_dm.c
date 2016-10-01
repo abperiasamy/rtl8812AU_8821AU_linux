@@ -37,7 +37,7 @@
 //============================================================
 
 
-static VOID
+static inline VOID
 dm_CheckProtection(
 	IN	PADAPTER	Adapter
 	)
@@ -247,7 +247,7 @@ dm_InitGPIOSetting(
 	IN	PADAPTER	Adapter
 	)
 {
-	PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(Adapter);
+	//PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(Adapter);
 
 	u8	tmp1byte;
 
@@ -515,7 +515,7 @@ rtl8812_InitHalDm(
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
-	u8	i;
+	//u8	i;
 
 #ifdef CONFIG_USB_HCI
 	dm_InitGPIOSetting(Adapter);
@@ -541,8 +541,8 @@ rtl8812_HalDmWatchDog(
 	BOOLEAN		bFwPSAwake = _TRUE;
 	u8 hw_init_completed = _FALSE;
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	//struct dm_priv	*pdmpriv = &pHalData->dmpriv;
+	//PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
 #ifdef CONFIG_CONCURRENT_MODE
 	PADAPTER pbuddy_adapter = Adapter->pbuddy_adapter;
 #endif //CONFIG_CONCURRENT_MODE
@@ -661,9 +661,9 @@ void rtl8812_init_dm_priv(IN PADAPTER Adapter)
 
 void rtl8812_deinit_dm_priv(IN PADAPTER Adapter)
 {
-	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T 		podmpriv = &pHalData->odmpriv;
+	//PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
+	//struct dm_priv	*pdmpriv = &pHalData->dmpriv;
+	//PDM_ODM_T 		podmpriv = &pHalData->odmpriv;
 	//_rtw_spinlock_free(&pHalData->odm_stainfo_lock);
 #ifdef CONFIG_SW_ANTENNA_DIVERSITY
 	//_cancel_timer_ex(&pdmpriv->SwAntennaSwitchTimer);	

@@ -32,7 +32,7 @@ extern unsigned char	WFD_OUI[];
 
 void init_mlme_ap_info(_adapter *padapter)
 {
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+	//struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;	
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
@@ -214,11 +214,12 @@ static void update_BCNTIM(_adapter *padapter)
 
 void rtw_add_bcn_ie(_adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 index, u8 *data, u8 len)
 {
+	//FIXME dst_ie ielen
 	PNDIS_802_11_VARIABLE_IEs	pIE;
 	u8	bmatch = _FALSE;
 	u8	*pie = pnetwork->IEs;
-	u8	*p, *dst_ie, *premainder_ie=NULL, *pbackup_remainder_ie=NULL;
-	u32	i, offset, ielen, ie_offset, remainder_ielen = 0;
+	u8	*p, *dst_ie = NULL, *premainder_ie=NULL, *pbackup_remainder_ie=NULL;
+	u32	i, offset, ielen = 0, ie_offset, remainder_ielen = 0;
 
 	for (i = sizeof(NDIS_802_11_FIXED_IEs); i < pnetwork->IELength;)
 	{
@@ -284,7 +285,8 @@ void rtw_add_bcn_ie(_adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 index, u8 *d
 
 void rtw_remove_bcn_ie(_adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 index)
 {
-	u8 *p, *dst_ie, *premainder_ie=NULL, *pbackup_remainder_ie=NULL;
+	//FIXME dst_ie
+	u8 *p, *dst_ie = NULL, *premainder_ie=NULL, *pbackup_remainder_ie=NULL;
 	uint offset, ielen, ie_offset, remainder_ielen = 0;
 	u8	*pie = pnetwork->IEs;
 
@@ -361,12 +363,12 @@ void	expire_timeout_chk(_adapter *padapter)
 {
 	_irqL irqL;
 	_list	*phead, *plist;
-	u8 updated;
+	u8 updated = 0;
 	struct sta_info *psta=NULL;	
 	struct sta_priv *pstapriv = &padapter->stapriv;
-	u8 chk_alive_num = 0;
-	char chk_alive_list[NUM_STA];
-	int i;
+	//u8 chk_alive_num = 0;
+	//char chk_alive_list[NUM_STA];
+	//int i;
 
 	_enter_critical_bh(&pstapriv->auth_list_lock, &irqL);
 	
@@ -1052,7 +1054,7 @@ static void update_hw_ht_param(_adapter *padapter)
 {
 	unsigned char		max_AMPDU_len;
 	unsigned char		min_MPDU_spacing;
-	struct registry_priv	 *pregpriv = &padapter->registrypriv;
+	//struct registry_priv	 *pregpriv = &padapter->registrypriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	
@@ -1443,13 +1445,13 @@ int rtw_check_beacon_data(_adapter *padapter, u8 *pbuf,  int len)
 	u8	channel, network_type, supportRate[NDIS_802_11_LENGTH_RATES_EX];
 	int supportRateNum = 0;
 	u8 OUI1[] = {0x00, 0x50, 0xf2,0x01};
-	u8 wps_oui[4]={0x0,0x50,0xf2,0x04};
+	//u8 wps_oui[4]={0x0,0x50,0xf2,0x04};
 	u8 WMM_PARA_IE[] = {0x00, 0x50, 0xf2, 0x02, 0x01, 0x01};	
 	struct registry_priv *pregistrypriv = &padapter->registrypriv;	
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	WLAN_BSSID_EX *pbss_network = (WLAN_BSSID_EX *)&pmlmepriv->cur_network.network;	
-	struct sta_priv *pstapriv = &padapter->stapriv;
+	//struct sta_priv *pstapriv = &padapter->stapriv;
 	u8 *ie = pbss_network->IEs;
 	
 
@@ -1948,7 +1950,7 @@ int rtw_acl_remove_sta(_adapter *padapter, u8 *addr)
 {
 	_irqL irqL;
 	_list	*plist, *phead;
-	int i, ret=0;
+	int ret=0;
 	struct rtw_wlan_acl_node *paclnode;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
@@ -2776,8 +2778,8 @@ u8 ap_free_sta(_adapter *padapter, struct sta_info *psta, bool active, u16 reaso
 {
 	_irqL irqL;
 	u8 beacon_updated = _FALSE;
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
+	//struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
+	//struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
 	if(!psta)
@@ -2997,7 +2999,7 @@ void rtw_ap_restore_network(_adapter *padapter)
 {
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+	//struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct sta_priv * pstapriv = &padapter->stapriv;
 	struct sta_info *psta;
 	struct security_priv* psecuritypriv=&(padapter->securitypriv);

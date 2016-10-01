@@ -26,7 +26,7 @@
 s32	rtl8812au_init_xmit_priv(_adapter *padapter)
 {
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
 #ifdef PLATFORM_LINUX
 	tasklet_init(&pxmitpriv->xmit_tasklet,
@@ -47,10 +47,10 @@ void	rtl8812au_free_xmit_priv(_adapter *padapter)
 static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bagg_pkt)
 {	
       int	pull=0;
-	uint	qsel;
-	u8 data_rate,pwr_status,offset;
+	//uint	qsel;
+	u8 offset = 0;
 	_adapter			*padapter = pxmitframe->padapter;
-	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;		
+	//struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;		
 	struct pkt_attrib	*pattrib = &pxmitframe->attrib;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -81,7 +81,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	//DBG_8192C("%s==> pkt_len=%d,bagg_pkt=%02x\n",__FUNCTION__,sz,bagg_pkt);
 	SET_TX_DESC_PKT_SIZE_8812(ptxdesc, sz);
 	
-	offset = TXDESC_SIZE + OFFSET_SZ;		
+	//offset = TXDESC_SIZE + OFFSET_SZ;		
 
 #ifdef CONFIG_TX_EARLY_MODE	
 	if(bagg_pkt){		

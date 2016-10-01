@@ -686,9 +686,9 @@ u8 rtw_sitesurvey_cmd(_adapter  *padapter, NDIS_802_11_SSID *ssid, int ssid_num,
 	struct sitesurvey_parm	*psurveyPara;
 	struct cmd_priv 	*pcmdpriv = &padapter->cmdpriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
-#endif //CONFIG_P2P
+//#ifdef CONFIG_P2P
+//	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
+//#endif //CONFIG_P2P
 
 _func_enter_;
 
@@ -1507,8 +1507,8 @@ u8 rtw_clearstakey_cmd(_adapter *padapter, u8 *psta, u8 entry, u8 enqueue)
 	struct set_stakey_parm	*psetstakey_para;
 	struct cmd_priv 			*pcmdpriv=&padapter->cmdpriv;
 	struct set_stakey_rsp		*psetstakey_rsp = NULL;	
-	struct mlme_priv			*pmlmepriv = &padapter->mlmepriv;
-	struct security_priv 		*psecuritypriv = &padapter->securitypriv;
+	//struct mlme_priv			*pmlmepriv = &padapter->mlmepriv;
+	//struct security_priv 		*psecuritypriv = &padapter->securitypriv;
 	struct sta_info* 			sta = (struct sta_info* )psta;
 	u8	res=_SUCCESS;
 
@@ -1919,7 +1919,7 @@ u8 rtw_set_csa_cmd(_adapter*padapter, u8 new_ch_no)
 {
 	struct	cmd_obj*	pcmdobj;
 	struct	SetChannelSwitch_param*setChannelSwitch_param;
-	struct 	mlme_priv *pmlmepriv = &padapter->mlmepriv;
+	//struct 	mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct	cmd_priv   *pcmdpriv = &padapter->cmdpriv;
 
 	u8	res=_SUCCESS;
@@ -1955,10 +1955,10 @@ _func_exit_;
 
 u8 rtw_tdls_cmd(_adapter *padapter, u8 *addr, u8 option)
 {
-	struct	cmd_obj*	pcmdobj;
-	struct	TDLSoption_param	*TDLSoption;
-	struct 	mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	struct	cmd_priv   *pcmdpriv = &padapter->cmdpriv;
+	//struct	cmd_obj*	pcmdobj;
+	//struct	TDLSoption_param	*TDLSoption;
+	//struct 	mlme_priv *pmlmepriv = &padapter->mlmepriv;
+	//struct	cmd_priv   *pcmdpriv = &padapter->cmdpriv;
 
 	u8	res=_SUCCESS;
 
@@ -1988,10 +1988,8 @@ _func_enter_;
 	init_h2fwcmd_w_parm_no_rsp(pcmdobj, TDLSoption, GEN_CMD_CODE(_TDLS));
 	res = rtw_enqueue_cmd(pcmdpriv, pcmdobj);
 
-#endif	//CONFIG_TDLS
-	
 exit:
-
+#endif	//CONFIG_TDLS
 
 _func_exit_;	
 

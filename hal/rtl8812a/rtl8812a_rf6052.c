@@ -42,7 +42,7 @@ PHY_RF6052SetBandwidth8812(
 	IN	PADAPTER				Adapter,
 	IN	CHANNEL_WIDTH		Bandwidth)	//20M or 40M
 {	
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	
 	switch(Bandwidth)
 	{
@@ -296,7 +296,7 @@ static void writeOFDMPowerReg8812(
 	IN 		u32*		pValue
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
 	u2Byte RegOffset_A[6] = {	
     	rTxAGC_A_Ofdm18_Ofdm6_JAguar,
@@ -451,7 +451,7 @@ PHY_RF6052SetOFDMTxPower8812(
 	IN	u8*		pPowerLevelBW40,	
 	IN	u8		Channel)
 {
-	u32 writeVal[2], powerBase0[2], powerBase1[2], pwrtrac_value;
+	u32 writeVal[2], powerBase0[2], powerBase1[2];
 	u8 index = 0;	
 	
 

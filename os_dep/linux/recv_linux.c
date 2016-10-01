@@ -164,8 +164,8 @@ int rtw_os_recvbuf_resource_alloc(_adapter *padapter, struct recv_buf *precvbuf)
 	int res=_SUCCESS;
 
 #ifdef CONFIG_USB_HCI
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
-	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
+	//struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
+	//struct usb_device	*pusbd = pdvobjpriv->pusbdev;
 
 	precvbuf->irp_pending = _FALSE;
 	precvbuf->purb = usb_alloc_urb(0, GFP_KERNEL);
@@ -394,7 +394,7 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, struct rx_pkt_attri
 void rtw_handle_tkip_mic_err(_adapter *padapter,u8 bgroup)
 {
 #ifdef CONFIG_IOCTL_CFG80211
-	enum nl80211_key_type key_type;
+	enum nl80211_key_type key_type = 0;
 #endif
 	union iwreq_data wrqu;
 	struct iw_michaelmicfailure    ev;
@@ -549,7 +549,7 @@ int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
 	struct recv_priv *precvpriv;
 	_queue	*pfree_recv_queue;
 	_pkt *skb;
-	struct mlme_priv*pmlmepriv = &padapter->mlmepriv;
+	//struct mlme_priv*pmlmepriv = &padapter->mlmepriv;
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
 
 _func_enter_;
@@ -613,7 +613,7 @@ _func_enter_;
 
 	rtw_os_recv_indicate_pkt(padapter, skb, pattrib);
 
-_recv_indicatepkt_end:
+//_recv_indicatepkt_end:
 
 	precv_frame->u.hdr.pkt = NULL; // pointers to NULL before rtw_free_recvframe()
 

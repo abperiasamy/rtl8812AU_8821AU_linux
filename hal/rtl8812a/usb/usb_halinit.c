@@ -29,7 +29,7 @@
 #endif
 
 
-static void _dbg_dump_macreg(_adapter *padapter)
+static inline void _dbg_dump_macreg(_adapter *padapter)
 {
 	u32 offset = 0;
 	u32 val32 = 0;
@@ -673,7 +673,7 @@ _InitQueuePriority_8812AUsb(
 
 
 
-static VOID
+static inline VOID
 _InitHardwareDropIncorrectBulkOut_8812A(
 	IN  PADAPTER Adapter
 	)
@@ -951,7 +951,7 @@ usb_AggSettingRxUpdate_8812A(
 #ifdef CONFIG_USB_RX_AGGREGATION
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8			valueDMA;
-	u8			valueUSB;
+	//u8			valueUSB;
 
 	valueDMA = rtw_read8(Adapter, REG_TRXDMA_CTRL);
 
@@ -1180,7 +1180,7 @@ _InitOperationMode_8812A(
 
 
 // Set CCK and OFDM Block "ON"
-static VOID _BBTurnOnBlock(
+static inline VOID _BBTurnOnBlock(
 	IN	PADAPTER		Adapter
 	)
 {
@@ -1192,7 +1192,7 @@ static VOID _BBTurnOnBlock(
 	PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bOFDMEn, 0x1);
 }
 
-static VOID _RfPowerSave(
+static inline VOID _RfPowerSave(
 	IN	PADAPTER		Adapter
 	)
 {
@@ -1259,7 +1259,7 @@ _InitAntenna_Selection_8812A(IN	PADAPTER Adapter)
 // If Efuse 0x0e bit1 is not enabled, we can not support selective suspend for Minicard and
 // slim card.
 //
-static VOID
+static inline VOID
 HalDetectSelectiveSuspendMode(
 	IN PADAPTER				Adapter
 	)
@@ -1313,7 +1313,7 @@ HalDetectSelectiveSuspendMode(
  *	When		Who		Remark
  *	08/23/2010	MHC		HW suspend mode switch test..
  *---------------------------------------------------------------------------*/
-static VOID 
+static inline VOID 
 HwSuspendModeEnable_8812AU(
 	IN	PADAPTER	pAdapter,
 	IN	u8			Type
@@ -1357,7 +1357,7 @@ HwSuspendModeEnable_8812AU(
 }	// HwSuspendModeEnable92Cu
 rt_rf_power_state RfOnOffDetect(IN	PADAPTER pAdapter )
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(pAdapter);
+	//HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(pAdapter);
 	u8	val8;
 	rt_rf_power_state rfpowerstate = rf_off;
 
@@ -1390,19 +1390,21 @@ void _ps_close_RF(_adapter *padapter){
 u32 rtl8812au_hal_init(PADAPTER Adapter)
 {
 	u8	value8 = 0, u1bRegCR;
-	u16  value16;
+	//u16  value16;
 	u8	txpktbuf_bndy;
 	u32	status = _SUCCESS;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	struct pwrctrl_priv		*pwrctrlpriv = &Adapter->pwrctrlpriv;
 	struct registry_priv	*pregistrypriv = &Adapter->registrypriv;
 	
-	rt_rf_power_state		eRfPowerStateToSet;
+	//rt_rf_power_state		eRfPowerStateToSet;
 #ifdef CONFIG_BT_COEXIST
 	struct btcoexist_priv	*pbtpriv = &(pHalData->bt_coexist);
 #endif
 
+#ifdef CONFIG_DEBUG
 	u32 init_start_time = rtw_get_current_time();
+#endif
 
 
 #ifdef DBG_HAL_INIT_PROFILING
@@ -1962,10 +1964,11 @@ CardDisableRTL8812AU(
 	IN	PADAPTER			Adapter 
 )
 {
+	//FIXME val8
 	u8	u1bTmp;
-	u8 	val8;
-	u16	val16;
-	u32	val32;
+	u8 	val8 = 0;
+	//u16	val16;
+	//u32	val32;
 	
 
 	//DBG_871X("CardDisableRTL8188EU\n");
@@ -2073,7 +2076,7 @@ unsigned int rtl8812au_inirp_init(PADAPTER Adapter)
 	u8 i;	
 	struct recv_buf *precvbuf;
 	uint	status;
-	struct dvobj_priv *pdev= adapter_to_dvobj(Adapter);
+	//struct dvobj_priv *pdev= adapter_to_dvobj(Adapter);
 	struct intf_hdl * pintfhdl=&Adapter->iopriv.intf;
 	struct recv_priv *precvpriv = &(Adapter->recvpriv);	
 	u32 (*_read_port)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
@@ -2245,7 +2248,7 @@ hal_InitPGData_8812A(
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
 //	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	u32			i;
-	u16			value16;
+	//u16			value16;
 
 	if(_FALSE == pEEPROM->bautoload_fail_flag)
 	{ // autoload OK.
@@ -2552,7 +2555,7 @@ ReadAdapterInfo8812AU(
 	IN PADAPTER			Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	
 	DBG_871X("====> ReadAdapterInfo8812AU\n");
 
@@ -2595,9 +2598,9 @@ void UpdateInterruptMask8812AU(PADAPTER padapter,u8 bHIMR0 ,u32 AddMSR, u32 Remo
 
 void SetHwReg8812AU(PADAPTER Adapter, u8 variable, u8* val)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	DM_ODM_T 		*podmpriv = &pHalData->odmpriv;
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//struct dm_priv	*pdmpriv = &pHalData->dmpriv;
+	//DM_ODM_T 		*podmpriv = &pHalData->odmpriv;
 _func_enter_;
 
 	switch(variable)
@@ -2659,8 +2662,8 @@ _func_exit_;
 
 void GetHwReg8812AU(PADAPTER Adapter, u8 variable, u8* val)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	DM_ODM_T 		*podmpriv = &pHalData->odmpriv;
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//DM_ODM_T 		*podmpriv = &pHalData->odmpriv;
 _func_enter_;
 
 	switch(variable)
@@ -2684,7 +2687,7 @@ SetHalDefVar8812AUsb(
 	IN	PVOID					pValue
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8			bResult = _SUCCESS;
 
 	switch(eVariable)
@@ -2708,7 +2711,7 @@ GetHalDefVar8812AUsb(
 	IN	PVOID					pValue
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8			bResult = _SUCCESS;
 
 	switch(eVariable)

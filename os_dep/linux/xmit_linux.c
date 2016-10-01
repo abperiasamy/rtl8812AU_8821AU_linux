@@ -230,7 +230,7 @@ void rtw_os_xmit_complete(_adapter *padapter, struct xmit_frame *pxframe)
 
 void rtw_os_xmit_schedule(_adapter *padapter)
 {
-	_adapter *pri_adapter = padapter;
+	//_adapter *pri_adapter = padapter;
 
 #if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 	if(!padapter)
@@ -374,7 +374,7 @@ int rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev)
 #endif	// CONFIG_TX_MCAST2UNI	
 	s32 res = 0;
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
-	u16 queue;
+	//u16 queue;
 #endif
 
 _func_enter_;

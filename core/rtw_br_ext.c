@@ -308,7 +308,7 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
 }
 
 
-static void convert_ipv6_mac_to_mc(struct sk_buff *skb)
+static inline void convert_ipv6_mac_to_mc(struct sk_buff *skb)
 {	
 	struct ipv6hdr *iph = (struct ipv6hdr *)(skb->data + ETH_HLEN);
 	unsigned char *dst_mac = skb->data;

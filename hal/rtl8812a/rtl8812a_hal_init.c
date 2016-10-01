@@ -529,7 +529,7 @@ s32 InitLLTTable8812(PADAPTER padapter, u8 txpktbuf_bndy)
 	s32	status = _FAIL;
 	u32	i;
 	u32	Last_Entry_Of_TxPktBuf = LAST_ENTRY_OF_TX_PKT_BUFFER_8812;
-	HAL_DATA_TYPE *pHalData	= GET_HAL_DATA(padapter);
+	//HAL_DATA_TYPE *pHalData	= GET_HAL_DATA(padapter);
 
 #if defined(CONFIG_IOL_LLT)
 	if(1 || rtw_IOL_applied(padapter))
@@ -793,7 +793,7 @@ _PageWrite_8812(
 	return _BlockWrite_8812(padapter,buffer,size);
 }
 
-static VOID
+static inline VOID
 _FillDummy_8812(
 	u8*		pFwBuf,
 	u32*	pFwLen
@@ -899,7 +899,7 @@ static s32 _FWFreeToGo8812(PADAPTER padapter)
 {
 	u32	counter = 0;
 	u32	value32;
-	u8 	value8;
+	//u8 	value8;
 
 	// polling CheckSum report
 	do {
@@ -951,8 +951,8 @@ FirmwareDownload8812(
 	u32 fwdl_start_time;
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);	
 	
-	u8				*pFwImageFileName;
-	u8				*pucMappedFile = NULL;
+	//u8				*pFwImageFileName;
+	//u8				*pucMappedFile = NULL;
 	PRT_FIRMWARE_8812	pFirmware = NULL;
 	u8				*pFwHdr = NULL;
 	u8				*pFirmwareBuf;
@@ -2193,7 +2193,7 @@ rtl8812_EfusePowerSwitch(
 	Hal_EfusePowerSwitch8812A(pAdapter, bWrite, PwrState);	
 }
 
-static BOOLEAN
+static inline BOOLEAN
 Hal_EfuseSwitchToBank8812A(
 	IN		PADAPTER	pAdapter,
 	IN		u1Byte		bank,
@@ -2789,7 +2789,7 @@ hal_EfusePgPacketRead_8812A(
 	u8	hoffset = 0,hworden = 0;
 	u8	tmpidx = 0;
 	u8	tmpdata[8];
-	u8	max_section = 0;
+	//u8	max_section = 0;
 	u8	tmp_header = 0;
 
 	if(data==NULL)
@@ -3553,8 +3553,8 @@ void rtl8812_GetHalODMVar(
 	PVOID					pValue1,
 	BOOLEAN					bSet)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	PDM_ODM_T podmpriv = &pHalData->odmpriv;
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//PDM_ODM_T podmpriv = &pHalData->odmpriv;
 	switch(eVariable){
 		case HAL_ODM_STA_INFO:
 			break;
@@ -3693,7 +3693,7 @@ void InitPGData8812A(PADAPTER padapter)
 {
 	PEEPROM_EFUSE_PRIV pEEPROM;
 	u32 i;
-	u16 val16;
+	//u16 val16;
 
 
 	pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
@@ -4083,7 +4083,7 @@ static void StopTxBeacon(_adapter *padapter)
 void SetBeaconRelatedRegisters8812A(PADAPTER padapter)
 {
 	u32	value32;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	u32 bcn_ctrl_reg 			= REG_BCN_CTRL;
@@ -4438,7 +4438,7 @@ static void hw_var_set_bcn_func(PADAPTER Adapter, u8 variable, u8* val)
 
 }
 
-static void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
+static inline void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 	u64	tsf;
@@ -4533,7 +4533,7 @@ static void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
 #endif
 }
 
-static void hw_var_set_mlme_disconnect(PADAPTER Adapter, u8 variable, u8* val)
+static inline void hw_var_set_mlme_disconnect(PADAPTER Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 				
@@ -4664,7 +4664,7 @@ static void hw_var_set_mlme_sitesurvey(PADAPTER Adapter, u8 variable, u8* val)
 	}		
 }
 
-static void hw_var_set_mlme_join(PADAPTER Adapter, u8 variable, u8* val)
+static inline void hw_var_set_mlme_join(PADAPTER Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 	u8	RetryLimit = 0x30;
@@ -4796,7 +4796,7 @@ _func_enter_;
 		case HW_VAR_BASIC_RATE:
 			{
 				u16 BrateCfg = 0;
-				u8 RateIndex = 0;
+				//u8 RateIndex = 0;
 
 				// 2007.01.16, by Emily
 				// Select RRSR (in Legacy-OFDM and CCK)
@@ -5567,7 +5567,7 @@ void GetHwReg8812A(PADAPTER padapter, u8 variable, u8 *pval)
 	PDM_ODM_T podmpriv;
 	u8 val8;
 	u16 val16;
-	u32 val32;
+	//u32 val32;
 
 _func_enter_;
 

@@ -1719,7 +1719,7 @@ static const struct net_device_ops rtw_netdev_ops = {
 
 int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 {
-	_adapter *padapter = rtw_netdev_priv(pnetdev);
+	//_adapter *padapter = rtw_netdev_priv(pnetdev);
 
 #ifdef CONFIG_EASY_REPLACEMENT
 	struct net_device	*TargetNetdev = NULL;
@@ -2227,7 +2227,7 @@ void rtw_cancel_all_timer(_adapter *padapter)
 
 u8 rtw_free_drv_sw(_adapter *padapter)
 {
-	struct net_device *pnetdev = (struct net_device*)padapter->pnetdev;
+	//struct net_device *pnetdev = (struct net_device*)padapter->pnetdev;
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("==>rtw_free_drv_sw"));
 
@@ -3292,7 +3292,9 @@ netdev_open_error:
 int rtw_ips_pwr_up(_adapter *padapter)
 {
 	int result;
+#ifdef CONFIG_DEBUG
 	u32 start_time = rtw_get_current_time();
+#endif
 	DBG_871X("===>  rtw_ips_pwr_up..............\n");
 	rtw_reset_drv_sw(padapter);
 
@@ -3307,7 +3309,9 @@ int rtw_ips_pwr_up(_adapter *padapter)
 
 void rtw_ips_pwr_down(_adapter *padapter)
 {
+#ifdef CONFIG_DEBUG
 	u32 start_time = rtw_get_current_time();
+#endif
 	DBG_871X("===> rtw_ips_pwr_down...................\n");
 
 	padapter->bCardDisableWOHSM = _TRUE;
@@ -3320,8 +3324,8 @@ void rtw_ips_pwr_down(_adapter *padapter)
 #endif
 void rtw_ips_dev_unload(_adapter *padapter)
 {
-	struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
-	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
+	//struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
+	//struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 	DBG_871X("====> %s...\n",__FUNCTION__);
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_FIFO_CLEARN_UP, 0);

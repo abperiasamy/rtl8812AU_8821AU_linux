@@ -22,7 +22,7 @@
 //#include <drv_types.h>
 #include <rtl8812a_hal.h>
 
-static s32  translate2dbm(u8 signal_strength_idx)
+static inline s32  translate2dbm(u8 signal_strength_idx)
 {
 	s32	signal_power; // in dBm.
 
@@ -37,7 +37,7 @@ static s32  translate2dbm(u8 signal_strength_idx)
 
 static void process_rssi(_adapter *padapter,union recv_frame *prframe)
 {
-	u32	last_rssi, tmp_val;
+	//u32	last_rssi, tmp_val;
 	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	struct signal_stat * signal_stat = &padapter->recvpriv.signal_strength_data;
@@ -93,7 +93,7 @@ static void process_rssi(_adapter *padapter,union recv_frame *prframe)
 
 static void process_link_qual(_adapter *padapter,union recv_frame *prframe)
 {
-	u32	last_evm=0, tmpVal;
+	//u32	last_evm=0, tmpVal;
  	struct rx_pkt_attrib *pattrib;
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	struct signal_stat * signal_stat;
@@ -230,7 +230,7 @@ void rtl8812_query_rx_phy_status(
 	PODM_PHY_INFO_T 	pPHYInfo  = (PODM_PHY_INFO_T)(&pattrib->phy_info);
 	u8					*wlanhdr;
 	ODM_PACKET_INFO_T	pkt_info;
-	u8 *sa;
+	u8 *sa = NULL;
 	struct sta_priv *pstapriv;
 	struct sta_info *psta;
 	//_irqL		irqL;

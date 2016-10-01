@@ -790,11 +790,12 @@ PHY_ConvertPowerLimitToPowerIndex(
 	IN	PADAPTER			Adapter
 	)
 {
+	//FIXME baseIndex5G baseIndex2_4G
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	u8 				BW40PwrBasedBm2_4G, BW40PwrBasedBm5G;
 	u8 				regulation, bw, channel, rateSection, group;	
-	u8 				baseIndex2_4G;
-	u8				baseIndex5G;
+	u8 				baseIndex2_4G = 0;
+	u8				baseIndex5G = 0;
 	s8 				tempValue = 0, tempPwrLmt = 0;
 	u8 				rfPath = 0;
 
@@ -1198,7 +1199,7 @@ PHY_GetPowerLimitValue(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	s16				band = -1, regulation = -1, bandwidth = -1,
-					rfPath = -1, rateSection = -1, channelGroup = -1;
+					rateSection = -1, channelGroup = -1;
 	u8				powerLimit = MAX_POWER_INDEX;
 
 	if ( ( Adapter->registrypriv.RegEnableTxPowerLimit == 0 && pHalData->EEPROMRegulatory != 1 ) ||
@@ -1353,8 +1354,9 @@ PHY_StorePwrByRateIndexVhtSeries(
 	IN	u32			Data
 	)
 {
+	//FIXME rf_path
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u8			rf_path, rate_section;
+	u8			rf_path = 0, rate_section;
 
 	//
 	// For VHT series TX power by rate table.
@@ -1468,8 +1470,9 @@ VOID phy_PreprocessVHTPGDataFromExactToRelativeValue(
 	IN	u32*		pData
 	)
 {
+	//FIXME rf_path
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u8			rf_path, rate_section, BaseValue = 0;
+	u8			rf_path = 0, rate_section, BaseValue = 0;
 	//
 	// For VHT series TX power by rate table.
 	// VHT TX power by rate off setArray = 
@@ -2210,16 +2213,16 @@ storePwrIndexDiffRateOffset(
 	}
 }
 
-static u8
+static inline u8
 phy_DbmToTxPwrIdx(
 	IN	PADAPTER		Adapter,
 	IN	WIRELESS_MODE	WirelessMode,
 	IN	int			PowerInDbm
 	)
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	//HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	u8	TxPwrIdx = 0;
-	s32	Offset = 0;
+	//s32	Offset = 0;
 
 #if 0
 	//
@@ -2268,7 +2271,7 @@ phy_DbmToTxPwrIdx(
 	return TxPwrIdx;
 }
 
-static int
+static inline int
 phy_TxPwrIdxToDbm(
 	IN	PADAPTER		Adapter,
 	IN	WIRELESS_MODE	WirelessMode,
@@ -2310,9 +2313,9 @@ PHY_GetTxPowerLevel8812(
 	OUT u32*    		powerlevel
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u8			TxPwrLevel = 0;
-	int			TxPwrDbm;
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//u8			TxPwrLevel = 0;
+	//int			TxPwrDbm;
 #if 0
 	//
 	// Because the Tx power indexes are different, we report the maximum of them to
@@ -4397,7 +4400,7 @@ PHY_HandleSwChnlAndSetBW8812(
 	u8					tmpnCur40MhzPrimeSC = pHalData->nCur40MhzPrimeSC;
 	u8					tmpnCur80MhzPrimeSC = pHalData->nCur80MhzPrimeSC;
 	u8					tmpCenterFrequencyIndex1 =pHalData->CurrentCenterFrequencyIndex1;
-	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
+	//struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
 
 	//DBG_871X("=> PHY_HandleSwChnlAndSetBW8812: bSwitchChannel %d, bSetBandWidth %d \n",bSwitchChannel,bSetBandWidth);
 

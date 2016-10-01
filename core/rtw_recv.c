@@ -716,7 +716,8 @@ _func_exit_;
 union recv_frame * portctrl(_adapter *adapter,union recv_frame * precv_frame);
 union recv_frame * portctrl(_adapter *adapter,union recv_frame * precv_frame)
 {
-	u8   *psta_addr, *ptr;
+	//FIXME psta_addr
+	u8   *psta_addr = NULL, *ptr;
 	uint  auth_alg;
 	struct recv_frame_hdr *pfhdr;
 	struct sta_info *psta;
@@ -1817,7 +1818,7 @@ sint validate_recv_data_frame(_adapter *adapter, union recv_frame *precv_frame)
 	struct sta_info *psta = NULL;
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	struct rx_pkt_attrib	*pattrib = & precv_frame->u.hdr.attrib;
-	struct sta_priv 	*pstapriv = &adapter->stapriv;
+	//struct sta_priv 	*pstapriv = &adapter->stapriv;
 	struct security_priv	*psecuritypriv = &adapter->securitypriv;	
 	sint ret = _SUCCESS;
 #ifdef CONFIG_TDLS
@@ -3254,7 +3255,7 @@ int recv_indicatepkt_reorder(_adapter *padapter, union recv_frame *prframe)
 	}
 
 
-_success_exit:
+//_success_exit:
 
 	return _SUCCESS;
 
@@ -3372,7 +3373,7 @@ int recv_func_prehandle(_adapter *padapter, union recv_frame *rframe)
 {
 	int ret = _SUCCESS;
 	struct rx_pkt_attrib *pattrib = &rframe->u.hdr.attrib;
-	struct recv_priv *precvpriv = &padapter->recvpriv;
+	//struct recv_priv *precvpriv = &padapter->recvpriv;
 	_queue *pfree_recv_queue = &padapter->recvpriv.free_recv_queue;
 	
 #ifdef CONFIG_MP_INCLUDED
@@ -3416,7 +3417,7 @@ int recv_func_posthandle(_adapter *padapter, union recv_frame *prframe)
 {
 	int ret = _SUCCESS;
 	union recv_frame *orig_prframe = prframe;
-	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
+	//struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 	_queue *pfree_recv_queue = &padapter->recvpriv.free_recv_queue;
 	
@@ -3573,7 +3574,9 @@ int recv_func_posthandle(_adapter *padapter, union recv_frame *prframe)
 	}
 #endif // CONFIG_80211N_HT
 
+#ifdef CONFIG_TDLS
 _exit_recv_func:
+#endif
 	return ret;
 
 _recv_data_drop:
@@ -3587,7 +3590,7 @@ int recv_func(_adapter *padapter, union recv_frame *rframe)
 {
 	int ret;
 	struct rx_pkt_attrib *prxattrib = &rframe->u.hdr.attrib;
-	struct recv_priv *recvpriv = &padapter->recvpriv;
+	//struct recv_priv *recvpriv = &padapter->recvpriv;
 	struct security_priv *psecuritypriv=&padapter->securitypriv;
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
 
@@ -3595,7 +3598,7 @@ int recv_func(_adapter *padapter, union recv_frame *rframe)
 	if (check_fwstate(mlmepriv, WIFI_STATION_STATE) && psecuritypriv->busetkipkey)
 	{
 		union recv_frame *pending_frame;
-		_irqL irqL;
+		//_irqL irqL;
 
 		while((pending_frame=rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue))) {
 			if (recv_func_posthandle(padapter, pending_frame) == _SUCCESS)

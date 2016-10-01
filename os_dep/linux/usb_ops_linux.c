@@ -30,7 +30,7 @@ int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u16 inde
 
 	unsigned int pipe;
 	int status = 0;
-	u32 tmp_buflen=0;
+	//u32 tmp_buflen=0;
 	u8 reqtype;
 	u8 *pIo_buf;
 	int vendorreq_times = 0;
@@ -38,7 +38,7 @@ int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u16 inde
 	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE
 	u8 *tmp_buf;
 	#else // use stack memory
-	u8 tmp_buf[MAX_USB_IO_CTL_SIZE];
+	//u8 tmp_buf[MAX_USB_IO_CTL_SIZE];
 	#endif
 
 #ifdef CONFIG_CONCURRENT_MODE
@@ -359,7 +359,7 @@ static void usb_bulkout_zero_complete(struct urb *purb, struct pt_regs *regs)
 
 }
 
-static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
+static inline u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 {	
 	int pipe, status, len;
 	u32 ret;
@@ -456,7 +456,7 @@ void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 {
 	_irqL irqL;
-	int i;
+	//int i;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)purb->context;
 	//struct xmit_frame *pxmitframe = (struct xmit_frame *)pxmitbuf->priv_data;
 	//_adapter			*padapter = pxmitframe->padapter;
@@ -611,7 +611,7 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	_irqL irqL;
 	unsigned int pipe;
 	int status;
-	u32 ret = _FAIL, bwritezero = _FALSE;
+	u32 ret = _FAIL;
 	PURB	purb = NULL;
 	_adapter *padapter = (_adapter *)pintfhdl->padapter;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(padapter);	
@@ -619,7 +619,7 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)wmem;
 	struct xmit_frame *pxmitframe = (struct xmit_frame *)pxmitbuf->priv_data;
 	struct usb_device *pusbd = pdvobj->pusbdev;
-	struct pkt_attrib *pattrib = &pxmitframe->attrib;
+	//struct pkt_attrib *pattrib = &pxmitframe->attrib;
 	
 _func_enter_;	
 	

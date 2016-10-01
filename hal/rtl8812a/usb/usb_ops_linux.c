@@ -416,7 +416,7 @@ _func_exit_;
 }
 #endif
 
-static s32 pre_recv_entry(union recv_frame *precvframe, u8 *pphy_status)
+static inline s32 pre_recv_entry(union recv_frame *precvframe, u8 *pphy_status)
 {	
 	s32 ret=_SUCCESS;
 #ifdef CONFIG_CONCURRENT_MODE	
@@ -590,7 +590,7 @@ _pkt *pskb
 	u8				*pphy_status = NULL;	
 	union recv_frame	*precvframe = NULL;
 	struct rx_pkt_attrib	*pattrib = NULL;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 	_queue			*pfree_recv_queue = &precvpriv->free_recv_queue;
 
@@ -937,8 +937,8 @@ void rtl8812au_recv_tasklet(void *priv)
 
 static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 {
-	_irqL irqL;
-	uint isevt, *pbuf;
+	//_irqL irqL;
+	//uint isevt, *pbuf;
 	struct recv_buf	*precvbuf = (struct recv_buf *)purb->context;	
 	_adapter 			*padapter =(_adapter *)precvbuf->adapter;
 	struct recv_priv	*precvpriv = &padapter->recvpriv;	
@@ -1052,7 +1052,7 @@ _func_exit_;
 
 static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 {	
-	_irqL irqL;
+	//_irqL irqL;
 	int err;
 	unsigned int pipe;
 	SIZE_PTR tmpaddr=0;

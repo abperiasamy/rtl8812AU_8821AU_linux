@@ -86,7 +86,7 @@ odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(
 	s4Byte CurrSig 
 )
 {	
-	s4Byte RetSig;
+	s4Byte RetSig = 0;
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 	//if(pDM_Odm->SupportInterface  == ODM_ITRF_PCIE) 
 	{
@@ -142,7 +142,7 @@ odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(
 	s4Byte CurrSig 
 )
 {
-	s4Byte RetSig;
+	s4Byte RetSig = 0;
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 	//if(pDM_Odm->SupportInterface  == ODM_ITRF_USB)
 	{
@@ -203,7 +203,7 @@ odm_SignalScaleMapping_92CSeries(
 	IN s4Byte CurrSig 
 )
 {
-	s4Byte RetSig;
+	s4Byte RetSig = 0;
 #if (DEV_BUS_TYPE == RT_PCI_INTERFACE) 
 	if(pDM_Odm->SupportInterface  == ODM_ITRF_PCIE) 
 	{
@@ -325,7 +325,7 @@ static u1Byte odm_SQ_process_patch_RT_CID_819x_Lenovo(
 	IN u1Byte 		RSSI
 )
 {
-	u1Byte	SQ;
+	u1Byte	SQ = 0;
 #if (DM_ODM_SUPPORT_TYPE &  ODM_WIN)			
 
 	if(isCCKrate){
@@ -542,7 +542,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 	IN		PODM_PACKET_INFO_T			pPktinfo
 	)
 {							
-	SWAT_T				*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
+	//SWAT_T				*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
 	u1Byte				i, Max_spatial_stream;
 	s1Byte				rx_pwr[4], rx_pwr_all=0;
 	u1Byte				EVM, PWDB_ALL = 0, PWDB_ALL_BT;

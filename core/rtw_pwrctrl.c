@@ -130,7 +130,7 @@ bool rtw_pwr_unassociated_idle(_adapter *adapter)
 #ifdef CONFIG_P2P
 	struct wifidirect_info	*pwdinfo = &(adapter->wdinfo);
 #ifdef CONFIG_IOCTL_CFG80211
-	struct cfg80211_wifidirect_info *pcfg80211_wdinfo = &adapter->cfg80211_wdinfo;
+	//struct cfg80211_wifidirect_info *pcfg80211_wdinfo = &adapter->cfg80211_wdinfo;
 #endif
 #endif
 
@@ -160,7 +160,7 @@ bool rtw_pwr_unassociated_idle(_adapter *adapter)
 		#ifdef CONFIG_P2P
 		struct wifidirect_info *b_pwdinfo = &(buddy->wdinfo);
 		#ifdef CONFIG_IOCTL_CFG80211
-		struct cfg80211_wifidirect_info *b_pcfg80211_wdinfo = &buddy->cfg80211_wdinfo;
+		//struct cfg80211_wifidirect_info *b_pcfg80211_wdinfo = &buddy->cfg80211_wdinfo;
 		#endif
 		#endif
 
@@ -206,10 +206,12 @@ exit:
 void rtw_ps_processor(_adapter*padapter)
 {
 #ifdef CONFIG_P2P
-	struct wifidirect_info	*pwdinfo = &( padapter->wdinfo );
+	//struct wifidirect_info	*pwdinfo = &( padapter->wdinfo );
 #endif //CONFIG_P2P
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
+#ifdef CONFIG_DEBUG
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
+#endif
 #ifdef SUPPORT_HW_RFOFF_DETECTED
 	rt_rf_power_state rfpwrstate;
 #endif //SUPPORT_HW_RFOFF_DETECTED
@@ -666,8 +668,8 @@ s32 LPS_RF_ON_check(PADAPTER padapter, u32 delay_ms)
 void LPS_Enter(PADAPTER padapter)
 {
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
-	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	_adapter *buddy = padapter->pbuddy_adapter;
+	//struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
+	//_adapter *buddy = padapter->pbuddy_adapter;
 
 _func_enter_;
 
@@ -735,8 +737,8 @@ void LPS_Leave(PADAPTER padapter)
 #define LPS_LEAVE_TIMEOUT_MS 100
 
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
-	u32 start_time;
-	u8 bAwake = _FALSE;
+	//u32 start_time;
+	//u8 bAwake = _FALSE;
 
 _func_enter_;
 

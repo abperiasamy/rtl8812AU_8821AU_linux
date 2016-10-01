@@ -941,13 +941,6 @@ static void next_key(u8 *key, sint round);
 static void byte_sub(u8 *in, u8 *out);
 static void shift_row(u8 *in, u8 *out);
 static void mix_column(u8 *in, u8 *out);
-#ifndef PLATFORM_FREEBSD 
-static void add_round_key( u8 *shiftrow_in,
-                    u8 *mcol_in,
-                    u8 *block_in,
-                    sint round,
-                    u8 *out);
-#endif //PLATFORM_FREEBSD
 static void aes128k128d(u8 *key, u8 *data, u8 *ciphertext);
 
 
@@ -1918,7 +1911,7 @@ u32	rtw_aes_decrypt(_adapter *padapter, u8 *precvframe)
 
 
 	sint 		length;
-	u32	prwskeylen;
+	//u32	prwskeylen;
 	u8	*pframe,*prwskey;	//, *payload,*iv
 	struct	sta_info		*stainfo;
 	struct	rx_pkt_attrib	 *prxattrib = &((union recv_frame *)precvframe)->u.hdr.attrib;
@@ -2153,7 +2146,7 @@ static u8 os_strlen(const char *s)
 	return p - s;
 }
 
-static int os_memcmp(void *s1, void *s2, u8 n)
+static inline int os_memcmp(void *s1, void *s2, u8 n)
 {
 	unsigned char *p1 = s1, *p2 = s2;
 
@@ -2256,7 +2249,7 @@ static void hmac_sha256_vector(u8 *key, size_t key_len, size_t num_elem,
  * given key.
  */
 #ifndef PLATFORM_FREEBSD //Baron
-static void sha256_prf(u8 *key, size_t key_len, char *label,
+static inline void sha256_prf(u8 *key, size_t key_len, char *label,
 		u8 *data, size_t data_len, u8 *buf, size_t buf_len)
 {
 	u16 counter = 1;
@@ -2683,7 +2676,7 @@ static int omac1_aes_128_vector(u8 *key, size_t num_elem,
  * OMAC1 was standardized with the name CMAC by NIST in a Special Publication
  * (SP) 800-38B.
  */
-static int omac1_aes_128(u8 *key, u8 *data, size_t data_len, u8 *mac)
+static inline int omac1_aes_128(u8 *key, u8 *data, size_t data_len, u8 *mac)
 {
 	return omac1_aes_128_vector(key, 1, &data, &data_len, mac);
 }
