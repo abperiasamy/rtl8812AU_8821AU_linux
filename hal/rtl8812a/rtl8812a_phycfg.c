@@ -1198,7 +1198,7 @@ PHY_GetPowerLimitValue(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	s16				band = -1, regulation = -1, bandwidth = -1,
-					rfPath = -1, rateSection = -1, channelGroup = -1;
+					rateSection = -1, channelGroup = -1;
 	u8				powerLimit = MAX_POWER_INDEX;
 
 	if ( ( Adapter->registrypriv.RegEnableTxPowerLimit == 0 && pHalData->EEPROMRegulatory != 1 ) ||
@@ -2217,9 +2217,9 @@ phy_DbmToTxPwrIdx(
 	IN	int			PowerInDbm
 	)
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	//HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	u8	TxPwrIdx = 0;
-	s32	Offset = 0;
+	//s32	Offset = 0;
 
 #if 0
 	//
@@ -2310,9 +2310,9 @@ PHY_GetTxPowerLevel8812(
 	OUT u32*    		powerlevel
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u8			TxPwrLevel = 0;
-	int			TxPwrDbm;
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//u8			TxPwrLevel = 0;
+	//int			TxPwrDbm;
 #if 0
 	//
 	// Because the Tx power indexes are different, we report the maximum of them to
@@ -4397,7 +4397,7 @@ PHY_HandleSwChnlAndSetBW8812(
 	u8					tmpnCur40MhzPrimeSC = pHalData->nCur40MhzPrimeSC;
 	u8					tmpnCur80MhzPrimeSC = pHalData->nCur80MhzPrimeSC;
 	u8					tmpCenterFrequencyIndex1 =pHalData->CurrentCenterFrequencyIndex1;
-	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
+	//struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
 
 	//DBG_871X("=> PHY_HandleSwChnlAndSetBW8812: bSwitchChannel %d, bSetBandWidth %d \n",bSwitchChannel,bSetBandWidth);
 

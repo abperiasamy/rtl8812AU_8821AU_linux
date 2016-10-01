@@ -615,8 +615,8 @@ static void disable_dm(PADAPTER padapter)
 #ifndef CONFIG_RTL8723A
 	u8 v8;
 #endif
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	//struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
 
 	//3 1. disable firmware dynamic mechanism
@@ -949,9 +949,9 @@ void	SetAntennaPathPower(PADAPTER pAdapter)
 	
 int SetTxPower(PADAPTER pAdapter)
 {
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);	
+	//HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);	
 	u1Byte			CurrChannel;
-	BOOLEAN 		bResult = _TRUE;
+	//BOOLEAN 		bResult = _TRUE;
 	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.MptCtx);
 	u1Byte			rf, TxPower[2];
 
@@ -1289,7 +1289,7 @@ void fill_tx_desc_8812a(PADAPTER padapter)
 	
 	u32	pkt_size = pattrib->last_txcmdsz;
 	s32 bmcast = IS_MCAST(pattrib->ra);
-	u8 data_rate,pwr_status,offset;
+	u8 offset;
 
 	SET_TX_DESC_FIRST_SEG_8812(pDesc, 1);
 	SET_TX_DESC_LAST_SEG_8812(pDesc, 1);
@@ -1369,7 +1369,7 @@ void fill_tx_desc_8723b(PADAPTER padapter)
 void SetPacketTx(PADAPTER padapter)
 {
 	u8 *ptr, *pkt_start, *pkt_end;
-	u32 pkt_size,offset;
+	u32 pkt_size;
 	struct tx_desc *desc;
 	struct rtw_ieee80211_hdr *hdr;
 	u8 payload;
@@ -1668,7 +1668,7 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 {
 	   int i,res;
 	  _adapter *padapter = pxmitpriv->adapter;
-	struct xmit_frame	*pxmitframe = (struct xmit_frame*) pxmitpriv->pxmit_frame_buf;
+	//struct xmit_frame	*pxmitframe = (struct xmit_frame*) pxmitpriv->pxmit_frame_buf;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
 	
 	u32 max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
@@ -1962,14 +1962,14 @@ mpt_ProQueryCalTxPower_8188E(
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(pAdapter);
-	u1Byte				TxCount=TX_1S, i = 0;	//default set to 1S
+	u1Byte				TxCount=TX_1S;	//default set to 1S
 	//PMGNT_INFO			pMgntInfo = &(pAdapter->MgntInfo); 
-	ULONG				TxPower = 1, PwrGroup=0, PowerDiffByRate=0;
-	ULONG				TxPowerCCK = 1, TxPowerOFDM = 1, TxPowerBW20 = 1, TxPowerBW40 = 1 ; 
+	ULONG				TxPower = 1, PowerDiffByRate=0;
+	//ULONG				TxPowerCCK = 1, TxPowerOFDM = 1, TxPowerBW20 = 1, TxPowerBW40 = 1 ; 
 	PMPT_CONTEXT		pMptCtx = &(pAdapter->mppriv.MptCtx);
 	u1Byte				CurrChannel = pHalData->CurrentChannel;
 	u1Byte				index = (CurrChannel -1);	
-	u1Byte				rf_path=(RfPath), rfPath;
+	u1Byte				rf_path=(RfPath);
 	u1Byte				limit = 0, rate = 0;
 
 	if(HAL_IsLegalChannel(pAdapter, CurrChannel) == FALSE)
@@ -2067,10 +2067,10 @@ ULONG mpt_ProQueryCalTxPower(
 	)
 {
 
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
-	ULONG			TxPower = 1, PwrGroup=0, PowerDiffByRate=0;
+	//HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
+	ULONG			TxPower = 1;
 	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.MptCtx);
-	u1Byte			limit = 0, rate = 0;
+	u1Byte			rate = 0;
 	rate=pMptCtx->MptRateIndex;
 	
 	 if ( IS_HARDWARE_TYPE_8188E(pAdapter) || IS_HARDWARE_TYPE_8192E(pAdapter) )//|| IS_HARDWARE_TYPE_8723B(pAdapter))

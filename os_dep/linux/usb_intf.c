@@ -431,7 +431,7 @@ static u8 rtw_deinit_intf_priv(struct dvobj_priv *dvobj)
 static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 {
 	int	i;
-	u8	val8;
+	//u8	val8;
 	int	status = _FAIL;
 	struct dvobj_priv *pdvobjpriv;
 	struct usb_device_descriptor 	*pdev_desc;
@@ -802,8 +802,8 @@ static void usb_intf_stop(_adapter *padapter)
 
 static void rtw_dev_unload(_adapter *padapter)
 {
-	struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
-	u8 val8;
+	//struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
+	//u8 val8;
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+rtw_dev_unload\n"));
 
 	if(padapter->bup == _TRUE)
@@ -1032,13 +1032,15 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	struct net_device *pnetdev = padapter->pnetdev;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-	struct usb_device *usb_dev = interface_to_usbdev(pusb_intf);
+	//struct usb_device *usb_dev = interface_to_usbdev(pusb_intf);
 #ifdef CONFIG_WOWLAN
 	struct wowlan_ioctl_param poidparam;
 #endif // CONFIG_WOWLAN
 
 	int ret = 0;
+#ifdef CONFIG_DEBUG
 	u32 start_time = rtw_get_current_time();
+#endif
 
 	_func_enter_;
 
@@ -1147,7 +1149,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
 	_adapter *padapter = dvobj->if1;
-	struct net_device *pnetdev = padapter->pnetdev;
+	//struct net_device *pnetdev = padapter->pnetdev;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	 int ret = 0;
 
@@ -1179,7 +1181,9 @@ int rtw_resume_process(_adapter *padapter)
 	struct net_device *pnetdev;
 	struct pwrctrl_priv *pwrpriv;
 	int ret = -1;
+#ifdef CONFIG_DEBUG
 	u32 start_time = rtw_get_current_time();
+#endif
 #ifdef CONFIG_BT_COEXIST
 	u8 pm_cnt;
 #endif	//#ifdef CONFIG_BT_COEXIST
@@ -1681,13 +1685,15 @@ static void rtw_usb_if1_deinit(_adapter *if1)
 static void dump_usb_interface(struct usb_interface *usb_intf)
 {
 	int	i;
-	u8	val8;
+	//u8	val8;
 
 	struct usb_device				*udev = interface_to_usbdev(usb_intf);
+#ifdef CONFIG_DEBUG
 	struct usb_device_descriptor 	*dev_desc = &udev->descriptor;
 
 	struct usb_host_config			*act_conf = udev->actconfig;
 	struct usb_config_descriptor	*act_conf_desc = &act_conf->desc;
+#endif
 
 	struct usb_host_interface		*host_iface;
 	struct usb_interface_descriptor	*iface_desc;
@@ -1897,8 +1903,8 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
 	_adapter *padapter = dvobj->if1;
-	struct net_device *pnetdev = padapter->pnetdev;
-	struct mlme_priv *pmlmepriv= &padapter->mlmepriv;
+	//struct net_device *pnetdev = padapter->pnetdev;
+	//struct mlme_priv *pmlmepriv= &padapter->mlmepriv;
 
 _func_enter_;
 
@@ -2005,7 +2011,7 @@ static int __init rtw_drv_entry(void)
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+rtw_drv_entry\n"));
 
 	DBG_871X(DRV_NAME " driver version=%s\n", DRIVERVERSION);
-	DBG_871X("build time: %s %s\n", __DATE__, __TIME__);
+	//DBG_871X("build time: %s %s\n", __DATE__, __TIME__);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24))
 	//console_suspend_enabled=0;

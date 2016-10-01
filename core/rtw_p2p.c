@@ -298,7 +298,7 @@ static void issue_p2p_provision_resp(struct wifidirect_info *pwdinfo, u8* raddr,
 	unsigned short				*fctrl;
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+	//struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
 
 	if ((pmgntframe = alloc_mgtxmitframe(pxmitpriv)) == NULL)
@@ -2931,8 +2931,8 @@ u8 process_p2p_group_negotation_resp( struct wifidirect_info *pwdinfo, u8 *pfram
 		u8	attr_content = 0x00;
 		u32	attr_contentlen = 0;
 		u8	operatingch_info[5] = { 0x00 };
-		uint	ch_cnt = 0;
-		u8	ch_content[100] = { 0x00 };
+		//uint	ch_cnt = 0;
+		//u8	ch_content[100] = { 0x00 };
 		u8	groupid[ 38 ];
 		u16	cap_attr;
 		u8	peer_ch_list[100] = { 0x00 };
@@ -3291,7 +3291,7 @@ void p2p_concurrent_handler(  _adapter* padapter );
 void restore_p2p_state_handler( _adapter*	padapter )
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
-	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
+	//struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 
 _func_enter_;
 
@@ -3498,7 +3498,7 @@ static void ro_ch_handler(_adapter *padapter)
 {
 	struct cfg80211_wifidirect_info *pcfg80211_wdinfo = &padapter->cfg80211_wdinfo;
 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
-	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
+	//struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 _func_enter_;
 
@@ -3547,7 +3547,7 @@ _func_exit_;
 static void ro_ch_timer_process (void *FunctionContext)
 {
 	_adapter *adapter = (_adapter *)FunctionContext;
-	struct rtw_wdev_priv *pwdev_priv = wdev_to_priv(adapter->rtw_wdev);
+	//struct rtw_wdev_priv *pwdev_priv = wdev_to_priv(adapter->rtw_wdev);
 
 	//printk("%s \n", __FUNCTION__);
 	
@@ -3562,8 +3562,8 @@ static void rtw_change_p2pie_op_ch(_adapter *padapter, const u8 *frame_body, u32
 {
 	u8 *ies, *p2p_ie;
 	u32 ies_len, p2p_ielen;
-	PADAPTER pbuddy_adapter = padapter->pbuddy_adapter;
-	struct mlme_ext_priv *pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
+	//PADAPTER pbuddy_adapter = padapter->pbuddy_adapter;
+	//struct mlme_ext_priv *pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
 
 	ies = (u8*)(frame_body + _PUBLIC_ACTION_IE_OFFSET_);
 	ies_len = len - _PUBLIC_ACTION_IE_OFFSET_;
@@ -3591,8 +3591,8 @@ static void rtw_change_p2pie_ch_list(_adapter *padapter, const u8 *frame_body, u
 {
 	u8 *ies, *p2p_ie;
 	u32 ies_len, p2p_ielen;
-	PADAPTER pbuddy_adapter = padapter->pbuddy_adapter;
-	struct mlme_ext_priv *pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
+	//PADAPTER pbuddy_adapter = padapter->pbuddy_adapter;
+	//struct mlme_ext_priv *pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
 
 	ies = (u8*)(frame_body + _PUBLIC_ACTION_IE_OFFSET_);
 	ies_len = len - _PUBLIC_ACTION_IE_OFFSET_;
@@ -3773,7 +3773,7 @@ void rtw_append_wfd_ie(_adapter *padapter, u8 *buf, u32* len)
 	unsigned char	*frame_body;
 	u8 category, action, OUI_Subtype, dialogToken=0;
 	u32	wfdielen = 0;
-	struct rtw_wdev_priv *pwdev_priv = wdev_to_priv(padapter->rtw_wdev);
+	//struct rtw_wdev_priv *pwdev_priv = wdev_to_priv(padapter->rtw_wdev);
 	
 	frame_body = (unsigned char *)(buf + sizeof(struct rtw_ieee80211_hdr_3addr));	
 	category = frame_body[0];
@@ -3891,7 +3891,7 @@ u8 *dump_p2p_attr_ch_list(u8 *p2p_ie, uint p2p_ielen, u8 *buf, u32 buf_len)
 	int w_sz = 0;
 	u8 ch_cnt = 0;
 	u8 ch_list[40];
-	bool continuous = _FALSE;
+	//bool continuous = _FALSE;
 
 	if ((pattr=rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CH_LIST, NULL, &attr_contentlen))!=NULL) {
 		int i, j;
@@ -4238,7 +4238,7 @@ void rtw_init_cfg80211_wifidirect_info( _adapter*	padapter)
 
 void p2p_protocol_wk_hdl(_adapter *padapter, int intCmdType)
 {
-	struct wifidirect_info	*pwdinfo= &(padapter->wdinfo);
+	//struct wifidirect_info	*pwdinfo= &(padapter->wdinfo);
 	
 _func_enter_;
 
@@ -4597,7 +4597,7 @@ static void pre_tx_scan_timer_process (void *FunctionContext)
 	struct	wifidirect_info				*pwdinfo = &adapter->wdinfo;
 	_irqL							irqL;
 	struct mlme_priv					*pmlmepriv = &adapter->mlmepriv;
-	u8								_status = 0;
+	//u8								_status = 0;
 
 	if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 		return;
@@ -4987,12 +4987,12 @@ int rtw_p2p_enable(_adapter *padapter, enum P2P_ROLE role)
 {
 	int ret = _SUCCESS;
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
-	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
+	//struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 
 	if (role == P2P_ROLE_DEVICE || role == P2P_ROLE_CLIENT|| role == P2P_ROLE_GO)
 	{
-		u8 channel, ch_offset;
-		u16 bwmode;
+		//u8 channel, ch_offset;
+		//u16 bwmode;
 
 #ifdef CONFIG_CONCURRENT_MODE
 		_adapter				*pbuddy_adapter = padapter->pbuddy_adapter;

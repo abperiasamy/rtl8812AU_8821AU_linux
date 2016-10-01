@@ -565,7 +565,7 @@ u8	rtw_get_center_ch(u8 channel, u8 chnl_bw, u8 chnl_offset)
 
 void SelectChannel(_adapter *padapter, unsigned char channel)
 {
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;	
+	//struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;	
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	//saved channel info
@@ -587,7 +587,7 @@ void SelectChannel(_adapter *padapter, unsigned char channel)
 
 void SetBWMode(_adapter *padapter, unsigned short bwmode, unsigned char channel_offset)
 {
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+	//struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
 	//saved bw info
@@ -612,7 +612,7 @@ void SetBWMode(_adapter *padapter, unsigned short bwmode, unsigned char channel_
 void set_channel_bwmode(_adapter *padapter, unsigned char channel, unsigned char channel_offset, unsigned short bwmode)
 {
 	u8 center_ch, chnl_offset80 = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+	//struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
 	if ( padapter->bNotifyChannelChange )
 	{
@@ -944,10 +944,10 @@ void flush_all_cam_entry(_adapter *padapter)
 #if defined(CONFIG_P2P) && defined(CONFIG_WFD)
 int WFD_info_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE)
 {
-	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+	//struct registry_priv	*pregpriv = &padapter->registrypriv;
+	//struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
+	//struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+	//struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wifidirect_info	*pwdinfo;	
 	u8	wfd_ie[ 128 ] = { 0x00 };
 	u32	wfd_ielen = 0;
@@ -1279,7 +1279,7 @@ void HT_caps_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct mlme_priv 		*pmlmepriv = &padapter->mlmepriv;	
 	struct ht_priv			*phtpriv = &pmlmepriv->htpriv;
-	struct registry_priv 	*pregistrypriv = &padapter->registrypriv;
+	//struct registry_priv 	*pregistrypriv = &padapter->registrypriv;
 	
 	if(pIE==NULL) return;
 	
@@ -1559,7 +1559,8 @@ int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len)
 	u32 wpa_ielen = 0;
 	u8 *pbssid = GetAddr3Ptr(pframe);
 	u32 hidden_ssid = 0;
-	u8 cur_network_type, network_type=0;
+	//u8 cur_network_type, network_type=0;
+	//u8 cur_network_type;
 	struct HT_info_element *pht_info = NULL;
 	struct rtw_ieee80211_ht_cap *pht_cap = NULL;
 	u32 bcn_channel;
@@ -2636,7 +2637,7 @@ void rtw_alloc_macid(_adapter *padapter, struct sta_info *psta)
 
 void rtw_release_macid(_adapter *padapter, struct sta_info *psta)
 {
-	int i;
+	//int i;
 	_irqL	irqL;
 	u8 bc_addr[ETH_ALEN] = {0xff,0xff,0xff,0xff,0xff,0xff};
 	struct dvobj_priv *pdvobj = adapter_to_dvobj(padapter);
@@ -2772,7 +2773,7 @@ static _adapter *pbuddy_padapter = NULL;
 int rtw_handle_dualmac(_adapter *adapter, bool init)
 {
 	int status = _SUCCESS;
-	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
+	//struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 
 	if(adapter->chip_type != RTL8192D)	
 		goto exit;

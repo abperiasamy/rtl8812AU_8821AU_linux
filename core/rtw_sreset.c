@@ -114,11 +114,11 @@ bool sreset_inprogress(_adapter *padapter)
 
 void sreset_restore_security_station(_adapter *padapter)
 {
-	u8 EntryId = 0;
+	//u8 EntryId = 0;
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
 	struct sta_priv * pstapriv = &padapter->stapriv;
 	struct sta_info *psta;
-	struct security_priv* psecuritypriv=&(padapter->securitypriv);
+	//struct security_priv* psecuritypriv=&(padapter->securitypriv);
 	struct mlme_ext_info	*pmlmeinfo = &padapter->mlmeextpriv.mlmext_info;
 
 	{
@@ -239,8 +239,8 @@ void sreset_restore_network_station(_adapter *padapter)
 void sreset_restore_network_status(_adapter *padapter)
 {
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
-	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+	//struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+	//struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	if (check_fwstate(mlmepriv, WIFI_STATION_STATE)) {
 		DBG_871X(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_STATION_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));

@@ -1147,7 +1147,7 @@ if ( *(pDM_Odm->mp_mode) != 1) {
 				
 				if(pDM_Odm->LinkedInterval == 2)
 				{
-					PADAPTER		pAdapter = pDM_Odm->Adapter;
+					//PADAPTER		pAdapter = pDM_Odm->Adapter;
 
 					//mark out IQK flow to prevent tx stuck. by Maddest 20130306
 					//PHY_IQCalibrate_8821A(pAdapter, FALSE);
@@ -1738,8 +1738,8 @@ odm_BasicDbgMessage
 	IN		PDM_ODM_T		pDM_Odm
 	)
 {
-	PFALSE_ALARM_STATISTICS FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
-	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
+	//PFALSE_ALARM_STATISTICS FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
+	//pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
 	
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("odm_BasicDbgMsg==>\n"));
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("bLinked = %d, RSSI_Min = %d, CurrentIGI = 0x%x \n",
@@ -2079,8 +2079,8 @@ odm_DynamicATCSwitch_init(
 	IN 		PDM_ODM_T 		pDM_Odm
 )
 {
-	PADAPTER		Adapter = pDM_Odm->Adapter;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//PADAPTER		Adapter = pDM_Odm->Adapter;
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN )
 
@@ -2096,12 +2096,12 @@ odm_DynamicATCSwitch(
 	IN 		PDM_ODM_T 		pDM_Odm
 )
 {
-	PADAPTER		Adapter = pDM_Odm->Adapter;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u1Byte 			CrystalCap,ATC_status_temp = 0;
-	u4Byte			packet_count;
-	int				CFO_kHz_A,CFO_kHz_B,CFO_ave = 0, Adjust_Xtal = 0;
-	int				CFO_ave_diff;
+	//PADAPTER		Adapter = pDM_Odm->Adapter;
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//u1Byte 			CrystalCap,ATC_status_temp = 0;
+	//u4Byte			packet_count;
+	//int				CFO_kHz_A,CFO_kHz_B,CFO_ave = 0, Adjust_Xtal = 0;
+	//int				CFO_ave_diff;
 	
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN )
 
@@ -2315,7 +2315,7 @@ odm_Adaptivity(
 {
 	s4Byte TH_H_dmc, TH_L_dmc;
 	s4Byte TH_H, TH_L, Diff, IGI_target;
-	u4Byte value32;
+	//u4Byte value32;
 	BOOLEAN EDCCA_State;
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
@@ -2657,7 +2657,7 @@ odm_DIG(
 {
 	pDIG_T						pDM_DigTable = &pDM_Odm->DM_DigTable;
 	PFALSE_ALARM_STATISTICS		pFalseAlmCnt = &pDM_Odm->FalseAlmCnt;
-	pRXHP_T						pRX_HP_Table  = &pDM_Odm->DM_RXHP_Table;
+	//pRXHP_T						pRX_HP_Table  = &pDM_Odm->DM_RXHP_Table;
 	u1Byte						DIG_Dynamic_MIN;
 	u1Byte						DIG_MaxOfMin;
 	BOOLEAN						FirstConnect, FirstDisConnect;

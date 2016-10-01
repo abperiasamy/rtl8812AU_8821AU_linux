@@ -387,7 +387,7 @@ u8 rtw_set_802_11_ssid(_adapter* padapter, NDIS_802_11_SSID *ssid)
 {	
 	_irqL irqL;
 	u8 status = _SUCCESS;
-	u32 cur_time = 0;
+	//u32 cur_time = 0;
 
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct wlan_network *pnetwork = &pmlmepriv->cur_network;
@@ -1356,8 +1356,8 @@ int rtw_set_scan_mode(_adapter *adapter, RT_SCAN_TYPE scan_mode)
 */
 int rtw_set_channel_plan(_adapter *adapter, u8 channel_plan)
 {
-	struct registry_priv *pregistrypriv = &adapter->registrypriv;
-	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
+	//struct registry_priv *pregistrypriv = &adapter->registrypriv;
+	//struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
 
 	//handle by cmd_thread to sync with scan operation
 	return rtw_set_chplan_cmd(adapter, channel_plan, 1);

@@ -252,8 +252,8 @@ int rtw_android_get_rssi(struct net_device *net, char *command, int total_len)
 int rtw_android_get_link_speed(struct net_device *net, char *command, int total_len)
 {
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(net);
-	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);	
-	struct	wlan_network	*pcur_network = &pmlmepriv->cur_network;
+	//struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);	
+	//struct	wlan_network	*pcur_network = &pmlmepriv->cur_network;
 	int bytes_written = 0;
 	u16 link_speed = 0;
 
@@ -265,7 +265,7 @@ int rtw_android_get_link_speed(struct net_device *net, char *command, int total_
 
 int rtw_android_get_macaddr(struct net_device *net, char *command, int total_len)
 {
-	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
+	//_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
 	int bytes_written = 0;
 	
 	bytes_written = snprintf(command, total_len, "Macaddr = "MAC_FMT, MAC_ARG(net->dev_addr));
@@ -285,7 +285,7 @@ int rtw_android_set_country(struct net_device *net, char *command, int total_len
 
 int rtw_android_get_p2p_dev_addr(struct net_device *net, char *command, int total_len)
 {
-	int ret;
+	//int ret;
 	int bytes_written = 0;
 
 	//We use the same address as our HW MAC address
@@ -297,7 +297,7 @@ int rtw_android_get_p2p_dev_addr(struct net_device *net, char *command, int tota
 
 int rtw_android_set_block(struct net_device *net, char *command, int total_len)
 {
-	int ret;
+	//int ret;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
 	char *block_value = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_BLOCK]) + 1;
 

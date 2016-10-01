@@ -43,7 +43,7 @@ void DoIQK_8812A(
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PADAPTER 		Adapter = pDM_Odm->Adapter;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 #endif
 
 	ODM_ResetIQKResult(pDM_Odm);		
@@ -111,8 +111,8 @@ ODM_TxPwrTrackSetPwr8812A(
 	u1Byte			PwrTrackingLimit = 26; //+1.0dB
 	u1Byte			TxRate = 0xFF;
 	s1Byte			Final_OFDM_Swing_Index = 0; 
-	s1Byte			Final_CCK_Swing_Index = 0; 
-	u1Byte			i = 0;
+	//s1Byte			Final_CCK_Swing_Index = 0; 
+	//u1Byte			i = 0;
 
 #if 0
 	#if (MP_DRIVER==1)	
@@ -707,7 +707,7 @@ void _IQK_Tx_8812A(
     	BOOLEAN 	TX0IQKOK = FALSE, RX0IQKOK = FALSE;
 	int 			TX_X1[10], TX_Y1[10], RX_X1[10], RX_Y1[10];
 	BOOLEAN  	TX1IQKOK = FALSE, RX1IQKOK = FALSE, VDF_enable = FALSE;
-	int 			i, k, VDF_Y[3], VDF_X[3], Tx_dt[3], Rx_dt[3], ii, dx = 0, dy = 0, TX_finish = 0, RX_finish = 0, dt = 0;
+	int 			i, k, VDF_Y[3], VDF_X[3], Tx_dt[3], Rx_dt[3], ii, dx = 0, dy = 0, TX_finish = 0, RX_finish = 0;
 	PODM_RF_CAL_T  pRFCalibrateInfo = &(pDM_Odm->RFCalibrateInfo);
 	
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("BandWidth = %d, ExtPA5G = %d, ExtPA2G = %d\n", *pDM_Odm->pBandWidth, pDM_Odm->ExtPA5G, pDM_Odm->ExtPA));
@@ -2087,7 +2087,7 @@ PHY_LCCalibrate_8812A(
 	
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PADAPTER 		pAdapter = pDM_Odm->Adapter;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);	
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);	
 
 
 	#if (MP_DRIVER == 1)

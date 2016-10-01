@@ -185,7 +185,7 @@ u8 rtl8812_h2c_msg_hdl(_adapter *padapter, unsigned char *pbuf)
 u8 rtl8812_set_rssi_cmd(_adapter*padapter, u8 *param)
 {
 	u8	res=_SUCCESS;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 _func_enter_;
 
 	*((u32*) param ) = cpu_to_le32( *((u32*) param ) );
@@ -571,7 +571,7 @@ void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
-	u32					pktlen;
+	//u32					pktlen;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -718,7 +718,7 @@ CheckFwRsvdPageContent(
 )
 {
 	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(Adapter);
-	u32	MaxBcnPageNum;
+	//u32	MaxBcnPageNum;
 
  	if(pHalData->FwRsvdPageStartOffset != 0)
  	{
@@ -741,7 +741,7 @@ GetTxBufferRsvdPageNum8812(
 	IN	BOOLEAN		bWoWLANBoundary
 )
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8	RsvdPageNum=0;
 	u8	TxPageBndy= LAST_ENTRY_OF_TX_PKT_BUFFER_8812; // default reseved 1 page for the IC type which is undefined.
 
@@ -1113,7 +1113,7 @@ _func_exit_;
 void rtl8812_set_p2p_ps_offload_cmd(_adapter* padapter, u8 p2p_ps_state)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-	struct pwrctrl_priv		*pwrpriv = &padapter->pwrctrlpriv;
+	//struct pwrctrl_priv		*pwrpriv = &padapter->pwrctrlpriv;
 	struct wifidirect_info	*pwdinfo = &( padapter->wdinfo );
 	u8	*p2p_ps_offload = (u8 *)&pHalData->p2p_ps_offload;
 	u8	i;

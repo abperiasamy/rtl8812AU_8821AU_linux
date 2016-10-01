@@ -316,7 +316,7 @@ _func_exit_;
 //struct	sta_info *rtw_alloc_stainfo(_queue *pfree_sta_queue, unsigned char *hwaddr)
 struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr) 
 {	
-	_irqL irqL, irqL2;
+	_irqL irqL2;
 	uint tmp_aid;
 	s32	index;
 	_list	*phash_list;

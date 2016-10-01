@@ -261,8 +261,8 @@ ODM_ReadAndConfig_MP_8821A_AGC_TAB(
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
-	u2Byte     count       = 0;
-	pu4Byte    ptr_array   = NULL;
+	//u2Byte     count       = 0;
+	//pu4Byte    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     _interface   = pDM_Odm->SupportInterface;
 	u1Byte     board       = pDM_Odm->BoardType;  
@@ -506,8 +506,8 @@ ODM_ReadAndConfig_MP_8821A_PHY_REG(
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
-	u2Byte     count       = 0;
-	pu4Byte    ptr_array   = NULL;
+	//u2Byte     count       = 0;
+	//pu4Byte    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     _interface   = pDM_Odm->SupportInterface;
 	u1Byte     board       = pDM_Odm->BoardType;  
@@ -618,8 +618,8 @@ ODM_ReadAndConfig_MP_8821A_PHY_REG_PG(
 {
 	u4Byte     hex = 0;
 	u4Byte     i           = 0;
-	u2Byte     count       = 0;
-	pu4Byte    ptr_array   = NULL;
+	//u2Byte     count       = 0;
+	//pu4Byte    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     _interface   = pDM_Odm->SupportInterface;
 	u1Byte     board       = pDM_Odm->BoardType;  

@@ -353,7 +353,7 @@ void VHT_operation_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 	struct ht_priv			*phtpriv = &pmlmepriv->htpriv;
 	struct vht_priv		*pvhtpriv = &pmlmepriv->vhtpriv;
 	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
-	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+	//struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 
 	if(pIE==NULL) return;
 
@@ -372,7 +372,7 @@ u32	rtw_build_vht_operation_ie(_adapter *padapter, u8 *pbuf, u8 channel)
 	//struct registry_priv	*pregistrypriv = &padapter->registrypriv;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct vht_priv		*pvhtpriv = &pmlmepriv->vhtpriv;
-	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+	//struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	u8	ChnlWidth, center_freq;
 	u32	len = 0;
 	u8	operation[5];
@@ -529,7 +529,7 @@ u32 rtw_restructure_vht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, uint in_le
 	u32	ielen, out_len;
 	u8	cap_len, notify_len, operation_bw, supported_chnl_width;
 	u8	*p, *pframe;
-	struct registry_priv *pregistrypriv = &padapter->registrypriv;
+	//struct registry_priv *pregistrypriv = &padapter->registrypriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct vht_priv	*pvhtpriv = &pmlmepriv->vhtpriv;
 
