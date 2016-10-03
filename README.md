@@ -2,6 +2,15 @@
 
 rtl8812AU_8821AU linux kernel driver for AC1200 (801.11ac) Wireless Dual-Band USB Adapter
 
+## Compiling on Ubuntu 16.04
+
+```cd``` into folder.
+
+```sh
+# sudo make
+# sudo make install
+```
+
 ## Compiling with DKMS
 
 ```sh
