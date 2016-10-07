@@ -1409,13 +1409,15 @@ PHY_StorePwrByRateIndexVhtSeries(
 	//
 	// 3. Judge TX power by rate array rate section
 	//
-	if (rf_path == 0)
+	switch (rf_path)
 	{
-		rate_section = (u8)((RegAddr&0xFFF)-0xC20)/4;
-	}
-	else if (rf_path == 1)
-	{
-		rate_section = (u8)((RegAddr&0xFFF)-0xE20)/4;
+		case 0:
+		default:
+			rate_section = (u8)((RegAddr & 0xFFF) - 0xC20) / 4;
+			break;
+		case 1:
+			rate_section = (u8)((RegAddr & 0xFFF) - 0xE20) / 4;
+			break;
 	}
 
 	pHalData->TxPwrByRateOffset[pHalData->TxPwrByRateBand][rf_path][rate_section] = Data;
@@ -1501,13 +1503,15 @@ VOID phy_PreprocessVHTPGDataFromExactToRelativeValue(
 	//
 	// Judge TX power by rate array rate section
 	//
-	if ( rf_path == 0 )
+	switch (rf_path)
 	{
-		rate_section = ( u8) ( ( RegAddr & 0xFFF ) - 0xC20 ) / 4;
-	}
-	else if ( rf_path == 1 )
-	{
-		rate_section = ( u8 ) ( ( RegAddr & 0xFFF ) - 0xE20 ) / 4;
+		case 0:
+		default:
+			rate_section = (u8)((RegAddr & 0xFFF) - 0xC20) / 4;
+			break;
+		case 1:
+			rate_section = (u8)((RegAddr & 0xFFF) - 0xE20) / 4;
+			break;
 	}
 	
 	switch ( RegAddr )
