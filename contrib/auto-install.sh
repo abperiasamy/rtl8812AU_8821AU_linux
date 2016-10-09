@@ -32,7 +32,7 @@ make install
 echo 'SUBSYSTEM=="net", ACTION=="add", DRIVERS=="rtl8812au", ATTR{type}=="1", NAME="wlan0"' >> /lib/udev/rules.d/70-persistent-network.rules
 
 ## Load driver module
-modprobe 8812au
+modprobe rtl8812au
 
 ## Add module at boot (file may be /etc/modules on other distribution)
-echo -e '# Netgear A600 usb wifi dongle\n8812au' > /etc/modules-load.d/8812au.conf
+echo -e '# Netgear A600 usb wifi dongle\nrtl8812au' > /etc/modules-load.d/rtl8812au.conf
