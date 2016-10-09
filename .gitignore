@@ -1,7 +1,39 @@
+# Object files
 *.o
-*.cmd
-.tmp_versions/
-8812au.ko
-8812au.mod.c
+*.ko
+*.obj
+*.elf
+*.o.cmd
+*.ko.cmd
+.tmp_versions
 Module.symvers
 modules.order
+*.mod.c
+cscope.*
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
