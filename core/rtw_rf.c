@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -56,12 +56,10 @@ u32 rtw_ch2freq(u32 channel)
 	u8	i;
 	u32	freq = 0;
 
-	for (i = 0; i < ch_freq_map_num; i++)
-	{
-		if (channel == ch_freq_map[i].channel)
-		{
+	for (i = 0; i < ch_freq_map_num; i++) {
+		if (channel == ch_freq_map[i].channel) {
 			freq = ch_freq_map[i].frequency;
-				break;
+			break;
 		}
 	}
 	if (i == ch_freq_map_num)
@@ -75,12 +73,10 @@ u32 rtw_freq2ch(u32 freq)
 	u8	i;
 	u32	ch = 0;
 
-	for (i = 0; i < ch_freq_map_num; i++)
-	{
-		if (freq == ch_freq_map[i].frequency)
-		{
+	for (i = 0; i < ch_freq_map_num; i++) {
+		if (freq == ch_freq_map[i].frequency) {
 			ch = ch_freq_map[i].channel;
-				break;
+			break;
 		}
 	}
 	if (i == ch_freq_map_num)

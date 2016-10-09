@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -29,8 +29,8 @@ void rtl8812au_InitSwLeds(PADAPTER padapter);
 void rtl8812au_DeInitSwLeds(PADAPTER padapter);
 #endif
 #ifdef CONFIG_PCI_HCI
-void rtl8812e_InitSwLeds(PADAPTER padapter);
-void rtl8812e_DeInitSwLeds(PADAPTER padapter);
+void rtl8812ae_InitSwLeds(PADAPTER padapter);
+void rtl8812ae_DeInitSwLeds(PADAPTER padapter);
 #endif
 #ifdef CONFIG_SDIO_HCI
 void rtl8812s_InitSwLeds(PADAPTER padapter);

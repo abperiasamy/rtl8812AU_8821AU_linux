@@ -22,20 +22,13 @@
 
 
 //#include "hal_com.h"
-#if 1
 #include "hal_data.h"
-#else
-#include "../hal/OUTSRC/odm_precomp.h"
-#endif
 
 #include "rtl8723a_spec.h"
 #include "rtl8723a_pg.h"
 #include "Hal8723APhyReg.h"
 #include "Hal8723APhyCfg.h"
 #include "rtl8723a_rf.h"
-#ifdef CONFIG_BT_COEXIST
-#include "rtl8723a_bt-coexist.h"
-#endif
 #include "rtl8723a_dm.h"
 #include "rtl8723a_recv.h"
 #include "rtl8723a_xmit.h"
@@ -49,137 +42,93 @@
 
 #if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 
-	//2TODO: We should define 8192S firmware related macro settings here!!
-	#define RTL819X_DEFAULT_RF_TYPE			RF_1T2R
-	#define RTL819X_TOTAL_RF_PATH				2
+//2TODO: We should define 8192S firmware related macro settings here!!
+#define RTL819X_DEFAULT_RF_TYPE			RF_1T2R
+#define RTL819X_TOTAL_RF_PATH				2
 
 //---------------------------------------------------------------------
 //		RTL8723S From file
 //---------------------------------------------------------------------
-	#define RTL8723_FW_UMC_IMG				"rtl8723S\\rtl8723fw.bin"
-	#define RTL8723_FW_UMC_B_IMG			"rtl8723S\\rtl8723fw_B.bin"
-	#define RTL8723_PHY_REG					"rtl8723S\\PHY_REG_1T.txt"
-	#define RTL8723_PHY_RADIO_A				"rtl8723S\\radio_a_1T.txt"
-	#define RTL8723_PHY_RADIO_B				"rtl8723S\\radio_b_1T.txt"
-	#define RTL8723_AGC_TAB					"rtl8723S\\AGC_TAB_1T.txt"
-	#define RTL8723_PHY_MACREG 				"rtl8723S\\MAC_REG.txt"
-	#define RTL8723_PHY_REG_PG				"rtl8723S\\PHY_REG_PG.txt"
-	#define RTL8723_PHY_REG_MP				"rtl8723S\\PHY_REG_MP.txt"
+#define RTL8723_FW_UMC_IMG				"rtl8723S\\rtl8723fw.bin"
+#define RTL8723_FW_UMC_B_IMG			"rtl8723S\\rtl8723fw_B.bin"
+#define RTL8723_PHY_REG					"rtl8723S\\PHY_REG_1T.txt"
+#define RTL8723_PHY_RADIO_A				"rtl8723S\\radio_a_1T.txt"
+#define RTL8723_PHY_RADIO_B				"rtl8723S\\radio_b_1T.txt"
+#define RTL8723_AGC_TAB					"rtl8723S\\AGC_TAB_1T.txt"
+#define RTL8723_PHY_MACREG 				"rtl8723S\\MAC_REG.txt"
+#define RTL8723_PHY_REG_PG				"rtl8723S\\PHY_REG_PG.txt"
+#define RTL8723_PHY_REG_MP				"rtl8723S\\PHY_REG_MP.txt"
 
 //---------------------------------------------------------------------
 //		RTL8723S From header
 //---------------------------------------------------------------------
 
-	// Fw Array
-	#define Rtl8723_FwImageArray				Rtl8723SFwImgArray
-	#define Rtl8723_FwUMCBCutImageArrayWithBT		Rtl8723SFwUMCBCutImgArrayWithBT
-	#define Rtl8723_FwUMCBCutImageArrayWithoutBT	Rtl8723SFwUMCBCutImgArrayWithoutBT
+// Fw Array
+#define Rtl8723_FwImageArray				Rtl8723SFwImgArray
+#define Rtl8723_FwUMCBCutImageArrayWithBT		Rtl8723SFwUMCBCutImgArrayWithBT
+#define Rtl8723_FwUMCBCutImageArrayWithoutBT	Rtl8723SFwUMCBCutImgArrayWithoutBT
 
-	#define Rtl8723_ImgArrayLength				Rtl8723SImgArrayLength
-	#define Rtl8723_UMCBCutImgArrayWithBTLength		Rtl8723SUMCBCutImgArrayWithBTLength
-	#define Rtl8723_UMCBCutImgArrayWithoutBTLength	Rtl8723SUMCBCutImgArrayWithoutBTLength
+#define Rtl8723_ImgArrayLength				Rtl8723SImgArrayLength
+#define Rtl8723_UMCBCutImgArrayWithBTLength		Rtl8723SUMCBCutImgArrayWithBTLength
+#define Rtl8723_UMCBCutImgArrayWithoutBTLength	Rtl8723SUMCBCutImgArrayWithoutBTLength
 
-	#define Rtl8723_PHY_REG_Array_PG 			Rtl8723SPHY_REG_Array_PG
-	#define Rtl8723_PHY_REG_Array_PGLength		Rtl8723SPHY_REG_Array_PGLength
+#define Rtl8723_PHY_REG_Array_PG 			Rtl8723SPHY_REG_Array_PG
+#define Rtl8723_PHY_REG_Array_PGLength		Rtl8723SPHY_REG_Array_PGLength
 #if MP_DRIVER == 1
-	#define Rtl8723E_FwBTImgArray				Rtl8723EFwBTImgArray
-	#define Rtl8723E_FwBTImgArrayLength			Rtl8723EBTImgArrayLength
+#define Rtl8723E_FwBTImgArray				Rtl8723EFwBTImgArray
+#define Rtl8723E_FwBTImgArrayLength			Rtl8723EBTImgArrayLength
 
-	#define Rtl8723_FwUMCBCutMPImageArray		Rtl8723SFwUMCBCutMPImgArray
-	#define Rtl8723_UMCBCutMPImgArrayLength 	Rtl8723SUMCBCutMPImgArrayLength
+#define Rtl8723_FwUMCBCutMPImageArray		Rtl8723SFwUMCBCutMPImgArray
+#define Rtl8723_UMCBCutMPImgArrayLength 	Rtl8723SUMCBCutMPImgArrayLength
 
-	#define Rtl8723_PHY_REG_Array_MP			Rtl8723SPHY_REG_Array_MP
-	#define Rtl8723_PHY_REG_Array_MPLength		Rtl8723SPHY_REG_Array_MPLength
+#define Rtl8723_PHY_REG_Array_MP			Rtl8723SPHY_REG_Array_MP
+#define Rtl8723_PHY_REG_Array_MPLength		Rtl8723SPHY_REG_Array_MPLength
 #endif
 
-#ifndef CONFIG_PHY_SETTING_WITH_ODM
-	// MAC/BB/PHY Array
-	#define Rtl8723_MAC_Array					Rtl8723SMAC_2T_Array
-	//#define Rtl8723_AGCTAB_2TArray				Rtl8723SAGCTAB_2TArray
-	#define Rtl8723_AGCTAB_1TArray				Rtl8723SAGCTAB_1TArray
-	//#define Rtl8723_PHY_REG_2TArray				Rtl8723SPHY_REG_2TArray
-	#define Rtl8723_PHY_REG_1TArray				Rtl8723SPHY_REG_1TArray
-	//#define Rtl8723_RadioA_2TArray				Rtl8723SRadioA_2TArray
-	#define Rtl8723_RadioA_1TArray				Rtl8723SRadioA_1TArray
-	//#define Rtl8723_RadioB_2TArray				Rtl8723SRadioB_2TArray
-	#define Rtl8723_RadioB_1TArray				Rtl8723SRadioB_1TArray
-
-	// Array length
-	#define Rtl8723_MAC_ArrayLength				Rtl8723SMAC_2T_ArrayLength
-	#define Rtl8723_AGCTAB_1TArrayLength		Rtl8723SAGCTAB_1TArrayLength
-	#define Rtl8723_PHY_REG_1TArrayLength 		Rtl8723SPHY_REG_1TArrayLength
-
-	#define Rtl8723_RadioA_1TArrayLength			Rtl8723SRadioA_1TArrayLength
-	#define Rtl8723_RadioB_1TArrayLength			Rtl8723SRadioB_1TArrayLength
-#endif // CONFIG_PHY_SETTING_WITH_ODM
 #endif // CONFIG_SDIO_HCI
 
 #ifdef CONFIG_USB_HCI
 
-	//2TODO: We should define 8192S firmware related macro settings here!!
-	#define RTL819X_DEFAULT_RF_TYPE			RF_1T2R
-	#define RTL819X_TOTAL_RF_PATH				2
+//2TODO: We should define 8192S firmware related macro settings here!!
+#define RTL819X_DEFAULT_RF_TYPE			RF_1T2R
+#define RTL819X_TOTAL_RF_PATH				2
 
-	//TODO:  The following need to check!!
-	#define RTL8723_FW_UMC_IMG				"rtl8192CU\\rtl8723fw.bin"
-	#define RTL8723_FW_UMC_B_IMG			"rtl8192CU\\rtl8723fw_B.bin"
-	#define RTL8723_PHY_REG					"rtl8723S\\PHY_REG_1T.txt"
-	#define RTL8723_PHY_RADIO_A				"rtl8723S\\radio_a_1T.txt"
-	#define RTL8723_PHY_RADIO_B				"rtl8723S\\radio_b_1T.txt"
-	#define RTL8723_AGC_TAB					"rtl8723S\\AGC_TAB_1T.txt"
-	#define RTL8723_PHY_MACREG 				"rtl8723S\\MAC_REG.txt"
-	#define RTL8723_PHY_REG_PG				"rtl8723S\\PHY_REG_PG.txt"
-	#define RTL8723_PHY_REG_MP				"rtl8723S\\PHY_REG_MP.txt"
+//TODO:  The following need to check!!
+#define RTL8723_FW_UMC_IMG				"rtl8192CU\\rtl8723fw.bin"
+#define RTL8723_FW_UMC_B_IMG			"rtl8192CU\\rtl8723fw_B.bin"
+#define RTL8723_PHY_REG					"rtl8723S\\PHY_REG_1T.txt"
+#define RTL8723_PHY_RADIO_A				"rtl8723S\\radio_a_1T.txt"
+#define RTL8723_PHY_RADIO_B				"rtl8723S\\radio_b_1T.txt"
+#define RTL8723_AGC_TAB					"rtl8723S\\AGC_TAB_1T.txt"
+#define RTL8723_PHY_MACREG 				"rtl8723S\\MAC_REG.txt"
+#define RTL8723_PHY_REG_PG				"rtl8723S\\PHY_REG_PG.txt"
+#define RTL8723_PHY_REG_MP				"rtl8723S\\PHY_REG_MP.txt"
 
 //---------------------------------------------------------------------
 //		RTL8723S From header
 //---------------------------------------------------------------------
 
-	// Fw Array
-	#define Rtl8723_FwImageArray				Rtl8723UFwImgArray
-	#define Rtl8723_FwUMCBCutImageArrayWithBT		Rtl8723UFwUMCBCutImgArrayWithBT
-	#define Rtl8723_FwUMCBCutImageArrayWithoutBT	Rtl8723UFwUMCBCutImgArrayWithoutBT
+// Fw Array
+#define Rtl8723_FwImageArray				Rtl8723UFwImgArray
+#define Rtl8723_FwUMCBCutImageArrayWithBT		Rtl8723UFwUMCBCutImgArrayWithBT
+#define Rtl8723_FwUMCBCutImageArrayWithoutBT	Rtl8723UFwUMCBCutImgArrayWithoutBT
 
-	#define Rtl8723_ImgArrayLength				Rtl8723UImgArrayLength
-	#define Rtl8723_UMCBCutImgArrayWithBTLength		Rtl8723UUMCBCutImgArrayWithBTLength
-	#define Rtl8723_UMCBCutImgArrayWithoutBTLength	Rtl8723UUMCBCutImgArrayWithoutBTLength
+#define Rtl8723_ImgArrayLength				Rtl8723UImgArrayLength
+#define Rtl8723_UMCBCutImgArrayWithBTLength		Rtl8723UUMCBCutImgArrayWithBTLength
+#define Rtl8723_UMCBCutImgArrayWithoutBTLength	Rtl8723UUMCBCutImgArrayWithoutBTLength
 
-	#define Rtl8723_PHY_REG_Array_PG 			Rtl8723UPHY_REG_Array_PG
-	#define Rtl8723_PHY_REG_Array_PGLength		Rtl8723UPHY_REG_Array_PGLength
+#define Rtl8723_PHY_REG_Array_PG 			Rtl8723UPHY_REG_Array_PG
+#define Rtl8723_PHY_REG_Array_PGLength		Rtl8723UPHY_REG_Array_PGLength
 
 #if MP_DRIVER == 1
-	#define Rtl8723E_FwBTImgArray				Rtl8723EFwBTImgArray
-	#define Rtl8723E_FwBTImgArrayLength			Rtl8723EBTImgArrayLength
+#define Rtl8723E_FwBTImgArray				Rtl8723EFwBTImgArray
+#define Rtl8723E_FwBTImgArrayLength			Rtl8723EBTImgArrayLength
 
-	#define Rtl8723_FwUMCBCutMPImageArray		Rtl8723SFwUMCBCutMPImgArray
-	#define Rtl8723_UMCBCutMPImgArrayLength	    Rtl8723SUMCBCutMPImgArrayLength
+#define Rtl8723_FwUMCBCutMPImageArray		Rtl8723SFwUMCBCutMPImgArray
+#define Rtl8723_UMCBCutMPImgArrayLength	    Rtl8723SUMCBCutMPImgArrayLength
 
-	#define Rtl8723_PHY_REG_Array_MP			Rtl8723UPHY_REG_Array_MP
-	#define Rtl8723_PHY_REG_Array_MPLength		Rtl8723UPHY_REG_Array_MPLength
-#endif
-#ifndef CONFIG_PHY_SETTING_WITH_ODM
-	// MAC/BB/PHY Array
-	#define Rtl8723_MAC_Array					Rtl8723UMAC_2T_Array
-	//#define Rtl8723_AGCTAB_2TArray				Rtl8723UAGCTAB_2TArray
-	#define Rtl8723_AGCTAB_1TArray				Rtl8723UAGCTAB_1TArray
-	//#define Rtl8723_PHY_REG_2TArray				Rtl8723UPHY_REG_2TArray
-	#define Rtl8723_PHY_REG_1TArray				Rtl8723UPHY_REG_1TArray
-	//#define Rtl8723_RadioA_2TArray				Rtl8723URadioA_2TArray
-	#define Rtl8723_RadioA_1TArray				Rtl8723URadioA_1TArray
-	//#define Rtl8723_RadioB_2TArray				Rtl8723URadioB_2TArray
-	#define Rtl8723_RadioB_1TArray				Rtl8723URadioB_1TArray
-
-
-
-	// Array length
-
-	#define Rtl8723_MAC_ArrayLength				Rtl8723UMAC_2T_ArrayLength
-	#define Rtl8723_AGCTAB_1TArrayLength			Rtl8723UAGCTAB_1TArrayLength
-	#define Rtl8723_PHY_REG_1TArrayLength 			Rtl8723UPHY_REG_1TArrayLength
-
-
-	#define Rtl8723_RadioA_1TArrayLength			Rtl8723URadioA_1TArrayLength
-	#define Rtl8723_RadioB_1TArrayLength			Rtl8723URadioB_1TArrayLength
+#define Rtl8723_PHY_REG_Array_MP			Rtl8723UPHY_REG_Array_MP
+#define Rtl8723_PHY_REG_Array_MPLength		Rtl8723UPHY_REG_Array_MPLength
 #endif
 #endif
 
@@ -202,21 +151,13 @@ typedef struct _RT_FIRMWARE_8723A {
 	u8			szFwBuffer[FW_8723A_SIZE];
 #endif
 	u32			ulFwLength;
-
-#ifdef CONFIG_EMBEDDED_FWIMG
-	u8*			szBTFwBuffer;
-#else
-	u8			szBTFwBuffer[FW_8723A_SIZE];
-#endif
-	u32			ulBTFwLength;
 } RT_FIRMWARE_8723A, *PRT_FIRMWARE_8723A;
 
 //
 // This structure must be cared byte-ordering
 //
 // Added by tynli. 2009.12.04.
-typedef struct _RT_8723A_FIRMWARE_HDR
-{
+typedef struct _RT_8723A_FIRMWARE_HDR {
 	// 8-byte alinment required
 
 	//--- LONG WORD 0 ----
@@ -243,42 +184,31 @@ typedef struct _RT_8723A_FIRMWARE_HDR
 	//--- LONG WORD 3 ----
 	u32		Rsvd4;
 	u32		Rsvd5;
-}RT_8723A_FIRMWARE_HDR, *PRT_8723A_FIRMWARE_HDR;
+} RT_8723A_FIRMWARE_HDR, *PRT_8723A_FIRMWARE_HDR;
 
 #define DRIVER_EARLY_INT_TIME_8723A		0x05
 #define BCN_DMA_ATIME_INT_TIME_8723A		0x02
 
-// Note: We will divide number of page equally for each queue other than public queue!
-#define TX_TOTAL_PAGE_NUMBER_8723A	0xF8
-#define TX_PAGE_BOUNDARY		(TX_TOTAL_PAGE_NUMBER_8723A + 1)
+//For General Reserved Page Number(Beacon Queue is reserved page)
+//Beacon:2, PS-Poll:1, Null Data:1,Qos Null Data:1,BT Qos Null Data:1
+#define BCNQ_PAGE_NUM_8723A		0x08
+
+#define TX_TOTAL_PAGE_NUMBER_8723A	(0xFF - BCNQ_PAGE_NUM_8723A)
+#define TX_PAGE_BOUNDARY_8723A		(TX_TOTAL_PAGE_NUMBER_8723A + 1)
+
+#define WMM_NORMAL_TX_TOTAL_PAGE_NUMBER_8723A	TX_TOTAL_PAGE_NUMBER_8723A
+#define WMM_NORMAL_TX_PAGE_BOUNDARY_8723A		(WMM_NORMAL_TX_TOTAL_PAGE_NUMBER_8723A + 1)
 
 // For Normal Chip Setting
 // (HPQ + LPQ + NPQ + PUBQ) shall be TX_TOTAL_PAGE_NUMBER_8723A
-#define NORMAL_PAGE_NUM_PUBQ	0xE7
-#define NORMAL_PAGE_NUM_HPQ		0x0C
-#define NORMAL_PAGE_NUM_LPQ		0x02
-#define NORMAL_PAGE_NUM_NPQ		0x02
-
-// For Test Chip Setting
-// (HPQ + LPQ + PUBQ) shall be TX_TOTAL_PAGE_NUMBER_8723A
-#define TEST_PAGE_NUM_PUBQ		0x7E
-
-// For Test Chip Setting
-#define WMM_TEST_TX_TOTAL_PAGE_NUMBER	0xF5
-#define WMM_TEST_TX_PAGE_BOUNDARY		(WMM_TEST_TX_TOTAL_PAGE_NUMBER + 1) //F6
-
-#define WMM_TEST_PAGE_NUM_PUBQ		0xA3
-#define WMM_TEST_PAGE_NUM_HPQ		0x29
-#define WMM_TEST_PAGE_NUM_LPQ		0x29
+#define NORMAL_PAGE_NUM_HPQ_8723A		0x0C
+#define NORMAL_PAGE_NUM_LPQ_8723A		0x02
+#define NORMAL_PAGE_NUM_NPQ_8723A		0x02
 
 // Note: For Normal Chip Setting, modify later
-#define WMM_NORMAL_TX_TOTAL_PAGE_NUMBER	0xF5
-#define WMM_NORMAL_TX_PAGE_BOUNDARY		(WMM_TEST_TX_TOTAL_PAGE_NUMBER + 1) //F6
-
-#define WMM_NORMAL_PAGE_NUM_PUBQ	0xB0
-#define WMM_NORMAL_PAGE_NUM_HPQ		0x29
-#define WMM_NORMAL_PAGE_NUM_LPQ		0x1C
-#define WMM_NORMAL_PAGE_NUM_NPQ		0x1C
+#define WMM_NORMAL_PAGE_NUM_HPQ_8723A		0x29
+#define WMM_NORMAL_PAGE_NUM_LPQ_8723A		0x1C
+#define WMM_NORMAL_PAGE_NUM_NPQ_8723A		0x1C
 
 
 //-------------------------------------------------------------------------
@@ -331,8 +261,7 @@ typedef struct _RT_8723A_FIRMWARE_HDR
 
 // Description: Determine the types of C2H events that are the same in driver and Fw.
 // Fisrt constructed by tynli. 2009.10.09.
-typedef enum _RTL8192C_C2H_EVT
-{
+typedef enum _RTL8192C_C2H_EVT {
 	C2H_DBG = 0,
 	C2H_TSF = 1,
 	C2H_AP_RPT_RSP = 2,
@@ -348,13 +277,10 @@ typedef enum _RTL8192C_C2H_EVT
 } RTL8192C_C2H_EVT;
 
 
-#define GET_RF_TYPE(priv)			(GET_HAL_DATA(priv)->rf_type)
-
 #define INCLUDE_MULTI_FUNC_BT(_Adapter)		(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_BT)
 #define INCLUDE_MULTI_FUNC_GPS(_Adapter)	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_GPS)
 
-typedef struct rxreport_8723a
-{
+typedef struct rxreport_8723a {
 	u32 pktlen:14;
 	u32 crc32:1;
 	u32 icverr:1;
@@ -425,8 +351,7 @@ typedef struct rxreport_8723a
 	u32 rsvd2413:19;
 } RXREPORT, *PRXREPORT;
 
-typedef struct phystatus_8723a
-{
+typedef struct phystatus_8723a {
 	u32 rxgain_a:7;
 	u32 trsw_a:1;
 	u32 rxgain_b:7;
@@ -508,20 +433,21 @@ void Hal_InitChannelPlan(PADAPTER padapter);
 void rtl8723a_set_hal_ops(struct hal_ops *pHalFunc);
 void SetHwReg8723A(PADAPTER padapter, u8 variable, u8 *val);
 void GetHwReg8723A(PADAPTER padapter, u8 variable, u8 *val);
+u8 GetHalDefVar8723A(PADAPTER Adapter, HAL_DEF_VARIABLE eVariable, PVOID pValue);
 #ifdef CONFIG_BT_COEXIST
 void rtl8723a_SingleDualAntennaDetection(PADAPTER padapter);
 #endif
+int 	FirmwareDownloadBT(PADAPTER Adapter, PRT_MP_FIRMWARE pFirmware);
 
 // register
 void SetBcnCtrlReg(PADAPTER padapter, u8 SetBits, u8 ClearBits);
 void rtl8723a_InitBeaconParameters(PADAPTER padapter);
 void rtl8723a_InitBeaconMaxError(PADAPTER padapter, u8 InfraMode);
 
-void rtl8723a_clone_haldata(_adapter *dst_adapter, _adapter *src_adapter);
 void rtl8723a_start_thread(_adapter *padapter);
 void rtl8723a_stop_thread(_adapter *padapter);
 
-s32 c2h_id_filter_ccx_8723a(u8 id);
+s32 c2h_id_filter_ccx_8723a(u8 *buf);
 void _InitTransferPageSize(PADAPTER padapter);
 #endif// __RTL8723A_HAL_H__
 

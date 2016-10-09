@@ -75,23 +75,20 @@ enum WAPI_DEBUG {
 #define			WAPI_MAX_STAINFO_NUM			4
 #define			WAPI_CAM_ENTRY_NUM			14	// 28/2=14
 
-typedef struct  _RT_WAPI_BKID
-{
+typedef struct  _RT_WAPI_BKID {
 	struct list_head	list;
 	u8				bkid[16];
-}RT_WAPI_BKID,*PRT_WAPI_BKID;
+} RT_WAPI_BKID,*PRT_WAPI_BKID;
 
-typedef struct  _RT_WAPI_KEY
-{
+typedef struct  _RT_WAPI_KEY {
 	u8			dataKey[16];
 	u8			micKey[16];
 	u8			keyId;
 	bool			bSet;
 	bool             bTxEnable;
-}RT_WAPI_KEY,*PRT_WAPI_KEY;
+} RT_WAPI_KEY,*PRT_WAPI_KEY;
 
-typedef enum _RT_WAPI_PACKET_TYPE
-{
+typedef enum _RT_WAPI_PACKET_TYPE {
 	WAPI_NONE = 0,
 	WAPI_PREAUTHENTICATE=1,
 	WAPI_STAKEY_REQUEST=2,
@@ -105,10 +102,9 @@ typedef enum _RT_WAPI_PACKET_TYPE
 	WAPI_USK_CONFIRM=10,
 	WAPI_MSK_NOTIFICATION=11,
 	WAPI_MSK_RESPONSE=12
-}RT_WAPI_PACKET_TYPE;
+} RT_WAPI_PACKET_TYPE;
 
-typedef struct	_RT_WAPI_STA_INFO
-{
+typedef struct	_RT_WAPI_STA_INFO {
 	struct list_head		list;
 	u8					PeerMacAddr[6];
 	RT_WAPI_KEY		      wapiUsk;
@@ -125,20 +121,19 @@ typedef struct	_RT_WAPI_STA_INFO
 	bool					bSetkeyOk;
 	bool					bAuthenticateInProgress;
 	bool					bAuthenticatorInUpdata;
-}RT_WAPI_STA_INFO,*PRT_WAPI_STA_INFO;
+} RT_WAPI_STA_INFO,*PRT_WAPI_STA_INFO;
 
 //Added for HW wapi en/decryption
-typedef struct _RT_WAPI_CAM_ENTRY{
+typedef struct _RT_WAPI_CAM_ENTRY {
 	//RT_LIST_ENTRY		list;
 	u8			IsUsed;
 	u8			entry_idx;//for cam entry
 	u8			keyidx;	// 0 or 1,new or old key
 	u8			PeerMacAddr[6];
 	u8			type;	//should be 110,wapi
-}RT_WAPI_CAM_ENTRY,*PRT_WAPI_CAM_ENTRY;
+} RT_WAPI_CAM_ENTRY,*PRT_WAPI_CAM_ENTRY;
 
-typedef struct _RT_WAPI_T
-{
+typedef struct _RT_WAPI_T {
 //BKID
 	RT_WAPI_BKID		wapiBKID[WAPI_MAX_BKID_NUM];
 	struct list_head		wapiBKIDIdleList;
@@ -165,13 +160,12 @@ typedef struct _RT_WAPI_T
 	int extra_postfix_len;
 
 	RT_WAPI_CAM_ENTRY	wapiCamEntry[WAPI_CAM_ENTRY_NUM];
-}RT_WAPI_T,*PRT_WAPI_T;
+} RT_WAPI_T,*PRT_WAPI_T;
 
-typedef struct _WLAN_HEADER_WAPI_EXTENSION
-{
-    u8      KeyIdx;
-    u8      Reserved;
-    u8      PN[16];
+typedef struct _WLAN_HEADER_WAPI_EXTENSION {
+	u8      KeyIdx;
+	u8      Reserved;
+	u8      PN[16];
 } WLAN_HEADER_WAPI_EXTENSION, *PWLAN_HEADER_WAPI_EXTENSION;
 
 u32 WapiComparePN(u8 *PN1, u8 *PN2);

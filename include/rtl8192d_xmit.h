@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -61,20 +61,14 @@
 //OFFSET 20
 #define SGI		BIT(6)
 
-//
-// Queue Select Value in TxDesc
-//
-#define QSLT_BK							0x2//0x01
-#define QSLT_BE							0x0
-#define QSLT_VI							0x5//0x4
-#define QSLT_VO							0x7//0x6
-#define QSLT_BEACON					0x10
-#define QSLT_HIGH						0x11
-#define QSLT_MGNT						0x12
-#define QSLT_CMD						0x13
+
 
 //Because we open EM for normal case, we just always insert 2*8 bytes.by wl
+#ifdef USB_PACKET_OFFSET_SZ
+#define USB_92D_DUMMY_OFFSET		(PACKET_OFFSET_SZ/8)
+#else
 #define USB_92D_DUMMY_OFFSET		2
+#endif
 #define USB_92D_DUMMY_LENGTH		(USB_92D_DUMMY_OFFSET * PACKET_OFFSET_SZ)
 #define USB_HWDESC_HEADER_LEN	(TXDESC_SIZE + USB_92D_DUMMY_LENGTH)
 

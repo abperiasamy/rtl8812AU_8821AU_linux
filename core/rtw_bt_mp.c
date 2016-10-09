@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *										  
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -28,64 +28,72 @@
 #include <rtl8723b_hal.h>
 #endif
 
-#if (defined(CONFIG_RTL8723A) || defined(CONFIG_RTL8723B))
+#if defined(CONFIG_RTL8723A) || defined(CONFIG_RTL8723B) || defined(CONFIG_RTL8821A)
 void MPh2c_timeout_handle(void *FunctionContext)
 {
-	_adapter *pAdapter = (_adapter *)FunctionContext;
-	PMPT_CONTEXT		pMptCtx=&pAdapter->mppriv.MptCtx;
+	PADAPTER pAdapter;
+	PMPT_CONTEXT pMptCtx;
+
 
 	DBG_8192C("[MPT], MPh2c_timeout_handle \n");
 
-	pMptCtx->bMPh2c_timeout=_TRUE;
-	
-	_rtw_up_sema(&pMptCtx->MPh2c_Sema);
-	
-	//_cancel_timer_ex( &pMptCtx->MPh2c_timeout_timer);
-	
-	return;
+	pAdapter = (PADAPTER)FunctionContext;
+	pMptCtx = &pAdapter->mppriv.MptCtx;
+
+	pMptCtx->bMPh2c_timeout = _TRUE;
+
+	if ((_FALSE == pMptCtx->MptH2cRspEvent)
+	    || ((_TRUE == pMptCtx->MptH2cRspEvent)
+	        && (_FALSE == pMptCtx->MptBtC2hEvent))) {
+		_rtw_up_sema(&pMptCtx->MPh2c_Sema);
+	}
 }
-u32 WaitC2Hevent( PADAPTER pAdapter,BOOLEAN *C2H_event ,u32 delay_time)
+
+u32 WaitC2Hevent(PADAPTER pAdapter, u8 *C2H_event, u32 delay_time)
 {
 	PMPT_CONTEXT		pMptCtx=&(pAdapter->mppriv.MptCtx);
 	pMptCtx->bMPh2c_timeout=_FALSE;
-	
-	_set_timer( &pMptCtx->MPh2c_timeout_timer, delay_time );
-	
-	_rtw_down_sema(&pMptCtx->MPh2c_Sema);
 
-	if( pMptCtx->bMPh2c_timeout == _TRUE )
-	{
-		C2H_event =_FALSE;
-		
+	if( pAdapter->registrypriv.mp_mode == 0 ) {
+		DBG_8192C("[MPT], Error!! WaitC2Hevent mp_mode == 0!!\n");
 		return _FALSE;
 	}
-	
+
+	_set_timer( &pMptCtx->MPh2c_timeout_timer, delay_time );
+
+	_rtw_down_sema(&pMptCtx->MPh2c_Sema);
+
+	if (pMptCtx->bMPh2c_timeout == _TRUE) {
+		*C2H_event = _FALSE;
+
+		return _FALSE;
+	}
+
+	// for safty, cancel timer here again
+	_cancel_timer_ex(&pMptCtx->MPh2c_timeout_timer);
+
 	return _TRUE;
-	
 }
 
 BT_CTRL_STATUS
 mptbt_CheckC2hFrame(
-	PADAPTER		Adapter,
-	PBT_H2C			pH2c,
-	PBT_EXT_C2H		pExtC2h
-	)
+    PADAPTER		Adapter,
+    PBT_H2C			pH2c,
+    PBT_EXT_C2H		pExtC2h
+)
 {
 	BT_CTRL_STATUS	c2hStatus = BT_STATUS_C2H_SUCCESS;
-		
+
 	//DBG_8192C("[MPT], MPT rsp C2H hex: %x %x %x  %x %x %x \n"), pExtC2h , pExtC2h+1 ,pExtC2h+2 ,pExtC2h+3 ,pExtC2h+4 ,pExtC2h+5);
 
 	DBG_8192C("[MPT], statusCode = 0x%x\n", pExtC2h->statusCode);
 	DBG_8192C("[MPT], retLen = %d\n", pExtC2h->retLen);
 	DBG_8192C("[MPT], opCodeVer : req/rsp=%d/%d\n", pH2c->opCodeVer, pExtC2h->opCodeVer);
 	DBG_8192C("[MPT], reqNum : req/rsp=%d/%d\n", pH2c->reqNum, pExtC2h->reqNum);
-	if(pExtC2h->reqNum != pH2c->reqNum)
-	{
+	if(pExtC2h->reqNum != pH2c->reqNum) {
 		c2hStatus = BT_STATUS_C2H_REQNUM_MISMATCH;
 		DBG_8192C("[MPT], Error!! C2H reqNum Mismatch!!\n");
-	}
-	else if(pExtC2h->opCodeVer != pH2c->opCodeVer)
-	{
+	} else if(pExtC2h->opCodeVer != pH2c->opCodeVer) {
 		c2hStatus = BT_STATUS_OPCODE_L_VERSION_MISMATCH;
 		DBG_8192C("[MPT], Error!! OPCode version L mismatch!!\n");
 	}
@@ -93,16 +101,12 @@ mptbt_CheckC2hFrame(
 	return c2hStatus;
 }
 
-#if defined(CONFIG_RTL8723A)
-extern s32 FillH2CCmd(PADAPTER padapter, u8 ElementID, u32 CmdLen, u8 *pCmdBuffer);
-#endif
-
 BT_CTRL_STATUS
 mptbt_SendH2c(
-	PADAPTER	Adapter,
-	PBT_H2C	pH2c,
-	u2Byte		h2cCmdLen
-	)
+    PADAPTER	Adapter,
+    PBT_H2C	pH2c,
+    u2Byte		h2cCmdLen
+)
 {
 	//KIRQL				OldIrql = KeGetCurrentIrql();
 	BT_CTRL_STATUS	h2cStatus=BT_STATUS_H2C_SUCCESS;
@@ -113,42 +117,39 @@ mptbt_SendH2c(
 
 	//PlatformResetEvent(&pMptCtx->MptH2cRspEvent);
 	//PlatformResetEvent(&pMptCtx->MptBtC2hEvent);
-	
+
 //	if(OldIrql == PASSIVE_LEVEL)
 //	{
-		//RTPRINT_DATA(FMPBT, FMPBT_H2C_CONTENT, ("[MPT], MPT H2C hex: \n"), pH2c, h2cCmdLen);
+	//RTPRINT_DATA(FMPBT, FMPBT_H2C_CONTENT, ("[MPT], MPT H2C hex: \n"), pH2c, h2cCmdLen);
 
-		for(i=0; i<BT_H2C_MAX_RETRY; i++)
-		{
-			DBG_8192C("[MPT], Send H2C command to wifi!!!\n");
+	for(i=0; i<BT_H2C_MAX_RETRY; i++) {
+		DBG_8192C("[MPT], Send H2C command to wifi!!!\n");
+
+		pMptCtx->MptH2cRspEvent = _FALSE;
+		pMptCtx->MptBtC2hEvent = _FALSE;
+
 #if defined(CONFIG_RTL8723A)
-			FillH2CCmd(Adapter, 70, h2cCmdLen, (pu1Byte)pH2c);
+		rtw_hal_fill_h2c_cmd(Adapter, 70, h2cCmdLen, (pu1Byte)pH2c);
 #elif defined(CONFIG_RTL8723B)
-			rtl8723b_set_FwBtMpOper_cmd(Adapter, pH2c->opCode, pH2c->opCodeVer, pH2c->reqNum, pH2c->buf[0]);
+		rtl8723b_set_FwBtMpOper_cmd(Adapter, pH2c->opCode, pH2c->opCodeVer, pH2c->reqNum, pH2c->buf);
 #endif
-			pMptCtx->h2cReqNum++;
-			pMptCtx->h2cReqNum %= 16;
+		pMptCtx->h2cReqNum++;
+		pMptCtx->h2cReqNum %= 16;
 
-			if(WaitC2Hevent(Adapter, &pMptCtx->MptH2cRspEvent, 100))
-			{
-				DBG_8192C("[MPT], Received WiFi MptH2cRspEvent!!!\n");
-				if(WaitC2Hevent(Adapter, &pMptCtx->MptBtC2hEvent, 400))
-				{
-					DBG_8192C("[MPT], Received MptBtC2hEvent!!!\n");
-					break;
-				}
-				else
-				{
-					DBG_8192C("[MPT], Error!!BT MptBtC2hEvent timeout!!\n");
-					h2cStatus = BT_STATUS_H2C_BT_NO_RSP;
-				}
+		if(WaitC2Hevent(Adapter, &pMptCtx->MptH2cRspEvent, 100)) {
+			DBG_8192C("[MPT], Received WiFi MptH2cRspEvent!!!\n");
+			if(WaitC2Hevent(Adapter, &pMptCtx->MptBtC2hEvent, 400)) {
+				DBG_8192C("[MPT], Received MptBtC2hEvent!!!\n");
+				break;
+			} else {
+				DBG_8192C("[MPT], Error!!BT MptBtC2hEvent timeout!!\n");
+				h2cStatus = BT_STATUS_H2C_BT_NO_RSP;
 			}
-			else
-			{
-				DBG_8192C("[MPT], Error!!WiFi  MptH2cRspEvent timeout!!\n");
-				h2cStatus = BT_STATUS_H2C_TIMTOUT;
-			}
+		} else {
+			DBG_8192C("[MPT], Error!!WiFi  MptH2cRspEvent timeout!!\n");
+			h2cStatus = BT_STATUS_H2C_TIMTOUT;
 		}
+	}
 //	}
 //	else
 //	{
@@ -164,57 +165,61 @@ mptbt_SendH2c(
 
 BT_CTRL_STATUS
 mptbt_CheckBtRspStatus(
-	PADAPTER			Adapter,
-	PBT_EXT_C2H			pExtC2h
-	)
+    PADAPTER			Adapter,
+    PBT_EXT_C2H			pExtC2h
+)
 {
 	BT_CTRL_STATUS	retStatus=BT_OP_STATUS_SUCCESS;
 
-	switch(pExtC2h->statusCode)
-	{
-		case BT_OP_STATUS_SUCCESS:
-			retStatus = BT_STATUS_BT_OP_SUCCESS;
-			DBG_8192C("[MPT], BT status : BT_STATUS_SUCCESS\n");
-			break;
-		case BT_OP_STATUS_VERSION_MISMATCH:
-			retStatus = BT_STATUS_OPCODE_L_VERSION_MISMATCH;
-			DBG_8192C("[MPT], BT status : BT_STATUS_OPCODE_L_VERSION_MISMATCH\n");
-			break;
-		case BT_OP_STATUS_UNKNOWN_OPCODE:
-			retStatus = BT_STATUS_UNKNOWN_OPCODE_L;
-			DBG_8192C("[MPT], BT status : BT_STATUS_UNKNOWN_OPCODE_L\n");
-			break;
-		case BT_OP_STATUS_ERROR_PARAMETER:
-			retStatus = BT_STATUS_PARAMETER_FORMAT_ERROR_L;
-			DBG_8192C("[MPT], BT status : BT_STATUS_PARAMETER_FORMAT_ERROR_L\n");
-			break;
-		default:
-			retStatus = BT_STATUS_UNKNOWN_STATUS_L;
-			DBG_8192C("[MPT], BT status : BT_STATUS_UNKNOWN_STATUS_L\n");
-			break;
+	switch(pExtC2h->statusCode) {
+	case BT_OP_STATUS_SUCCESS:
+		retStatus = BT_STATUS_BT_OP_SUCCESS;
+		DBG_8192C("[MPT], BT status : BT_STATUS_SUCCESS\n");
+		break;
+	case BT_OP_STATUS_VERSION_MISMATCH:
+		retStatus = BT_STATUS_OPCODE_L_VERSION_MISMATCH;
+		DBG_8192C("[MPT], BT status : BT_STATUS_OPCODE_L_VERSION_MISMATCH\n");
+		break;
+	case BT_OP_STATUS_UNKNOWN_OPCODE:
+		retStatus = BT_STATUS_UNKNOWN_OPCODE_L;
+		DBG_8192C("[MPT], BT status : BT_STATUS_UNKNOWN_OPCODE_L\n");
+		break;
+	case BT_OP_STATUS_ERROR_PARAMETER:
+		retStatus = BT_STATUS_PARAMETER_FORMAT_ERROR_L;
+		DBG_8192C("[MPT], BT status : BT_STATUS_PARAMETER_FORMAT_ERROR_L\n");
+		break;
+	default:
+		retStatus = BT_STATUS_UNKNOWN_STATUS_L;
+		DBG_8192C("[MPT], BT status : BT_STATUS_UNKNOWN_STATUS_L\n");
+		break;
 	}
-	
+
 	return retStatus;
-}	
+}
 
 
 
 BT_CTRL_STATUS
 mptbt_BtFwOpCodeProcess(
-	PADAPTER		Adapter,
-	u1Byte			btFwOpCode,
-	u1Byte			opCodeVer,
-	pu1Byte			pH2cPar,
-	u1Byte			h2cParaLen
-	)
+    PADAPTER		Adapter,
+    u1Byte			btFwOpCode,
+    u1Byte			opCodeVer,
+    pu1Byte			pH2cPar,
+    u1Byte			h2cParaLen
+)
 {
-	u1Byte				H2C_Parameter[6] ={0};
+	u1Byte				H2C_Parameter[6] = {0};
 	PBT_H2C				pH2c=(PBT_H2C)&H2C_Parameter[0];
 	PMPT_CONTEXT		pMptCtx=&(Adapter->mppriv.MptCtx);
 	PBT_EXT_C2H			pExtC2h=(PBT_EXT_C2H)&pMptCtx->c2hBuf[0];
-	u2Byte				paraLen=0,i;
+	u2Byte				i;
 	BT_CTRL_STATUS	h2cStatus=BT_STATUS_H2C_SUCCESS, c2hStatus=BT_STATUS_C2H_SUCCESS;
 	BT_CTRL_STATUS	retStatus=BT_STATUS_H2C_BT_NO_RSP;
+
+	if( Adapter->registrypriv.mp_mode == 0 ) {
+		DBG_8192C("[MPT], Error!! mptbt_BtFwOpCodeProces mp_mode == 0!!\n");
+		return _FALSE;
+	}
 
 	pH2c->opCode = btFwOpCode;
 	pH2c->opCodeVer = opCodeVer;
@@ -227,33 +232,22 @@ mptbt_BtFwOpCodeProcess(
 	DBG_8192C("[MPT], pH2c->opCodeVer=%d\n", pH2c->opCodeVer);
 	DBG_8192C("[MPT], pH2c->reqNum=%d\n", pH2c->reqNum);
 	DBG_8192C("[MPT], h2c parameter length=%d\n", h2cParaLen);
-	if(h2cParaLen)
-	{
-		DBG_8192C("[MPT], parameters(hex): \n");
-		for(i=0;i<h2cParaLen;i++)
-		{
-			DBG_8192C(" 0x%x \n", pH2c->buf[i]);
-		}
+	for (i=0; i<h2cParaLen; i++) {
+		DBG_8192C("[MPT], parameter[%d]=0x%02x\n", i, pH2c->buf[i]);
 	}
 
 	h2cStatus = mptbt_SendH2c(Adapter, pH2c, h2cParaLen+2);
-	if(BT_STATUS_H2C_SUCCESS == h2cStatus)
-	{
-		// if reach here, it means H2C get the correct c2h response, 
+	if(BT_STATUS_H2C_SUCCESS == h2cStatus) {
+		// if reach here, it means H2C get the correct c2h response,
 		c2hStatus = mptbt_CheckC2hFrame(Adapter, pH2c, pExtC2h);
-		if(BT_STATUS_C2H_SUCCESS == c2hStatus)
-		{
+		if(BT_STATUS_C2H_SUCCESS == c2hStatus) {
 			retStatus = mptbt_CheckBtRspStatus(Adapter, pExtC2h);
-		}
-		else
-		{
+		} else {
 			DBG_8192C("[MPT], Error!! C2H failed for pH2c->opCode=%d\n", pH2c->opCode);
 			// check c2h status error, return error status code to upper layer.
 			retStatus = c2hStatus;
 		}
-	}
-	else
-	{
+	} else {
 		DBG_8192C("[MPT], Error!! H2C failed for pH2c->opCode=%d\n", pH2c->opCode);
 		// check h2c status error, return error status code to upper layer.
 		retStatus = h2cStatus;
@@ -267,12 +261,12 @@ mptbt_BtFwOpCodeProcess(
 
 u2Byte
 mptbt_BtReady(
-	PADAPTER		Adapter,
-	PBT_REQ_CMD 	pBtReq,
-	PBT_RSP_CMD 	pBtRsp
-	)
+    PADAPTER		Adapter,
+    PBT_REQ_CMD 	pBtReq,
+    PBT_RSP_CMD 	pBtRsp
+)
 {
-	u1Byte				h2cParaBuf[6] ={0};
+	u1Byte				h2cParaBuf[6] = {0};
 	u1Byte				h2cParaLen=0;
 	u2Byte				paraLen=0;
 	u1Byte				retStatus=BT_STATUS_BT_OP_SUCCESS;
@@ -281,7 +275,7 @@ mptbt_BtReady(
 	PMPT_CONTEXT		pMptCtx=&(Adapter->mppriv.MptCtx);
 	PBT_EXT_C2H			pExtC2h=(PBT_EXT_C2H)&pMptCtx->c2hBuf[0];
 	u1Byte				i;
-	u1Byte				btFwVer=0, bdAddr[6]={0};
+	u1Byte				btFwVer=0, bdAddr[6]= {0};
 	u2Byte				btRealFwVer=0;
 	pu2Byte 			pu2Tmp=NULL;
 
@@ -290,8 +284,7 @@ mptbt_BtReady(
 	//
 
 	// 1. check upper layer opcode version
-	if(pBtReq->opCodeVer != 1)
-	{
+	if(pBtReq->opCodeVer != 1) {
 		DBG_8192C("[MPT], Error!! Upper OP code version not match!!!\n");
 		pBtRsp->status = BT_STATUS_OPCODE_U_VERSION_MISMATCH;
 		return paraLen;
@@ -309,14 +302,11 @@ mptbt_BtReady(
 	// execute h2c and check respond c2h from bt fw is correct or not
 	retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	// ckeck bt return status.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
-	}
-	else
-	{
+	} else {
 		pu2Tmp = (pu2Byte)&pExtC2h->buf[0];
 		btRealFwVer = *pu2Tmp;
 		btFwVer = pExtC2h->buf[1];
@@ -329,14 +319,11 @@ mptbt_BtReady(
 	// execute h2c and check respond c2h from bt fw is correct or not
 	retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	// ckeck bt return status.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
-	}
-	else
-	{
+	} else {
 		bdAddr[5] = pExtC2h->buf[0];
 		bdAddr[4] = pExtC2h->buf[1];
 		bdAddr[3] = pExtC2h->buf[2];
@@ -347,21 +334,17 @@ mptbt_BtReady(
 	// execute h2c and check respond c2h from bt fw is correct or not
 	retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	// ckeck bt return status.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
-	}
-	else
-	{
+	} else {
 		bdAddr[2] = pExtC2h->buf[0];
 		bdAddr[1] = pExtC2h->buf[1];
 		bdAddr[0] = pExtC2h->buf[2];
 	}
 	DBG_8192C("[MPT], Local BDAddr:");
-	for(i=0; i<6; i++)
-	{
+	for(i=0; i<6; i++) {
 		DBG_8192C(" 0x%x ", bdAddr[i]);
 	}
 	pBtRsp->status = BT_STATUS_SUCCESS;
@@ -369,8 +352,7 @@ mptbt_BtReady(
 	pu2Tmp = (pu2Byte)&pBtRsp->pParamStart[1];
 	*pu2Tmp = btRealFwVer;
 	pBtRsp->pParamStart[3] = btFwVer;
-	for(i=0; i<6; i++)
-	{
+	for(i=0; i<6; i++) {
 		pBtRsp->pParamStart[4+i] = bdAddr[5-i];
 	}
 
@@ -399,7 +381,7 @@ u4Byte mptbt_switch_RF(PADAPTER	Adapter, u1Byte	Enter)
 	if (Enter) {
 		////1>. close WiFi RF
 		mptbt_close_WiFiRF(Adapter);
-		
+
 		////2>. change ant switch to BT
 		tmp_2byte = rtw_read16(Adapter, 0x860);
 		tmp_2byte = tmp_2byte | BIT(9);
@@ -409,7 +391,7 @@ u4Byte mptbt_switch_RF(PADAPTER	Adapter, u1Byte	Enter)
 	} else {
 		////1>. Open WiFi RF
 		mptbt_open_WiFiRF(Adapter);
-		
+
 		////2>. change ant switch back
 		tmp_2byte = rtw_read16(Adapter, 0x860);
 		tmp_2byte = tmp_2byte | BIT(8);
@@ -423,12 +405,12 @@ u4Byte mptbt_switch_RF(PADAPTER	Adapter, u1Byte	Enter)
 
 u2Byte
 mptbt_BtSetMode(
-	PADAPTER		Adapter,
-	PBT_REQ_CMD 	pBtReq,
-	PBT_RSP_CMD 	pBtRsp
-	)
+    PADAPTER		Adapter,
+    PBT_REQ_CMD 	pBtReq,
+    PBT_RSP_CMD 	pBtRsp
+)
 {
-	u1Byte				h2cParaBuf[6] ={0};
+	u1Byte				h2cParaBuf[6] = {0};
 	u1Byte				h2cParaLen=0;
 	u2Byte				paraLen=0;
 	u1Byte				retStatus=BT_STATUS_BT_OP_SUCCESS;
@@ -440,39 +422,32 @@ mptbt_BtSetMode(
 	// check upper layer parameters
 	//
 	// 1. check upper layer opcode version
-	if(pBtReq->opCodeVer != 1)
-	{
+	if(pBtReq->opCodeVer != 1) {
 		DBG_8192C("[MPT], Error!! Upper OP code version not match!!!\n");
 		pBtRsp->status = BT_STATUS_OPCODE_U_VERSION_MISMATCH;
 		return paraLen;
 	}
 	// 2. check upper layer parameter length
-	if(1 == pBtReq->paraLength)
-	{
+	if(1 == pBtReq->paraLength) {
 		btModeToSet = pBtReq->pParamStart[0];
 		DBG_8192C("[MPT], BtTestMode=%d \n", btModeToSet);
-	}
-	else
-	{
+	} else {
 		DBG_8192C("[MPT], Error!! wrong parameter length=%d (should be 1)\n", pBtReq->paraLength);
 		pBtRsp->status = BT_STATUS_PARAMETER_FORMAT_ERROR_U;
 		return paraLen;
 	}
-	
+
 	//
 	// execute lower layer opcodes
 	//
-	
-	// 1. fill h2c parameters	
+
+	// 1. fill h2c parameters
 	// check bt mode
 	btOpcode = BT_LO_OP_SET_BT_MODE;
-	if(btModeToSet >= MP_BT_MODE_MAX)
-	{
+	if(btModeToSet >= MP_BT_MODE_MAX) {
 		pBtRsp->status = BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 		return paraLen;
-	}
-	else
-	{
+	} else {
 		mptbt_switch_RF(Adapter, 1);
 
 		h2cParaBuf[0] = btModeToSet;
@@ -480,93 +455,106 @@ mptbt_BtSetMode(
 		// 2. execute h2c and check respond c2h from bt fw is correct or not
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	}
-	
+
 	// 3. construct respond status code and data.
-	if(BT_STATUS_BT_OP_SUCCESS == retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS == retStatus) {
 		pBtRsp->status = BT_STATUS_SUCCESS;
-	}
-	else
-	{
+	} else {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 	}
-	
+
 	return paraLen;
 }
 
 
 VOID
 MPTBT_FwC2hBtMpCtrl(
-	PADAPTER	Adapter,
-	pu1Byte 	tmpBuf,
-	u1Byte		length
-	)
+    PADAPTER	Adapter,
+    pu1Byte 	tmpBuf,
+    u1Byte		length
+)
 {
 	u32 i;
 	PMPT_CONTEXT	pMptCtx=&(Adapter->mppriv.MptCtx);
 	PBT_EXT_C2H pExtC2h=(PBT_EXT_C2H)tmpBuf;
-	
+
+	if(Adapter->bBTFWReady == _FALSE || Adapter->registrypriv.mp_mode == 0 ) {
+		//DBG_8192C("Ignore C2H BT MP Info since not in MP mode \n");
+		return;
+	}
+	if( length > 32 || length < 3 ) {
+		DBG_8192C("\n [MPT], pExtC2h->buf hex: length=%d > 32 || < 3\n",length);
+		return;
+	}
+
 	//cancel_timeout for h2c handle
-	_cancel_timer_ex( &pMptCtx->MPh2c_timeout_timer);
+	_cancel_timer_ex(&pMptCtx->MPh2c_timeout_timer);
 
-	DBG_8192C("[MPT], MPTBT_FwC2hBtMpCtrl(), hex: \n");
-	for(i=0;i<=length;i++)
-	{
-		//DBG_8192C("[MPT], MPTBT_FwC2hBtMpCtrl(), hex: \n",tmpBuf[i], length);
-		DBG_8192C(" 0x%x ",tmpBuf[i]);
+	for (i=0; i<length; i++) {
+		DBG_8192C("[MPT], %s, buf[%d]=0x%02x ", __FUNCTION__, i, tmpBuf[i]);
 	}
-	DBG_8192C("\n [MPT], pExtC2h->extendId=0x%x\n", pExtC2h->extendId);
-	
-	switch(pExtC2h->extendId)
-	{
-		case EXT_C2H_WIFI_FW_ACTIVE_RSP:
-			DBG_8192C("[MPT], EXT_C2H_WIFI_FW_ACTIVE_RSP\n");
-			DBG_8192C("[MPT], pExtC2h->buf hex: \n");
-			for(i=0;i<=(length-3);i++)
-				DBG_8192C(" 0x%x ",pExtC2h->buf[i]);
-				//PlatformSetEvent(&pMptCtx->MptH2cRspEvent);
-				pMptCtx->MptH2cRspEvent=_TRUE;
-				_rtw_up_sema(&pMptCtx->MPh2c_Sema);
-			break;
-		case EXT_C2H_TRIG_BY_BT_FW:
-			DBG_8192C("[MPT], EXT_C2H_TRIG_BY_BT_FW\n");
-				//PlatformMoveMemory(&pMptCtx->c2hBuf[0], tmpBuf, length);
-			_rtw_memcpy(&pMptCtx->c2hBuf[0], tmpBuf, length);
-			DBG_8192C("[MPT], pExtC2h->statusCode=0x%x\n", pExtC2h->statusCode);
-			DBG_8192C("[MPT], pExtC2h->retLen=0x%x\n", pExtC2h->retLen);
-			DBG_8192C("[MPT], pExtC2h->opCodeVer=0x%x\n", pExtC2h->opCodeVer);
-			DBG_8192C("[MPT], pExtC2h->reqNum=0x%x\n", pExtC2h->reqNum);
-			DBG_8192C("[MPT], pExtC2h->buf hex: \n");
-			for(i=0;i<=(length-3);i++)
-				DBG_8192C(" 0x%x ",pExtC2h->buf[0]);
-				//PlatformSetEvent(&pMptCtx->MptBtC2hEvent);
-				pMptCtx->MptBtC2hEvent=_TRUE;
-				_rtw_up_sema(&pMptCtx->MPh2c_Sema);
-			break;
-		default:
-			break;
-	}
-	
+	DBG_8192C("[MPT], pExtC2h->extendId=0x%x\n", pExtC2h->extendId);
 
-	
+	switch(pExtC2h->extendId) {
+	case EXT_C2H_WIFI_FW_ACTIVE_RSP:
+		DBG_8192C("[MPT], EXT_C2H_WIFI_FW_ACTIVE_RSP\n");
+#if 0
+		DBG_8192C("[MPT], pExtC2h->buf hex: \n");
+		for (i=0; i<(length-3); i++) {
+			DBG_8192C(" 0x%x ", pExtC2h->buf[i]);
+		}
+#endif
+		if ((_FALSE == pMptCtx->bMPh2c_timeout)
+		    && (_FALSE == pMptCtx->MptH2cRspEvent)) {
+			pMptCtx->MptH2cRspEvent = _TRUE;
+			_rtw_up_sema(&pMptCtx->MPh2c_Sema);
+		}
+		break;
+
+	case EXT_C2H_TRIG_BY_BT_FW:
+		DBG_8192C("[MPT], EXT_C2H_TRIG_BY_BT_FW\n");
+		_rtw_memcpy(&pMptCtx->c2hBuf[0], tmpBuf, length);
+		DBG_8192C("[MPT], pExtC2h->statusCode=0x%x\n", pExtC2h->statusCode);
+		DBG_8192C("[MPT], pExtC2h->retLen=0x%x\n", pExtC2h->retLen);
+		DBG_8192C("[MPT], pExtC2h->opCodeVer=0x%x\n", pExtC2h->opCodeVer);
+		DBG_8192C("[MPT], pExtC2h->reqNum=0x%x\n", pExtC2h->reqNum);
+		for (i=0; i<(length-3); i++) {
+			DBG_8192C("[MPT], pExtC2h->buf[%d]=0x%02x\n", i, pExtC2h->buf[i]);
+		}
+
+		if ((_FALSE == pMptCtx->bMPh2c_timeout)
+		    && (_TRUE == pMptCtx->MptH2cRspEvent)
+		    && (_FALSE == pMptCtx->MptBtC2hEvent)) {
+			pMptCtx->MptBtC2hEvent = _TRUE;
+			_rtw_up_sema(&pMptCtx->MPh2c_Sema);
+		}
+		break;
+
+	default:
+		DBG_8192C("[MPT], EXT_C2H Target not found,pExtC2h->extendId =%d ,pExtC2h->reqNum=%d\n",pExtC2h->extendId,pExtC2h->reqNum);
+		break;
+	}
+
+
+
 }
 
 
 u2Byte
 mptbt_BtGetGeneral(
-	IN	PADAPTER		Adapter,
-	IN	PBT_REQ_CMD 	pBtReq,
-	IN	PBT_RSP_CMD 	pBtRsp
-	)
+    IN	PADAPTER		Adapter,
+    IN	PBT_REQ_CMD 	pBtReq,
+    IN	PBT_RSP_CMD 	pBtRsp
+)
 {
 	PMPT_CONTEXT		pMptCtx=&(Adapter->mppriv.MptCtx);
 	PBT_EXT_C2H 		pExtC2h=(PBT_EXT_C2H)&pMptCtx->c2hBuf[0];
-	u1Byte				h2cParaBuf[6] ={0};
+	u1Byte				h2cParaBuf[6] = {0};
 	u1Byte				h2cParaLen=0;
 	u2Byte				paraLen=0;
 	u1Byte				retStatus=BT_STATUS_BT_OP_SUCCESS;
-	u1Byte				btOpcode, bdAddr[6]={0};
+	u1Byte				btOpcode, bdAddr[6]= {0};
 	u1Byte				btOpcodeVer=0;
 	u1Byte				getType=0, i;
 	u2Byte				getParaLen=0, validParaLen=0;
@@ -574,103 +562,90 @@ mptbt_BtGetGeneral(
 	u4Byte				regAddr=0, regValue=0;
 	pu4Byte 			pu4Tmp;
 	pu2Byte 			pu2Tmp;
-	pu1Byte 			pu1Tmp;
+	//pu1Byte 			pu1Tmp;
 
 	//
 	// check upper layer parameters
 	//
-	
+
 	// check upper layer opcode version
-	if(pBtReq->opCodeVer != 1)
-	{
+	if(pBtReq->opCodeVer != 1) {
 		DBG_8192C("[MPT], Error!! Upper OP code version not match!!!\n");
 		pBtRsp->status = BT_STATUS_OPCODE_U_VERSION_MISMATCH;
 		return paraLen;
 	}
 	// check upper layer parameter length
-	if(pBtReq->paraLength < 1)
-	{
+	if(pBtReq->paraLength < 1) {
 		DBG_8192C("[MPT], Error!! wrong parameter length=%d (should larger than 1)\n", pBtReq->paraLength);
 		pBtRsp->status = BT_STATUS_PARAMETER_FORMAT_ERROR_U;
 		return paraLen;
 	}
 	getParaLen = pBtReq->paraLength - 1;
 	getType = pBtReq->pParamStart[0];
-	
+
 	DBG_8192C("[MPT], getType=%d, getParaLen=%d\n", getType, getParaLen);
 
 	// check parameter first
-	switch(getType)
-	{
-		case BT_GGET_REG:
-			DBG_8192C("[MPT], [BT_GGET_REG]\n");
-			validParaLen = 5;
-			if(getParaLen == validParaLen)
-			{
-				btOpcode = BT_LO_OP_READ_REG;
-				regType = pBtReq->pParamStart[1];
-				pu4Tmp = (pu4Byte)&pBtReq->pParamStart[2];
-				regAddr = *pu4Tmp;
-				DBG_8192C("[MPT], BT_GGET_REG regType=0x%x, regAddr=0x%x!!\n", 
-					regType, regAddr);
-				if(regType >= BT_REG_MAX)
-				{
+	switch(getType) {
+	case BT_GGET_REG:
+		DBG_8192C("[MPT], [BT_GGET_REG]\n");
+		validParaLen = 5;
+		if(getParaLen == validParaLen) {
+			btOpcode = BT_LO_OP_READ_REG;
+			regType = pBtReq->pParamStart[1];
+			pu4Tmp = (pu4Byte)&pBtReq->pParamStart[2];
+			regAddr = *pu4Tmp;
+			DBG_8192C("[MPT], BT_GGET_REG regType=0x%02x, regAddr=0x%08x!!\n",
+			          regType, regAddr);
+			if(regType >= BT_REG_MAX) {
+				pBtRsp->status = (btOpcode<<8)| BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
+				return paraLen;
+			} else {
+				if( ((BT_REG_RF==regType)&&(regAddr>0x7f)) ||
+				    ((BT_REG_MODEM==regType)&&(regAddr>0x1ff)) ||
+				    ((BT_REG_BLUEWIZE==regType)&&(regAddr>0xfff)) ||
+				    ((BT_REG_VENDOR==regType)&&(regAddr>0xfff)) ||
+				    ((BT_REG_LE==regType)&&(regAddr>0xfff)) ) {
 					pBtRsp->status = (btOpcode<<8)| BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 					return paraLen;
 				}
-				else
-				{
-					if( ((BT_REG_RF==regType)&&(regAddr>0x7f)) ||
-						((BT_REG_MODEM==regType)&&(regAddr>0x1ff)) ||
-						((BT_REG_BLUEWIZE==regType)&&(regAddr>0xfff)) ||
-						((BT_REG_VENDOR==regType)&&(regAddr>0xfff)) ||
-						((BT_REG_LE==regType)&&(regAddr>0xfff)) )
-					{				
-						pBtRsp->status = (btOpcode<<8)| BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
-						return paraLen;
-					}
-				}
 			}
-			break;
-		case BT_GGET_STATUS:
-			DBG_8192C("[MPT], [BT_GGET_STATUS]\n");
-			validParaLen = 0;
-			break;
-		case BT_GGET_REPORT:
-			DBG_8192C("[MPT], [BT_GGET_REPORT]\n");
-			validParaLen = 1;
-			if(getParaLen == validParaLen)
-			{
-				reportType = pBtReq->pParamStart[1];
-				DBG_8192C("[MPT], BT_GGET_REPORT reportType=0x%x!!\n", reportType);
-				if(reportType >= BT_REPORT_MAX)
-				{
-					pBtRsp->status = BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
-					return paraLen;
-				}
-			}
-			break;
-		default:
-			{
-				DBG_8192C("[MPT], Error!! getType=%d, out of range\n", getType);
+		}
+		break;
+	case BT_GGET_STATUS:
+		DBG_8192C("[MPT], [BT_GGET_STATUS]\n");
+		validParaLen = 0;
+		break;
+	case BT_GGET_REPORT:
+		DBG_8192C("[MPT], [BT_GGET_REPORT]\n");
+		validParaLen = 1;
+		if(getParaLen == validParaLen) {
+			reportType = pBtReq->pParamStart[1];
+			DBG_8192C("[MPT], BT_GGET_REPORT reportType=0x%x!!\n", reportType);
+			if(reportType >= BT_REPORT_MAX) {
 				pBtRsp->status = BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 				return paraLen;
 			}
-			break;
+		}
+		break;
+	default: {
+		DBG_8192C("[MPT], Error!! getType=%d, out of range\n", getType);
+		pBtRsp->status = BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
+		return paraLen;
 	}
-	if(getParaLen != validParaLen)
-	{
+	break;
+	}
+	if(getParaLen != validParaLen) {
 		DBG_8192C("[MPT], Error!! wrong parameter length=%d for BT_GET_GEN_CMD cmd id=0x%x, paraLen should=0x%x\n",
-			getParaLen, getType, validParaLen);
+		          getParaLen, getType, validParaLen);
 		pBtRsp->status = BT_STATUS_PARAMETER_FORMAT_ERROR_U;
 		return paraLen;
 	}
-	
+
 	//
 	// execute lower layer opcodes
 	//
-	if(BT_GGET_REG == getType)
-	{
+	if(BT_GGET_REG == getType) {
 		// fill h2c parameters
 		// here we should write reg value first then write the address, adviced by Austin
 		btOpcode = BT_LO_OP_READ_REG;
@@ -681,8 +656,7 @@ mptbt_BtGetGeneral(
 		// execute h2c and check respond c2h from bt fw is correct or not
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 		// construct respond status code and data.
-		if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-		{
+		if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 			pBtRsp->status = ((btOpcode<<8)|retStatus);
 			DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 			return paraLen;
@@ -690,22 +664,19 @@ mptbt_BtGetGeneral(
 
 		pu2Tmp = (pu2Byte)&pExtC2h->buf[0];
 		regValue = *pu2Tmp;
-		DBG_8192C("[MPT], read reg regType=0x%x, regAddr=0x%x, regValue=0x%x\n", 
-			regType, regAddr, regValue);
-		
+		DBG_8192C("[MPT], read reg regType=0x%02x, regAddr=0x%08x, regValue=0x%04x\n",
+		          regType, regAddr, regValue);
+
 		pu4Tmp = (pu4Byte)&pBtRsp->pParamStart[0];
 		*pu4Tmp = regValue;
 		paraLen = 4;
-	}
-	else if(BT_GGET_STATUS == getType)
-	{
+	} else if(BT_GGET_STATUS == getType) {
 		btOpcode = BT_LO_OP_GET_BT_STATUS;
 		h2cParaLen = 0;
 		// execute h2c and check respond c2h from bt fw is correct or not
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 		// construct respond status code and data.
-		if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-		{
+		if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 			pBtRsp->status = ((btOpcode<<8)|retStatus);
 			DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 			return paraLen;
@@ -713,177 +684,159 @@ mptbt_BtGetGeneral(
 
 		pBtRsp->pParamStart[0] = pExtC2h->buf[0];
 		pBtRsp->pParamStart[1] = pExtC2h->buf[1];
-		DBG_8192C("[MPT], read bt status, testMode=0x%x, testStatus=0x%x\n", 
-			pBtRsp->pParamStart[0], pBtRsp->pParamStart[1]);		
+		DBG_8192C("[MPT], read bt status, testMode=0x%x, testStatus=0x%x\n",
+		          pBtRsp->pParamStart[0], pBtRsp->pParamStart[1]);
 		paraLen = 2;
-	}
-	else if(BT_GGET_REPORT == getType)
-	{
-		switch(reportType)
-		{
-			case BT_REPORT_RX_PACKET_CNT:
-				{
-					DBG_8192C("[MPT], [Rx Packet Counts]\n");
-					btOpcode = BT_LO_OP_GET_RX_PKT_CNT_L;
-					h2cParaLen = 0;
-					// execute h2c and check respond c2h from bt fw is correct or not
-					retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
-					// construct respond status code and data.
-					if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-					{
-						pBtRsp->status = ((btOpcode<<8)|retStatus);
-						DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
-						return paraLen;
-					}
-					pBtRsp->pParamStart[0] = pExtC2h->buf[0];
-					pBtRsp->pParamStart[1] = pExtC2h->buf[1];
-
-					btOpcode = BT_LO_OP_GET_RX_PKT_CNT_H;
-					h2cParaLen = 0;
-					// execute h2c and check respond c2h from bt fw is correct or not
-					retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
-					// construct respond status code and data.
-					if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-					{
-						pBtRsp->status = ((btOpcode<<8)|retStatus);
-						DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
-						return paraLen;
-					}
-					pBtRsp->pParamStart[2] = pExtC2h->buf[0];
-					pBtRsp->pParamStart[3] = pExtC2h->buf[1];
-					paraLen = 4;
-				}
-				break;
-			case BT_REPORT_RX_ERROR_BITS:
-				{
-					DBG_8192C("[MPT], [Rx Error Bits]\n");
-					btOpcode = BT_LO_OP_GET_RX_ERROR_BITS_L;
-					h2cParaLen = 0;
-					// execute h2c and check respond c2h from bt fw is correct or not
-					retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
-					// construct respond status code and data.
-					if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-					{
-						pBtRsp->status = ((btOpcode<<8)|retStatus);
-						DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
-						return paraLen;
-					}
-					pBtRsp->pParamStart[0] = pExtC2h->buf[0];
-					pBtRsp->pParamStart[1] = pExtC2h->buf[1];
-
-					btOpcode = BT_LO_OP_GET_RX_ERROR_BITS_H;
-					h2cParaLen = 0;
-					// execute h2c and check respond c2h from bt fw is correct or not
-					retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
-					// construct respond status code and data.
-					if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-					{
-						pBtRsp->status = ((btOpcode<<8)|retStatus);
-						DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
-						return paraLen;
-					}
-					pBtRsp->pParamStart[2] = pExtC2h->buf[0];
-					pBtRsp->pParamStart[3] = pExtC2h->buf[1];
-					paraLen = 4;
-				}
-				break;
-			case BT_REPORT_RSSI:
-				{
-					DBG_8192C("[MPT], [RSSI]\n");
-					btOpcode = BT_LO_OP_GET_RSSI;
-					h2cParaLen = 0;
-					// execute h2c and check respond c2h from bt fw is correct or not
-					retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
-					// construct respond status code and data.
-					if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-					{
-						pBtRsp->status = ((btOpcode<<8)|retStatus);
-						DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
-						return paraLen;
-					}
-					pBtRsp->pParamStart[0] = pExtC2h->buf[0];
-					pBtRsp->pParamStart[1] = pExtC2h->buf[1];
-					paraLen = 2;
-				}
-				break;
-			case BT_REPORT_CFO_HDR_QUALITY:
-				{
-					DBG_8192C("[MPT], [CFO & Header Quality]\n");
-					btOpcode = BT_LO_OP_GET_CFO_HDR_QUALITY_L;
-					h2cParaLen = 0;
-					// execute h2c and check respond c2h from bt fw is correct or not
-					retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
-					// construct respond status code and data.
-					if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-					{
-						pBtRsp->status = ((btOpcode<<8)|retStatus);
-						DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
-						return paraLen;
-					}
-					pBtRsp->pParamStart[0] = pExtC2h->buf[0];
-					pBtRsp->pParamStart[1] = pExtC2h->buf[1];
-
-					btOpcode = BT_LO_OP_GET_CFO_HDR_QUALITY_H;
-					h2cParaLen = 0;
-					// execute h2c and check respond c2h from bt fw is correct or not
-					retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
-					// construct respond status code and data.
-					if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-					{
-						pBtRsp->status = ((btOpcode<<8)|retStatus);
-						DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
-						return paraLen;
-					}
-					pBtRsp->pParamStart[2] = pExtC2h->buf[0];
-					pBtRsp->pParamStart[3] = pExtC2h->buf[1];
-					paraLen = 4;
-				}
-				break;
-			case BT_REPORT_CONNECT_TARGET_BD_ADDR:
-				{
-					DBG_8192C("[MPT], [Connected Target BD ADDR]\n");
-					btOpcode = BT_LO_OP_GET_TARGET_BD_ADDR_L;
-					h2cParaLen = 0;
-					// execute h2c and check respond c2h from bt fw is correct or not
-					retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
-					// construct respond status code and data.
-					if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-					{
-						pBtRsp->status = ((btOpcode<<8)|retStatus);
-						DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
-						return paraLen;
-					}
-					bdAddr[5] = pExtC2h->buf[0];
-					bdAddr[4] = pExtC2h->buf[1];
-					bdAddr[3] = pExtC2h->buf[2];
-
-					btOpcode = BT_LO_OP_GET_TARGET_BD_ADDR_H;
-					h2cParaLen = 0;
-					// execute h2c and check respond c2h from bt fw is correct or not
-					retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
-					// construct respond status code and data.
-					if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-					{
-						pBtRsp->status = ((btOpcode<<8)|retStatus);
-						DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
-						return paraLen;
-					}
-					bdAddr[2] = pExtC2h->buf[0];
-					bdAddr[1] = pExtC2h->buf[1];
-					bdAddr[0] = pExtC2h->buf[2];
-						
-					DBG_8192C("[MPT], Connected Target BDAddr:%s", bdAddr);
-					for(i=0; i<6; i++)
-					{
-						pBtRsp->pParamStart[i] = bdAddr[5-i];
-					}
-					paraLen = 6;
-				}
-				break;
-			default:
-				pBtRsp->status = BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
+	} else if(BT_GGET_REPORT == getType) {
+		switch(reportType) {
+		case BT_REPORT_RX_PACKET_CNT: {
+			DBG_8192C("[MPT], [Rx Packet Counts]\n");
+			btOpcode = BT_LO_OP_GET_RX_PKT_CNT_L;
+			h2cParaLen = 0;
+			// execute h2c and check respond c2h from bt fw is correct or not
+			retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+			// construct respond status code and data.
+			if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+				pBtRsp->status = ((btOpcode<<8)|retStatus);
+				DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 				return paraLen;
-				break;
+			}
+			pBtRsp->pParamStart[0] = pExtC2h->buf[0];
+			pBtRsp->pParamStart[1] = pExtC2h->buf[1];
+
+			btOpcode = BT_LO_OP_GET_RX_PKT_CNT_H;
+			h2cParaLen = 0;
+			// execute h2c and check respond c2h from bt fw is correct or not
+			retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+			// construct respond status code and data.
+			if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+				pBtRsp->status = ((btOpcode<<8)|retStatus);
+				DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
+				return paraLen;
+			}
+			pBtRsp->pParamStart[2] = pExtC2h->buf[0];
+			pBtRsp->pParamStart[3] = pExtC2h->buf[1];
+			paraLen = 4;
+		}
+		break;
+		case BT_REPORT_RX_ERROR_BITS: {
+			DBG_8192C("[MPT], [Rx Error Bits]\n");
+			btOpcode = BT_LO_OP_GET_RX_ERROR_BITS_L;
+			h2cParaLen = 0;
+			// execute h2c and check respond c2h from bt fw is correct or not
+			retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+			// construct respond status code and data.
+			if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+				pBtRsp->status = ((btOpcode<<8)|retStatus);
+				DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
+				return paraLen;
+			}
+			pBtRsp->pParamStart[0] = pExtC2h->buf[0];
+			pBtRsp->pParamStart[1] = pExtC2h->buf[1];
+
+			btOpcode = BT_LO_OP_GET_RX_ERROR_BITS_H;
+			h2cParaLen = 0;
+			// execute h2c and check respond c2h from bt fw is correct or not
+			retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+			// construct respond status code and data.
+			if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+				pBtRsp->status = ((btOpcode<<8)|retStatus);
+				DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
+				return paraLen;
+			}
+			pBtRsp->pParamStart[2] = pExtC2h->buf[0];
+			pBtRsp->pParamStart[3] = pExtC2h->buf[1];
+			paraLen = 4;
+		}
+		break;
+		case BT_REPORT_RSSI: {
+			DBG_8192C("[MPT], [RSSI]\n");
+			btOpcode = BT_LO_OP_GET_RSSI;
+			h2cParaLen = 0;
+			// execute h2c and check respond c2h from bt fw is correct or not
+			retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+			// construct respond status code and data.
+			if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+				pBtRsp->status = ((btOpcode<<8)|retStatus);
+				DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
+				return paraLen;
+			}
+			pBtRsp->pParamStart[0] = pExtC2h->buf[0];
+			pBtRsp->pParamStart[1] = pExtC2h->buf[1];
+			paraLen = 2;
+		}
+		break;
+		case BT_REPORT_CFO_HDR_QUALITY: {
+			DBG_8192C("[MPT], [CFO & Header Quality]\n");
+			btOpcode = BT_LO_OP_GET_CFO_HDR_QUALITY_L;
+			h2cParaLen = 0;
+			// execute h2c and check respond c2h from bt fw is correct or not
+			retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+			// construct respond status code and data.
+			if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+				pBtRsp->status = ((btOpcode<<8)|retStatus);
+				DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
+				return paraLen;
+			}
+			pBtRsp->pParamStart[0] = pExtC2h->buf[0];
+			pBtRsp->pParamStart[1] = pExtC2h->buf[1];
+
+			btOpcode = BT_LO_OP_GET_CFO_HDR_QUALITY_H;
+			h2cParaLen = 0;
+			// execute h2c and check respond c2h from bt fw is correct or not
+			retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+			// construct respond status code and data.
+			if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+				pBtRsp->status = ((btOpcode<<8)|retStatus);
+				DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
+				return paraLen;
+			}
+			pBtRsp->pParamStart[2] = pExtC2h->buf[0];
+			pBtRsp->pParamStart[3] = pExtC2h->buf[1];
+			paraLen = 4;
+		}
+		break;
+		case BT_REPORT_CONNECT_TARGET_BD_ADDR: {
+			DBG_8192C("[MPT], [Connected Target BD ADDR]\n");
+			btOpcode = BT_LO_OP_GET_TARGET_BD_ADDR_L;
+			h2cParaLen = 0;
+			// execute h2c and check respond c2h from bt fw is correct or not
+			retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+			// construct respond status code and data.
+			if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+				pBtRsp->status = ((btOpcode<<8)|retStatus);
+				DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
+				return paraLen;
+			}
+			bdAddr[5] = pExtC2h->buf[0];
+			bdAddr[4] = pExtC2h->buf[1];
+			bdAddr[3] = pExtC2h->buf[2];
+
+			btOpcode = BT_LO_OP_GET_TARGET_BD_ADDR_H;
+			h2cParaLen = 0;
+			// execute h2c and check respond c2h from bt fw is correct or not
+			retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+			// construct respond status code and data.
+			if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+				pBtRsp->status = ((btOpcode<<8)|retStatus);
+				DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
+				return paraLen;
+			}
+			bdAddr[2] = pExtC2h->buf[0];
+			bdAddr[1] = pExtC2h->buf[1];
+			bdAddr[0] = pExtC2h->buf[2];
+
+			DBG_8192C("[MPT], Connected Target BDAddr:%s", bdAddr);
+			for(i=0; i<6; i++) {
+				pBtRsp->pParamStart[i] = bdAddr[5-i];
+			}
+			paraLen = 6;
+		}
+		break;
+		default:
+			pBtRsp->status = BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
+			return paraLen;
+			break;
 		}
 	}
 
@@ -895,12 +848,12 @@ mptbt_BtGetGeneral(
 
 u2Byte
 mptbt_BtSetGeneral(
-	IN	PADAPTER		Adapter,
-	IN	PBT_REQ_CMD 	pBtReq,
-	IN	PBT_RSP_CMD 	pBtRsp
-	)
+    IN	PADAPTER		Adapter,
+    IN	PBT_REQ_CMD 	pBtReq,
+    IN	PBT_RSP_CMD 	pBtRsp
+)
 {
-	u1Byte				h2cParaBuf[6] ={0};
+	u1Byte				h2cParaBuf[6] = {0};
 	u1Byte				h2cParaLen=0;
 	u2Byte				paraLen=0;
 	u1Byte				retStatus=BT_STATUS_BT_OP_SUCCESS;
@@ -908,168 +861,171 @@ mptbt_BtSetGeneral(
 	u1Byte				btOpcodeVer=0;
 	u1Byte				setType=0;
 	u2Byte				setParaLen=0, validParaLen=0;
-	u1Byte				regType=0, bdAddr[6]={0}, calVal=0;
+	u1Byte				regType=0, bdAddr[6]= {0}, calVal=0;
 	u4Byte				regAddr=0, regValue=0;
 	pu4Byte 			pu4Tmp;
-	pu2Byte 			pu2Tmp;
-	pu1Byte 			pu1Tmp;
+	//pu2Byte 			pu2Tmp;
+	//pu1Byte 			pu1Tmp;
 
 	//
 	// check upper layer parameters
 	//
-	
+
 	// check upper layer opcode version
-	if(pBtReq->opCodeVer != 1)
-	{
+	if(pBtReq->opCodeVer != 1) {
 		DBG_8192C("[MPT], Error!! Upper OP code version not match!!!\n");
 		pBtRsp->status = BT_STATUS_OPCODE_U_VERSION_MISMATCH;
 		return paraLen;
 	}
 	// check upper layer parameter length
-	if(pBtReq->paraLength < 1)
-	{
+	if(pBtReq->paraLength < 1) {
 		DBG_8192C("[MPT], Error!! wrong parameter length=%d (should larger than 1)\n", pBtReq->paraLength);
 		pBtRsp->status = BT_STATUS_PARAMETER_FORMAT_ERROR_U;
 		return paraLen;
 	}
 	setParaLen = pBtReq->paraLength - 1;
 	setType = pBtReq->pParamStart[0];
-	
+
 	DBG_8192C("[MPT], setType=%d, setParaLen=%d\n", setType, setParaLen);
 
 	// check parameter first
-	switch(setType)
-	{
-		case BT_GSET_REG:
-			DBG_8192C ("[MPT], [BT_GSET_REG]\n");
-			validParaLen = 9;
-			if(setParaLen == validParaLen)
-			{
-				btOpcode = BT_LO_OP_WRITE_REG_VALUE;
-				regType = pBtReq->pParamStart[1];
-				pu4Tmp = (pu4Byte)&pBtReq->pParamStart[2];
-				regAddr = *pu4Tmp;
-				pu4Tmp = (pu4Byte)&pBtReq->pParamStart[6];
-				regValue = *pu4Tmp;
-				DBG_8192C("[MPT], BT_GSET_REG regType=0x%x, regAddr=0x%x, regValue=0x%x!!\n", 
-					regType, regAddr, regValue);
-				if(regType >= BT_REG_MAX)
-				{
+	switch(setType) {
+	case BT_GSET_REG:
+		DBG_8192C ("[MPT], [BT_GSET_REG]\n");
+		validParaLen = 9;
+		if(setParaLen == validParaLen) {
+			btOpcode = BT_LO_OP_WRITE_REG_VALUE;
+			regType = pBtReq->pParamStart[1];
+			pu4Tmp = (pu4Byte)&pBtReq->pParamStart[2];
+			regAddr = *pu4Tmp;
+			pu4Tmp = (pu4Byte)&pBtReq->pParamStart[6];
+			regValue = *pu4Tmp;
+			DBG_8192C("[MPT], BT_GSET_REG regType=0x%x, regAddr=0x%x, regValue=0x%x!!\n",
+			          regType, regAddr, regValue);
+			if(regType >= BT_REG_MAX) {
+				pBtRsp->status = (btOpcode<<8)| BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
+				return paraLen;
+			} else {
+				if( ((BT_REG_RF==regType)&&(regAddr>0x7f)) ||
+				    ((BT_REG_MODEM==regType)&&(regAddr>0x1ff)) ||
+				    ((BT_REG_BLUEWIZE==regType)&&(regAddr>0xfff)) ||
+				    ((BT_REG_VENDOR==regType)&&(regAddr>0xfff)) ||
+				    ((BT_REG_LE==regType)&&(regAddr>0xfff)) ) {
 					pBtRsp->status = (btOpcode<<8)| BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 					return paraLen;
 				}
-				else
-				{
-					if( ((BT_REG_RF==regType)&&(regAddr>0x7f)) ||
-						((BT_REG_MODEM==regType)&&(regAddr>0x1ff)) ||
-						((BT_REG_BLUEWIZE==regType)&&(regAddr>0xfff)) ||
-						((BT_REG_VENDOR==regType)&&(regAddr>0xfff)) ||
-						((BT_REG_LE==regType)&&(regAddr>0xfff)) )
-					{				
-						pBtRsp->status = (btOpcode<<8)| BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
-						return paraLen;
-					}
-				}
 			}
-			break;
-		case BT_GSET_RESET:
-			DBG_8192C("[MPT], [BT_GSET_RESET]\n");
-			validParaLen = 0;
-			break;
-		case BT_GSET_TARGET_BD_ADDR:
-			DBG_8192C("[MPT], [BT_GSET_TARGET_BD_ADDR]\n");
-			validParaLen = 6;
-			if(setParaLen == validParaLen)
-			{
-				btOpcode = BT_LO_OP_SET_TARGET_BD_ADDR_H;
-				if( (pBtReq->pParamStart[1]==0) &&
-					(pBtReq->pParamStart[2]==0) &&
-					(pBtReq->pParamStart[3]==0) &&
-					(pBtReq->pParamStart[4]==0) &&
-					(pBtReq->pParamStart[5]==0) &&
-					(pBtReq->pParamStart[6]==0) )
-				{
-					DBG_8192C("[MPT], Error!! targetBDAddr=all zero\n");
-					pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
-					return paraLen;
-				}
-				if( (pBtReq->pParamStart[1]==0xff) &&
-					(pBtReq->pParamStart[2]==0xff) &&
-					(pBtReq->pParamStart[3]==0xff) &&
-					(pBtReq->pParamStart[4]==0xff) &&
-					(pBtReq->pParamStart[5]==0xff) &&
-					(pBtReq->pParamStart[6]==0xff) )
-				{
-					DBG_8192C("[MPT], Error!! targetBDAddr=all 0xf\n");
-					pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
-					return paraLen;
-				}
-				bdAddr[0] = pBtReq->pParamStart[6];
-				bdAddr[1] = pBtReq->pParamStart[5];
-				bdAddr[2] = pBtReq->pParamStart[4];
-				bdAddr[3] = pBtReq->pParamStart[3];
-				bdAddr[4] = pBtReq->pParamStart[2];
-				bdAddr[5] = pBtReq->pParamStart[1];
-				DBG_8192C ("[MPT], target BDAddr:%s", &bdAddr[0]);
+		}
+		break;
+	case BT_GSET_RESET:
+		DBG_8192C("[MPT], [BT_GSET_RESET]\n");
+		validParaLen = 0;
+		break;
+	case BT_GSET_TARGET_BD_ADDR:
+		DBG_8192C("[MPT], [BT_GSET_TARGET_BD_ADDR]\n");
+		validParaLen = 6;
+		if(setParaLen == validParaLen) {
+			btOpcode = BT_LO_OP_SET_TARGET_BD_ADDR_H;
+			if( (pBtReq->pParamStart[1]==0) &&
+			    (pBtReq->pParamStart[2]==0) &&
+			    (pBtReq->pParamStart[3]==0) &&
+			    (pBtReq->pParamStart[4]==0) &&
+			    (pBtReq->pParamStart[5]==0) &&
+			    (pBtReq->pParamStart[6]==0) ) {
+				DBG_8192C("[MPT], Error!! targetBDAddr=all zero\n");
+				pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
+				return paraLen;
 			}
-			break;
-		case BT_GSET_TX_PWR_FINETUNE:
-			DBG_8192C("[MPT], [BT_GSET_TX_PWR_FINETUNE]\n");
-			validParaLen = 1;
-			if(setParaLen == validParaLen)
-			{
-				btOpcode = BT_LO_OP_SET_TX_POWER_CALIBRATION;
-				calVal = pBtReq->pParamStart[1];
-				if( (calVal<1) || (calVal>9) )
-				{
-					pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
-					return paraLen;
-				}
-				DBG_8192C ("[MPT], calVal=%d\n", calVal);
+			if( (pBtReq->pParamStart[1]==0xff) &&
+			    (pBtReq->pParamStart[2]==0xff) &&
+			    (pBtReq->pParamStart[3]==0xff) &&
+			    (pBtReq->pParamStart[4]==0xff) &&
+			    (pBtReq->pParamStart[5]==0xff) &&
+			    (pBtReq->pParamStart[6]==0xff) ) {
+				DBG_8192C("[MPT], Error!! targetBDAddr=all 0xf\n");
+				pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
+				return paraLen;
 			}
-			break;
-		case BT_GSET_UPDATE_BT_PATCH:
-			if(IS_HARDWARE_TYPE_8723AE(Adapter) && Adapter->bFWReady)
-			{
-				u1Byte i;
-				DBG_8192C ("[MPT], write regs for load patch\n");
-				//BTFwPatch8723A(Adapter);
-				PlatformEFIOWrite1Byte(Adapter, 0xCC, 0x2d);
-				rtw_msleep_os(50);
-				PlatformEFIOWrite4Byte(Adapter, 0x68, 0xa005000c);
-				rtw_msleep_os(50);
-				PlatformEFIOWrite4Byte(Adapter, 0x68, 0xb005000c);
-				rtw_msleep_os(50);
-				PlatformEFIOWrite1Byte(Adapter, 0xCC, 0x29);
-				for(i=0; i<12; i++)
+			bdAddr[0] = pBtReq->pParamStart[6];
+			bdAddr[1] = pBtReq->pParamStart[5];
+			bdAddr[2] = pBtReq->pParamStart[4];
+			bdAddr[3] = pBtReq->pParamStart[3];
+			bdAddr[4] = pBtReq->pParamStart[2];
+			bdAddr[5] = pBtReq->pParamStart[1];
+			DBG_8192C ("[MPT], target BDAddr:%x,%x,%x,%x,%x,%x\n",
+			           bdAddr[0],bdAddr[1],bdAddr[2],bdAddr[3],bdAddr[4],bdAddr[5]);
+		}
+		break;
+	case BT_GSET_TX_PWR_FINETUNE:
+		DBG_8192C("[MPT], [BT_GSET_TX_PWR_FINETUNE]\n");
+		validParaLen = 1;
+		if(setParaLen == validParaLen) {
+			btOpcode = BT_LO_OP_SET_TX_POWER_CALIBRATION;
+			calVal = pBtReq->pParamStart[1];
+			if( (calVal<1) || (calVal>9) ) {
+				pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
+				return paraLen;
+			}
+			DBG_8192C ("[MPT], calVal=%d\n", calVal);
+		}
+		break;
+	case BT_SET_TRACKING_INTERVAL:
+		DBG_871X("[MPT], [BT_SET_TRACKING_INTERVAL] setParaLen =%d \n",setParaLen);
+
+		validParaLen = 1;
+		if(setParaLen == validParaLen)
+			calVal = pBtReq->pParamStart[1];
+		break;
+	case BT_SET_THERMAL_METER:
+		DBG_871X("[MPT], [BT_SET_THERMAL_METER] setParaLen =%d \n",setParaLen);
+		validParaLen = 1;
+		if(setParaLen == validParaLen)
+			calVal = pBtReq->pParamStart[1];
+		break;
+	case BT_ENABLE_CFO_TRACKING:
+		DBG_871X("[MPT], [BT_ENABLE_CFO_TRACKING] setParaLen =%d \n",setParaLen);
+		validParaLen = 1;
+		if(setParaLen == validParaLen)
+			calVal = pBtReq->pParamStart[1];
+		break;
+	case BT_GSET_UPDATE_BT_PATCH:
+		if(IS_HARDWARE_TYPE_8723AE(Adapter) && Adapter->bFWReady) {
+			u1Byte i;
+			DBG_8192C ("[MPT], write regs for load patch\n");
+			//BTFwPatch8723A(Adapter);
+			PlatformEFIOWrite1Byte(Adapter, 0xCC, 0x2d);
+			rtw_msleep_os(50);
+			PlatformEFIOWrite4Byte(Adapter, 0x68, 0xa005000c);
+			rtw_msleep_os(50);
+			PlatformEFIOWrite4Byte(Adapter, 0x68, 0xb005000c);
+			rtw_msleep_os(50);
+			PlatformEFIOWrite1Byte(Adapter, 0xCC, 0x29);
+			for(i=0; i<12; i++)
 				rtw_msleep_os(100);
 //#if (DEV_BUS_TYPE == RT_PCI_INTERFACE)
 //				BTFwPatch8723A(Adapter);
 //#endif
-				DBG_8192C("[MPT], load BT FW Patch finished!!!\n");
-			}
-			break;
-		default:
-			{
-				DBG_8192C ("[MPT], Error!! setType=%d, out of range\n", setType);
-				pBtRsp->status = BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
-				return paraLen;
-			}
-			break;
+			DBG_8192C("[MPT], load BT FW Patch finished!!!\n");
+		}
+		break;
+	default: {
+		DBG_8192C ("[MPT], Error!! setType=%d, out of range\n", setType);
+		pBtRsp->status = BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
+		return paraLen;
 	}
-	if(setParaLen != validParaLen)
-	{
+	break;
+	}
+	if(setParaLen != validParaLen) {
 		DBG_8192C("[MPT], Error!! wrong parameter length=%d for BT_SET_GEN_CMD cmd id=0x%x, paraLen should=0x%x\n",
-			setParaLen, setType, validParaLen);
+		          setParaLen, setType, validParaLen);
 		pBtRsp->status = BT_STATUS_PARAMETER_FORMAT_ERROR_U;
 		return paraLen;
 	}
-	
+
 	//
 	// execute lower layer opcodes
 	//
-	if(BT_GSET_REG == setType)
-	{
+	if(BT_GSET_REG == setType) {
 		// fill h2c parameters
 		// here we should write reg value first then write the address, adviced by Austin
 		btOpcode = BT_LO_OP_WRITE_REG_VALUE;
@@ -1080,13 +1036,12 @@ mptbt_BtSetGeneral(
 		// execute h2c and check respond c2h from bt fw is correct or not
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 		// construct respond status code and data.
-		if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-		{
+		if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 			pBtRsp->status = ((btOpcode<<8)|retStatus);
 			DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 			return paraLen;
 		}
-		
+
 		// write reg address
 		btOpcode = BT_LO_OP_WRITE_REG_ADDR;
 		h2cParaBuf[0] = regType;
@@ -1096,39 +1051,32 @@ mptbt_BtSetGeneral(
 		// execute h2c and check respond c2h from bt fw is correct or not
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 		// construct respond status code and data.
-		if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-		{
+		if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 			pBtRsp->status = ((btOpcode<<8)|retStatus);
 			DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 			return paraLen;
-		}		
-	}
-	else if(BT_GSET_RESET == setType)
-	{
+		}
+	} else if(BT_GSET_RESET == setType) {
 		btOpcode = BT_LO_OP_RESET;
 		h2cParaLen = 0;
 		// execute h2c and check respond c2h from bt fw is correct or not
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 		// construct respond status code and data.
-		if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-		{
+		if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 			pBtRsp->status = ((btOpcode<<8)|retStatus);
 			DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 			return paraLen;
 		}
-	}
-	else if(BT_GSET_TARGET_BD_ADDR == setType)
-	{
+	} else if(BT_GSET_TARGET_BD_ADDR == setType) {
 		// fill h2c parameters
 		btOpcode = BT_LO_OP_SET_TARGET_BD_ADDR_L;
 		h2cParaBuf[0] = pBtReq->pParamStart[1];
 		h2cParaBuf[1] = pBtReq->pParamStart[2];
 		h2cParaBuf[2] = pBtReq->pParamStart[3];
 		h2cParaLen = 3;
-		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);		
+		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 		// ckeck bt return status.
-		if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-		{
+		if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 			pBtRsp->status = ((btOpcode<<8)|retStatus);
 			DBG_8192C ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 			return paraLen;
@@ -1139,31 +1087,63 @@ mptbt_BtSetGeneral(
 		h2cParaBuf[1] = pBtReq->pParamStart[5];
 		h2cParaBuf[2] = pBtReq->pParamStart[6];
 		h2cParaLen = 3;
-		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);		
+		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 		// ckeck bt return status.
-		if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-		{
+		if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 			pBtRsp->status = ((btOpcode<<8)|retStatus);
 			DBG_8192C ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 			return paraLen;
 		}
-	}
-	else if(BT_GSET_TX_PWR_FINETUNE == setType)
-	{
+	} else if(BT_GSET_TX_PWR_FINETUNE == setType) {
 		// fill h2c parameters
 		btOpcode = BT_LO_OP_SET_TX_POWER_CALIBRATION;
 		h2cParaBuf[0] = calVal;
 		h2cParaLen = 1;
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 		// ckeck bt return status.
-		if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-		{
+		if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 			pBtRsp->status = ((btOpcode<<8)|retStatus);
 			DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 			return paraLen;
 		}
+	} else if(BT_SET_TRACKING_INTERVAL == setType) {
+		//	BT_LO_OP_SET_TRACKING_INTERVAL								= 0x22,
+		//	BT_LO_OP_SET_THERMAL_METER									= 0x23,
+		//	BT_LO_OP_ENABLE_CFO_TRACKING									= 0x24,
+		btOpcode = BT_LO_OP_SET_TRACKING_INTERVAL;
+		h2cParaBuf[0] = calVal;
+		h2cParaLen = 1;
+		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+		// ckeck bt return status.
+		if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+			pBtRsp->status = ((btOpcode<<8)|retStatus);
+			DBG_8192C ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
+			return paraLen;
+		}
+	} else if(BT_SET_THERMAL_METER == setType) {
+		btOpcode = BT_LO_OP_SET_THERMAL_METER;
+		h2cParaBuf[0] = calVal;
+		h2cParaLen = 1;
+		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+		// ckeck bt return status.
+		if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+			pBtRsp->status = ((btOpcode<<8)|retStatus);
+			DBG_8192C ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
+			return paraLen;
+		}
+	} else if(BT_ENABLE_CFO_TRACKING == setType) {
+		btOpcode = BT_LO_OP_ENABLE_CFO_TRACKING;
+		h2cParaBuf[0] = calVal;
+		h2cParaLen = 1;
+		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
+		// ckeck bt return status.
+		if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
+			pBtRsp->status = ((btOpcode<<8)|retStatus);
+			DBG_8192C ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
+			return paraLen;
+		}
 	}
-	
+
 	pBtRsp->status = BT_STATUS_SUCCESS;
 	return paraLen;
 }
@@ -1172,12 +1152,12 @@ mptbt_BtSetGeneral(
 
 u2Byte
 mptbt_BtSetTxRxPars(
-	IN	PADAPTER		Adapter,
-	IN	PBT_REQ_CMD 	pBtReq,
-	IN	PBT_RSP_CMD 	pBtRsp
-	)
+    IN	PADAPTER		Adapter,
+    IN	PBT_REQ_CMD 	pBtReq,
+    IN	PBT_RSP_CMD 	pBtRsp
+)
 {
-	u1Byte				h2cParaBuf[6] ={0};
+	u1Byte				h2cParaBuf[6] = {0};
 	u1Byte				h2cParaLen=0;
 	u2Byte				paraLen=0;
 	u1Byte				retStatus=BT_STATUS_BT_OP_SUCCESS;
@@ -1185,23 +1165,21 @@ mptbt_BtSetTxRxPars(
 	u1Byte				btOpcodeVer=0;
 	PBT_TXRX_PARAMETERS pTxRxPars=(PBT_TXRX_PARAMETERS)&pBtReq->pParamStart[0];
 	u2Byte				lenTxRx=sizeof(BT_TXRX_PARAMETERS);
-	u1Byte				i;
-	u1Byte				bdAddr[6]={0};
+	//u1Byte				i;
+	u1Byte				bdAddr[6]= {0};
 
 	//
 	// check upper layer parameters
 	//
-	
+
 	// 1. check upper layer opcode version
-	if(pBtReq->opCodeVer != 1)
-	{
+	if(pBtReq->opCodeVer != 1) {
 		DBG_8192C("[MPT], Error!! Upper OP code version not match!!!\n");
 		pBtRsp->status = BT_STATUS_OPCODE_U_VERSION_MISMATCH;
 		return paraLen;
 	}
 	// 2. check upper layer parameter length
-	if(pBtReq->paraLength == sizeof(BT_TXRX_PARAMETERS))
-	{	
+	if(pBtReq->paraLength == sizeof(BT_TXRX_PARAMETERS)) {
 		DBG_8192C ("[MPT], pTxRxPars->txrxChannel=0x%x \n", pTxRxPars->txrxChannel);
 		DBG_8192C ("[MPT], pTxRxPars->txrxTxPktCnt=0x%8x \n", pTxRxPars->txrxTxPktCnt);
 		DBG_8192C  ("[MPT], pTxRxPars->txrxTxPktInterval=0x%x \n", pTxRxPars->txrxTxPktInterval);
@@ -1209,7 +1187,7 @@ mptbt_BtSetTxRxPars(
 		DBG_8192C  ("[MPT], pTxRxPars->txrxPktType=0x%x \n", pTxRxPars->txrxPktType);
 		DBG_8192C  ("[MPT], pTxRxPars->txrxPayloadLen=0x%x \n", pTxRxPars->txrxPayloadLen);
 		DBG_8192C  ("[MPT], pTxRxPars->txrxPktHeader=0x%x \n", pTxRxPars->txrxPktHeader);
-		DBG_8192C  ("[MPT], pTxRxPars->txrxWhitenCoeff=0x%x \n", pTxRxPars->txrxWhitenCoeff); 	
+		DBG_8192C  ("[MPT], pTxRxPars->txrxWhitenCoeff=0x%x \n", pTxRxPars->txrxWhitenCoeff);
 		bdAddr[0] = pTxRxPars->txrxBdaddr[5];
 		bdAddr[1] = pTxRxPars->txrxBdaddr[4];
 		bdAddr[2] = pTxRxPars->txrxBdaddr[3];
@@ -1218,9 +1196,7 @@ mptbt_BtSetTxRxPars(
 		bdAddr[5] = pTxRxPars->txrxBdaddr[0];
 		DBG_8192C  ("[MPT], pTxRxPars->txrxBdaddr: %s", &bdAddr[0]);
 		DBG_8192C ("[MPT], pTxRxPars->txrxTxGainIndex=0x%x \n", pTxRxPars->txrxTxGainIndex);
-	}
-	else
-	{
+	} else {
 		DBG_8192C  ("[MPT], Error!! pBtReq->paraLength=%d, correct Len=%d\n", pBtReq->paraLength, lenTxRx);
 		pBtRsp->status = BT_STATUS_PARAMETER_FORMAT_ERROR_U;
 		return paraLen;
@@ -1229,81 +1205,74 @@ mptbt_BtSetTxRxPars(
 	//
 	// execute lower layer opcodes
 	//
-	
+
 	// fill h2c parameters
 	btOpcode = BT_LO_OP_SET_PKT_HEADER;
-	if(pTxRxPars->txrxPktHeader > 0x3ffff)
-	{
+	if(pTxRxPars->txrxPktHeader > 0x3ffff) {
 		DBG_8192C  ("[MPT], Error!! pTxRxPars->txrxPktHeader=0x%x is out of range, (should be between 0x0~0x3ffff)\n", pTxRxPars->txrxPktHeader);
 		pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 		return paraLen;
-	}
-	else
-	{
+	} else {
 		h2cParaBuf[0] = (u1Byte)(pTxRxPars->txrxPktHeader&0xff);
 		h2cParaBuf[1] = (u1Byte)((pTxRxPars->txrxPktHeader&0xff00)>>8);
 		h2cParaBuf[2] = (u1Byte)((pTxRxPars->txrxPktHeader&0xff0000)>>16);
 		h2cParaLen = 3;
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	}
-	
+
 	// ckeck bt return status.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C  ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
-	}	
+	}
 
 	// fill h2c parameters
 	btOpcode = BT_LO_OP_SET_PKT_TYPE_LEN;
 	{
 		u2Byte	payloadLenLimit=0;
-		switch(pTxRxPars->txrxPktType)
-		{
-			case MP_BT_PKT_DH1:
-				payloadLenLimit = 27*8;
-				break;
-			case MP_BT_PKT_DH3:
-				payloadLenLimit = 183*8;
-				break;
-			case MP_BT_PKT_DH5:
-				payloadLenLimit = 339*8;
-				break;
-			case MP_BT_PKT_2DH1:
-				payloadLenLimit = 54*8;
-				break;
-			case MP_BT_PKT_2DH3:
-				payloadLenLimit = 367*8;
-				break;
-			case MP_BT_PKT_2DH5:
-				payloadLenLimit = 679*8;
-				break;
-			case MP_BT_PKT_3DH1:
-				payloadLenLimit = 83*8;
-				break;
-			case MP_BT_PKT_3DH3:
-				payloadLenLimit = 552*8;
-				break;
-			case MP_BT_PKT_3DH5:
-				payloadLenLimit = 1021*8;
-				break;
-			case MP_BT_PKT_LE:
-				payloadLenLimit = 39*8;
-				break;
-			default:
-				{
-					DBG_8192C  ("[MPT], Error!! Unknown pTxRxPars->txrxPktType=0x%x\n", pTxRxPars->txrxPktType);
-					pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
-					return paraLen;
-				}
-				break;
+		switch(pTxRxPars->txrxPktType) {
+		case MP_BT_PKT_DH1:
+			payloadLenLimit = 27*8;
+			break;
+		case MP_BT_PKT_DH3:
+			payloadLenLimit = 183*8;
+			break;
+		case MP_BT_PKT_DH5:
+			payloadLenLimit = 339*8;
+			break;
+		case MP_BT_PKT_2DH1:
+			payloadLenLimit = 54*8;
+			break;
+		case MP_BT_PKT_2DH3:
+			payloadLenLimit = 367*8;
+			break;
+		case MP_BT_PKT_2DH5:
+			payloadLenLimit = 679*8;
+			break;
+		case MP_BT_PKT_3DH1:
+			payloadLenLimit = 83*8;
+			break;
+		case MP_BT_PKT_3DH3:
+			payloadLenLimit = 552*8;
+			break;
+		case MP_BT_PKT_3DH5:
+			payloadLenLimit = 1021*8;
+			break;
+		case MP_BT_PKT_LE:
+			payloadLenLimit = 39*8;
+			break;
+		default: {
+			DBG_8192C  ("[MPT], Error!! Unknown pTxRxPars->txrxPktType=0x%x\n", pTxRxPars->txrxPktType);
+			pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
+			return paraLen;
+		}
+		break;
 		}
 
-		if(pTxRxPars->txrxPayloadLen > payloadLenLimit)
-		{
-			DBG_8192C ("[MPT], Error!! pTxRxPars->txrxPayloadLen=0x%x, (should smaller than %d)\n", 
-				pTxRxPars->txrxPayloadLen, payloadLenLimit);
+		if(pTxRxPars->txrxPayloadLen > payloadLenLimit) {
+			DBG_8192C ("[MPT], Error!! pTxRxPars->txrxPayloadLen=0x%x, (should smaller than %d)\n",
+			           pTxRxPars->txrxPayloadLen, payloadLenLimit);
 			pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 			return paraLen;
 		}
@@ -1316,8 +1285,7 @@ mptbt_BtSetTxRxPars(
 	}
 
 	// ckeck bt return status.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
@@ -1325,53 +1293,45 @@ mptbt_BtSetTxRxPars(
 
 	// fill h2c parameters
 	btOpcode = BT_LO_OP_SET_PKT_CNT_L_PL_TYPE;
-	if(pTxRxPars->txrxPayloadType > MP_BT_PAYLOAD_MAX)
-	{
+	if(pTxRxPars->txrxPayloadType > MP_BT_PAYLOAD_MAX) {
 		DBG_8192C  ("[MPT], Error!! pTxRxPars->txrxPayloadType=0x%x, (should be between 0~4)\n", pTxRxPars->txrxPayloadType);
 		pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 		return paraLen;
-	}
-	else
-	{
+	} else {
 		h2cParaBuf[0] = (u1Byte)((pTxRxPars->txrxTxPktCnt&0xff));
 		h2cParaBuf[1] = (u1Byte)((pTxRxPars->txrxTxPktCnt&0xff00)>>8);
 		h2cParaBuf[2] = pTxRxPars->txrxPayloadType;
 		h2cParaLen = 3;
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	}
-	
+
 	// ckeck bt return status.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
-	}	
+	}
 
 	// fill h2c parameters
 	btOpcode = BT_LO_OP_SET_PKT_CNT_H_PKT_INTV;
-	if(pTxRxPars->txrxTxPktInterval > 15)
-	{
-	DBG_8192C  ("[MPT], Error!! pTxRxPars->txrxTxPktInterval=0x%x, (should be between 0~15)\n", pTxRxPars->txrxTxPktInterval);
-	pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
+	if(pTxRxPars->txrxTxPktInterval > 15) {
+		DBG_8192C  ("[MPT], Error!! pTxRxPars->txrxTxPktInterval=0x%x, (should be between 0~15)\n", pTxRxPars->txrxTxPktInterval);
+		pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 		return paraLen;
-	}
-	else
-	{
+	} else {
 		h2cParaBuf[0] = (u1Byte)((pTxRxPars->txrxTxPktCnt&0xff0000)>>16);
 		h2cParaBuf[1] = (u1Byte)((pTxRxPars->txrxTxPktCnt&0xff000000)>>24);
 		h2cParaBuf[2] = pTxRxPars->txrxTxPktInterval;
 		h2cParaLen = 3;
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	}
-	
+
 	// ckeck bt return status.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
-	}	
+	}
 
 	// fill h2c parameters
 	btOpcode = BT_LO_OP_SET_WHITENCOEFF;
@@ -1380,10 +1340,9 @@ mptbt_BtSetTxRxPars(
 		h2cParaLen = 1;
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	}
-	
+
 	// ckeck bt return status.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C  ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
@@ -1393,24 +1352,20 @@ mptbt_BtSetTxRxPars(
 	// fill h2c parameters
 	btOpcode = BT_LO_OP_SET_CHNL_TX_GAIN;
 	if( (pTxRxPars->txrxChannel > 78) ||
-		(pTxRxPars->txrxTxGainIndex > 7) )
-	{
+	    (pTxRxPars->txrxTxGainIndex > 7) ) {
 		DBG_8192C ("[MPT], Error!! pTxRxPars->txrxChannel=0x%x, (should be between 0~78)\n", pTxRxPars->txrxChannel);
 		DBG_8192C ("[MPT], Error!! pTxRxPars->txrxTxGainIndex=0x%x, (should be between 0~7)\n", pTxRxPars->txrxTxGainIndex);
 		pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 		return paraLen;
-	}
-	else
-	{
+	} else {
 		h2cParaBuf[0] = pTxRxPars->txrxChannel;
 		h2cParaBuf[1] = pTxRxPars->txrxTxGainIndex;
 		h2cParaLen = 2;
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	}
-	
+
 	// ckeck bt return status.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
@@ -1419,28 +1374,26 @@ mptbt_BtSetTxRxPars(
 	// fill h2c parameters
 	btOpcode = BT_LO_OP_SET_BD_ADDR_L;
 	if( (pTxRxPars->txrxBdaddr[0]==0) &&
-		(pTxRxPars->txrxBdaddr[1]==0) &&
-		(pTxRxPars->txrxBdaddr[2]==0) &&
-		(pTxRxPars->txrxBdaddr[3]==0) &&
-		(pTxRxPars->txrxBdaddr[4]==0) &&
-		(pTxRxPars->txrxBdaddr[5]==0) )
-	{
+	    (pTxRxPars->txrxBdaddr[1]==0) &&
+	    (pTxRxPars->txrxBdaddr[2]==0) &&
+	    (pTxRxPars->txrxBdaddr[3]==0) &&
+	    (pTxRxPars->txrxBdaddr[4]==0) &&
+	    (pTxRxPars->txrxBdaddr[5]==0) ) {
 		DBG_8192C ("[MPT], Error!! pTxRxPars->txrxBdaddr=all zero\n");
 		pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 		return paraLen;
 	}
 	if( (pTxRxPars->txrxBdaddr[0]==0xff) &&
-		(pTxRxPars->txrxBdaddr[1]==0xff) &&
-		(pTxRxPars->txrxBdaddr[2]==0xff) &&
-		(pTxRxPars->txrxBdaddr[3]==0xff) &&
-		(pTxRxPars->txrxBdaddr[4]==0xff) &&
-		(pTxRxPars->txrxBdaddr[5]==0xff) )
-	{
+	    (pTxRxPars->txrxBdaddr[1]==0xff) &&
+	    (pTxRxPars->txrxBdaddr[2]==0xff) &&
+	    (pTxRxPars->txrxBdaddr[3]==0xff) &&
+	    (pTxRxPars->txrxBdaddr[4]==0xff) &&
+	    (pTxRxPars->txrxBdaddr[5]==0xff) ) {
 		DBG_8192C ("[MPT], Error!! pTxRxPars->txrxBdaddr=all 0xf\n");
 		pBtRsp->status = (btOpcode<<8)|BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 		return paraLen;
 	}
-	
+
 	{
 		h2cParaBuf[0] = pTxRxPars->txrxBdaddr[0];
 		h2cParaBuf[1] = pTxRxPars->txrxBdaddr[1];
@@ -1449,12 +1402,11 @@ mptbt_BtSetTxRxPars(
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	}
 	// ckeck bt return status.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
-	}	
+	}
 
 	btOpcode = BT_LO_OP_SET_BD_ADDR_H;
 	{
@@ -1465,8 +1417,7 @@ mptbt_BtSetTxRxPars(
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	}
 	// ckeck bt return status.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C  ("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
@@ -1480,12 +1431,12 @@ mptbt_BtSetTxRxPars(
 
 u2Byte
 mptbt_BtTestCtrl(
-	IN	PADAPTER		Adapter,
-	IN	PBT_REQ_CMD 	pBtReq,
-	IN	PBT_RSP_CMD 	pBtRsp
-	)
+    IN	PADAPTER		Adapter,
+    IN	PBT_REQ_CMD 	pBtReq,
+    IN	PBT_RSP_CMD 	pBtRsp
+)
 {
-	u1Byte				h2cParaBuf[6] ={0};
+	u1Byte				h2cParaBuf[6] = {0};
 	u1Byte				h2cParaLen=0;
 	u2Byte				paraLen=0;
 	u1Byte				retStatus=BT_STATUS_BT_OP_SUCCESS;
@@ -1496,51 +1447,43 @@ mptbt_BtTestCtrl(
 	//
 	// check upper layer parameters
 	//
-	
+
 	// 1. check upper layer opcode version
-	if(pBtReq->opCodeVer != 1)
-	{
+	if(pBtReq->opCodeVer != 1) {
 		DBG_8192C("[MPT], Error!! Upper OP code version not match!!!\n");
 		pBtRsp->status = BT_STATUS_OPCODE_U_VERSION_MISMATCH;
 		return paraLen;
 	}
 	// 2. check upper layer parameter length
-	if(1 == pBtReq->paraLength)
-	{
+	if(1 == pBtReq->paraLength) {
 		testCtrl = pBtReq->pParamStart[0];
 		DBG_8192C("[MPT], testCtrl=%d \n", testCtrl);
-	}
-	else
-	{
+	} else {
 		DBG_8192C("[MPT], Error!! wrong parameter length=%d (should be 1)\n", pBtReq->paraLength);
 		pBtRsp->status = BT_STATUS_PARAMETER_FORMAT_ERROR_U;
 		return paraLen;
 	}
-	
+
 	//
 	// execute lower layer opcodes
 	//
-	
-	// 1. fill h2c parameters	
+
+	// 1. fill h2c parameters
 	// check bt mode
 	btOpcode = BT_LO_OP_TEST_CTRL;
-	if(testCtrl >= MP_BT_TEST_MAX)
-	{
-		DBG_8192C("[MPT], Error!! testCtrl=0x%x, (should be between smaller or equal to 0x%x)\n", 
-			testCtrl, MP_BT_TEST_MAX-1);
+	if(testCtrl >= MP_BT_TEST_MAX) {
+		DBG_8192C("[MPT], Error!! testCtrl=0x%x, (should be between smaller or equal to 0x%x)\n",
+		          testCtrl, MP_BT_TEST_MAX-1);
 		pBtRsp->status = BT_STATUS_PARAMETER_OUT_OF_RANGE_U;
 		return paraLen;
-	}
-	else
-	{
+	} else {
 		h2cParaBuf[0] = testCtrl;
 		h2cParaLen = 1;
 		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
 	}
-	
+
 	// 3. construct respond status code and data.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
@@ -1553,35 +1496,34 @@ mptbt_BtTestCtrl(
 
 u2Byte
 mptbt_TestBT(
-	IN	PADAPTER		Adapter,
-	IN	PBT_REQ_CMD 	pBtReq,
-	IN	PBT_RSP_CMD 	pBtRsp
-	)
+    IN	PADAPTER		Adapter,
+    IN	PBT_REQ_CMD 	pBtReq,
+    IN	PBT_RSP_CMD 	pBtRsp
+)
 {
 
-	u1Byte				h2cParaBuf[6] ={0};
+	u1Byte				h2cParaBuf[6] = {0};
 	u1Byte				h2cParaLen=0;
 	u2Byte				paraLen=0;
 	u1Byte				retStatus=BT_STATUS_BT_OP_SUCCESS;
 	u1Byte				btOpcode;
 	u1Byte				btOpcodeVer=0;
-	u1Byte				testCtrl=0;
+	//u1Byte				testCtrl=0;
 
-	// 1. fill h2c parameters	
-		btOpcode =  0x11;
-		h2cParaBuf[0] = 0x11;
-		h2cParaBuf[1] = 0x0;
-		h2cParaBuf[2] = 0x0;
-		h2cParaBuf[3] = 0x0;
-		h2cParaBuf[4] = 0x0;
-		h2cParaLen = 1;
+	// 1. fill h2c parameters
+	btOpcode =  0x11;
+	h2cParaBuf[0] = 0x11;
+	h2cParaBuf[1] = 0x0;
+	h2cParaBuf[2] = 0x0;
+	h2cParaBuf[3] = 0x0;
+	h2cParaBuf[4] = 0x0;
+	h2cParaLen = 1;
 	//	retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, &h2cParaBuf[0], h2cParaLen);
-		retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, h2cParaBuf, h2cParaLen);
-	
-	
+	retStatus = mptbt_BtFwOpCodeProcess(Adapter, btOpcode, btOpcodeVer, h2cParaBuf, h2cParaLen);
+
+
 	// 3. construct respond status code and data.
-	if(BT_STATUS_BT_OP_SUCCESS != retStatus)
-	{
+	if(BT_STATUS_BT_OP_SUCCESS != retStatus) {
 		pBtRsp->status = ((btOpcode<<8)|retStatus);
 		DBG_8192C("[MPT], Error!! status code=0x%x \n", pBtRsp->status);
 		return paraLen;
@@ -1593,79 +1535,75 @@ mptbt_TestBT(
 
 VOID
 mptbt_BtControlProcess(
-	PADAPTER	Adapter,
-	PVOID		pInBuf
-	)
+    PADAPTER	Adapter,
+    PVOID		pInBuf
+)
 {
-	u1Byte			H2C_Parameter[6] ={0};
-	PBT_H2C 		pH2c=(PBT_H2C)&H2C_Parameter[0];
+	//u1Byte			H2C_Parameter[6] = {0};
+	//PBT_H2C 		pH2c=(PBT_H2C)&H2C_Parameter[0];
 	PMPT_CONTEXT	pMptCtx=&(Adapter->mppriv.MptCtx);
 	PBT_REQ_CMD 	pBtReq=(PBT_REQ_CMD)pInBuf;
-	PBT_RSP_CMD 	pBtRsp=(PBT_RSP_CMD)&pMptCtx->mptOutBuf[0];
-	u1Byte			i;
+	PBT_RSP_CMD 	pBtRsp;
+	//u1Byte			i;
+
 
 	DBG_8192C("[MPT], mptbt_BtControlProcess()=========>\n");
 
 	DBG_8192C("[MPT], input opCodeVer=%d\n", pBtReq->opCodeVer);
 	DBG_8192C("[MPT], input OpCode=%d\n", pBtReq->OpCode);
 	DBG_8192C("[MPT], paraLength=%d \n", pBtReq->paraLength);
-	if(pBtReq->paraLength)
-	{
+	if(pBtReq->paraLength) {
 		//DBG_8192C("[MPT], parameters(hex):0x%x %d \n",&pBtReq->pParamStart[0], pBtReq->paraLength);
 	}
 
-	// The following we should maintain the User OP codes sent by upper layer
-
-	pBtRsp->status = BT_STATUS_SUCCESS;
+	_rtw_memset((void*)pMptCtx->mptOutBuf, 0, 100);
 	pMptCtx->mptOutLen = 4; //length of (BT_RSP_CMD.status+BT_RSP_CMD.paraLength)
-	pBtRsp->paraLength = 0x0;
-	
-	_rtw_memset((PVOID)&pMptCtx->mptOutBuf[0], '\0',100);
-	
-	switch(pBtReq->OpCode)
-	{
-		case BT_UP_OP_BT_READY:
-			DBG_8192C("[MPT], OPcode : [BT_READY]\n");
-			pBtRsp->paraLength = mptbt_BtReady(Adapter, pBtReq, pBtRsp);
-			break;
-		case BT_UP_OP_BT_SET_MODE:
-			DBG_8192C("[MPT], OPcode : [BT_SET_MODE]\n");
-			pBtRsp->paraLength = mptbt_BtSetMode(Adapter, pBtReq, pBtRsp);
-			break;
-		case BT_UP_OP_BT_SET_TX_RX_PARAMETER:
-			DBG_8192C("[MPT], OPcode : [BT_SET_TXRX_PARAMETER]\n");
-			pBtRsp->paraLength = mptbt_BtSetTxRxPars(Adapter, pBtReq, pBtRsp);
-			break;
-		case BT_UP_OP_BT_SET_GENERAL:
-			DBG_8192C("[MPT], OPcode : [BT_SET_GENERAL]\n");
-			pBtRsp->paraLength = mptbt_BtSetGeneral(Adapter, pBtReq, pBtRsp);
-			break;
-		case BT_UP_OP_BT_GET_GENERAL:
-			DBG_8192C("[MPT], OPcode : [BT_GET_GENERAL]\n");
-			pBtRsp->paraLength = mptbt_BtGetGeneral(Adapter, pBtReq, pBtRsp);
-			break;
-		case BT_UP_OP_BT_TEST_CTRL:
-			DBG_8192C("[MPT], OPcode : [BT_TEST_CTRL]\n");
-			pBtRsp->paraLength = mptbt_BtTestCtrl(Adapter, pBtReq, pBtRsp);
-			break;
-		case BT_UP_OP_TEST_BT:
-			DBG_8192C("[MPT], OPcode : [TEST_BT]\n");
-			pBtRsp->paraLength = mptbt_TestBT(Adapter, pBtReq, pBtRsp);
-			break;
-		default:
-			DBG_8192C("[MPT], Error!! OPcode : UNDEFINED!!!!\n");
-			pBtRsp->status = BT_STATUS_UNKNOWN_OPCODE_U;
-			pBtRsp->paraLength = 0x0;
-			break;
-	}
 
-	DBG_8192C("pBtRsp->paraLength =%d \n",pBtRsp->paraLength);
+	pBtRsp = (PBT_RSP_CMD)pMptCtx->mptOutBuf;
+	pBtRsp->status = BT_STATUS_SUCCESS;
+	pBtRsp->paraLength = 0x0;
+
+	// The following we should maintain the User OP codes sent by upper layer
+	switch(pBtReq->OpCode) {
+	case BT_UP_OP_BT_READY:
+		DBG_8192C("[MPT], OPcode : [BT_READY]\n");
+		pBtRsp->paraLength = mptbt_BtReady(Adapter, pBtReq, pBtRsp);
+		break;
+	case BT_UP_OP_BT_SET_MODE:
+		DBG_8192C("[MPT], OPcode : [BT_SET_MODE]\n");
+		pBtRsp->paraLength = mptbt_BtSetMode(Adapter, pBtReq, pBtRsp);
+		break;
+	case BT_UP_OP_BT_SET_TX_RX_PARAMETER:
+		DBG_8192C("[MPT], OPcode : [BT_SET_TXRX_PARAMETER]\n");
+		pBtRsp->paraLength = mptbt_BtSetTxRxPars(Adapter, pBtReq, pBtRsp);
+		break;
+	case BT_UP_OP_BT_SET_GENERAL:
+		DBG_8192C("[MPT], OPcode : [BT_SET_GENERAL]\n");
+		pBtRsp->paraLength = mptbt_BtSetGeneral(Adapter, pBtReq, pBtRsp);
+		break;
+	case BT_UP_OP_BT_GET_GENERAL:
+		DBG_8192C("[MPT], OPcode : [BT_GET_GENERAL]\n");
+		pBtRsp->paraLength = mptbt_BtGetGeneral(Adapter, pBtReq, pBtRsp);
+		break;
+	case BT_UP_OP_BT_TEST_CTRL:
+		DBG_8192C("[MPT], OPcode : [BT_TEST_CTRL]\n");
+		pBtRsp->paraLength = mptbt_BtTestCtrl(Adapter, pBtReq, pBtRsp);
+		break;
+	case BT_UP_OP_TEST_BT:
+		DBG_8192C("[MPT], OPcode : [TEST_BT]\n");
+		pBtRsp->paraLength = mptbt_TestBT(Adapter, pBtReq, pBtRsp);
+		break;
+	default:
+		DBG_8192C("[MPT], Error!! OPcode : UNDEFINED!!!!\n");
+		pBtRsp->status = BT_STATUS_UNKNOWN_OPCODE_U;
+		pBtRsp->paraLength = 0x0;
+		break;
+	}
 
 	pMptCtx->mptOutLen += pBtRsp->paraLength;
 
-	DBG_8192C("\n [MPT], OUT to DLL pMptCtx->mptOutLen=%d ,pBtRsp->paraLength =%d ",pMptCtx->mptOutLen,pBtRsp->paraLength);
-		
-	DBG_8192C("\n [MPT], mptbt_BtControlProcess()<=========\n");
+	DBG_8192C("[MPT], pMptCtx->mptOutLen=%d, pBtRsp->paraLength=%d\n", pMptCtx->mptOutLen, pBtRsp->paraLength);
+	DBG_8192C("[MPT], mptbt_BtControlProcess()<=========\n");
 }
 
 #endif

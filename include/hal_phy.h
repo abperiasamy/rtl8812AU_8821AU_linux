@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -45,41 +45,51 @@
 
 #define	RF6052_MAX_PATH				2
 
+//
+// Antenna detection method, i.e., using single tone detection or RSSI reported from each antenna detected.
+// Added by Roger, 2013.05.22.
+//
+#define ANT_DETECT_BY_SINGLE_TONE	BIT0
+#define ANT_DETECT_BY_RSSI				BIT1
+#define IS_ANT_DETECT_SUPPORT_SINGLE_TONE(__Adapter)		((GET_HAL_DATA(__Adapter)->AntDetection) & ANT_DETECT_BY_SINGLE_TONE)
+#define IS_ANT_DETECT_SUPPORT_RSSI(__Adapter)		((GET_HAL_DATA(__Adapter)->AntDetection) & ANT_DETECT_BY_RSSI)
+
+
 /*--------------------------Define Parameters-------------------------------*/
-typedef enum _BAND_TYPE{
+typedef enum _BAND_TYPE {
 	BAND_ON_2_4G = 0,
 	BAND_ON_5G,
 	BAND_ON_BOTH,
 	BANDMAX
-}BAND_TYPE,*PBAND_TYPE;
+} BAND_TYPE,*PBAND_TYPE;
 
-typedef	enum _RF_TYPE{
+typedef	enum _RF_TYPE {
 	RF_TYPE_MIN = 0, 	// 0
 	RF_8225=1,			// 1 11b/g RF for verification only
-	RF_8256=2,			// 2 11b/g/n 
+	RF_8256=2,			// 2 11b/g/n
 	RF_8258=3,			// 3 11a/b/g/n RF
 	RF_6052=4,			// 4 11b/g/n RF
-	RF_PSEUDO_11N=5,	// 5, It is a temporality RF. 
+	RF_PSEUDO_11N=5,	// 5, It is a temporality RF.
 	RF_TYPE_MAX
-}RF_TYPE_E,*PRF_TYPE_E;
+} RF_TYPE_E,*PRF_TYPE_E;
 
-typedef enum _RF_PATH{
+typedef enum _RF_PATH {
 	RF_PATH_A = 0,
 	RF_PATH_B,
 	RF_PATH_C,
 	RF_PATH_D
-}RF_PATH, *PRF_PATH;
+} RF_PATH, *PRF_PATH;
 
-#define	TX_1S			0			
-#define	TX_2S			1			
-#define	TX_3S			2			
+#define	TX_1S			0
+#define	TX_2S			1
+#define	TX_3S			2
 #define	TX_4S			3
 
 #define	RF_PATH_MAX_92C_88E 		2
-#define	RF_PATH_MAX_90_8812		4	//Max RF number 90 support 
+#define	RF_PATH_MAX_90_8812		4	//Max RF number 90 support
 
-typedef enum _ANTENNA_PATH{
-       ANTENNA_NONE 	= 0,
+typedef enum _ANTENNA_PATH {
+	ANTENNA_NONE 	= 0,
 	ANTENNA_D		= 1,
 	ANTENNA_C		= 2,
 	ANTENNA_CD	= 3,
@@ -97,28 +107,28 @@ typedef enum _ANTENNA_PATH{
 	ANTENNA_ABCD	= 15
 } ANTENNA_PATH;
 
-typedef enum _RF_CONTENT{
+typedef enum _RF_CONTENT {
 	radioa_txt = 0x1000,
 	radiob_txt = 0x1001,
 	radioc_txt = 0x1002,
 	radiod_txt = 0x1003
 } RF_CONTENT;
 
-typedef enum _BaseBand_Config_Type{
+typedef enum _BaseBand_Config_Type {
 	BaseBand_Config_PHY_REG = 0,			//Radio Path A
 	BaseBand_Config_AGC_TAB = 1,			//Radio Path B
 	BaseBand_Config_AGC_TAB_2G = 2,
-	BaseBand_Config_AGC_TAB_5G = 3,	
+	BaseBand_Config_AGC_TAB_5G = 3,
 	BaseBand_Config_PHY_REG_PG
-}BaseBand_Config_Type, *PBaseBand_Config_Type;
+} BaseBand_Config_Type, *PBaseBand_Config_Type;
 
-typedef enum _HW_BLOCK{
+typedef enum _HW_BLOCK {
 	HW_BLOCK_MAC = 0,
 	HW_BLOCK_PHY0 = 1,
 	HW_BLOCK_PHY1 = 2,
 	HW_BLOCK_RF = 3,
 	HW_BLOCK_MAXIMUM = 4, // Never use this
-}HW_BLOCK_E, *PHW_BLOCK_E;
+} HW_BLOCK_E, *PHW_BLOCK_E;
 
 typedef enum _WIRELESS_MODE {
 	WIRELESS_MODE_UNKNOWN = 0x00,
@@ -128,10 +138,12 @@ typedef enum _WIRELESS_MODE {
 	WIRELESS_MODE_AUTO = 0x08,
 	WIRELESS_MODE_N_24G = 0x10,
 	WIRELESS_MODE_N_5G = 0x20,
-	WIRELESS_MODE_AC_5G = 0x40
+	WIRELESS_MODE_AC_5G = 0x40,
+	WIRELESS_MODE_AC_24G  = 0x80,
+	WIRELESS_MODE_AC_ONLY  = 0x100,
 } WIRELESS_MODE;
 
-typedef enum _SwChnlCmdID{
+typedef enum _SwChnlCmdID {
 	CmdID_End,
 	CmdID_SetTxPowerLevel,
 	CmdID_BBRegWrite10,
@@ -139,32 +151,32 @@ typedef enum _SwChnlCmdID{
 	CmdID_WritePortUshort,
 	CmdID_WritePortUchar,
 	CmdID_RF_WriteReg,
-}SwChnlCmdID;
+} SwChnlCmdID;
 
-typedef struct _SwChnlCmd{
+typedef struct _SwChnlCmd {
 	SwChnlCmdID	CmdID;
 	u32				Para1;
 	u32				Para2;
 	u32				msDelay;
-}SwChnlCmd;
+} SwChnlCmd;
 
-typedef struct _R_ANTENNA_SELECT_OFDM{	
-	u32			r_tx_antenna:4;	
+typedef struct _R_ANTENNA_SELECT_OFDM {
+	u32			r_tx_antenna:4;
 	u32			r_ant_l:4;
-	u32			r_ant_non_ht:4;	
+	u32			r_ant_non_ht:4;
 	u32			r_ant_ht1:4;
 	u32			r_ant_ht2:4;
 	u32			r_ant_ht_s1:4;
 	u32			r_ant_non_ht_s1:4;
 	u32			OFDM_TXSC:2;
 	u32			Reserved:2;
-}R_ANTENNA_SELECT_OFDM;
+} R_ANTENNA_SELECT_OFDM;
 
-typedef struct _R_ANTENNA_SELECT_CCK{
-	u8			r_cckrx_enable_2:2;	
+typedef struct _R_ANTENNA_SELECT_CCK {
+	u8			r_cckrx_enable_2:2;
 	u8			r_cckrx_enable:2;
 	u8			r_ccktx_enable:4;
-}R_ANTENNA_SELECT_CCK;
+} R_ANTENNA_SELECT_CCK;
 
 typedef struct RF_Shadow_Compare_Map {
 	// Shadow register value
@@ -177,73 +189,73 @@ typedef struct RF_Shadow_Compare_Map {
 	u8		Recorver;
 	//
 	u8		Driver_Write;
-}RF_SHADOW_T;
+} RF_SHADOW_T;
 
 /*--------------------------Exported Function prototype---------------------*/
 
 u32
 PHY_CalculateBitShift(
-	u32 BitMask
-	);
+    u32 BitMask
+);
 
 u32
 PHY_RFShadowRead(
-	IN	PADAPTER		Adapter,
-	IN	u8				eRFPath,
-	IN	u32				Offset);
+    IN	PADAPTER		Adapter,
+    IN	u8				eRFPath,
+    IN	u32				Offset);
 
 VOID
 PHY_RFShadowWrite(
-	IN	PADAPTER		Adapter,
-	IN	u8				eRFPath,
-	IN	u32				Offset,
-	IN	u32				Data);
+    IN	PADAPTER		Adapter,
+    IN	u8				eRFPath,
+    IN	u32				Offset,
+    IN	u32				Data);
 
 BOOLEAN
 PHY_RFShadowCompare(
-	IN	PADAPTER		Adapter,
-	IN	u8				eRFPath,
-	IN	u32				Offset);
+    IN	PADAPTER		Adapter,
+    IN	u8				eRFPath,
+    IN	u32				Offset);
 
 VOID
 PHY_RFShadowRecorver(
-	IN	PADAPTER		Adapter,
-	IN	u8				eRFPath,
-	IN	u32				Offset);
+    IN	PADAPTER		Adapter,
+    IN	u8				eRFPath,
+    IN	u32				Offset);
 
 VOID
 PHY_RFShadowCompareAll(
-	IN	PADAPTER		Adapter);
+    IN	PADAPTER		Adapter);
 
 VOID
 PHY_RFShadowRecorverAll(
-	IN	PADAPTER		Adapter);
+    IN	PADAPTER		Adapter);
 
 VOID
 PHY_RFShadowCompareFlagSet(
-	IN	PADAPTER		Adapter,
-	IN	u8				eRFPath,
-	IN	u32				Offset,
-	IN	u8				Type);
+    IN	PADAPTER		Adapter,
+    IN	u8				eRFPath,
+    IN	u32				Offset,
+    IN	u8				Type);
 
 VOID
 PHY_RFShadowRecorverFlagSet(
-	IN	PADAPTER		Adapter,
-	IN	u8				eRFPath,
-	IN	u32				Offset,
-	IN	u8				Type);
+    IN	PADAPTER		Adapter,
+    IN	u8				eRFPath,
+    IN	u32				Offset,
+    IN	u8				Type);
 
 VOID
 PHY_RFShadowCompareFlagSetAll(
-	IN	PADAPTER		Adapter);
+    IN	PADAPTER		Adapter);
 
 VOID
 PHY_RFShadowRecorverFlagSetAll(
-	IN	PADAPTER		Adapter);
+    IN	PADAPTER		Adapter);
 
 VOID
 PHY_RFShadowRefresh(
-	IN	PADAPTER		Adapter);
+    IN	PADAPTER		Adapter);
 
 #endif //__HAL_COMMON_H__
 

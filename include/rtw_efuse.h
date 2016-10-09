@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -49,6 +49,7 @@ enum _EFUSE_DEF_TYPE {
 };
 
 #define		EFUSE_MAX_MAP_LEN		512
+
 #define		EFUSE_MAX_HW_SIZE		512
 #define		EFUSE_MAX_SECTION_BASE	16
 
@@ -57,6 +58,18 @@ enum _EFUSE_DEF_TYPE {
 #define GET_HDR_OFFSET_2_0(header) ( (header & 0xE0) >> 5)
 
 #define		EFUSE_REPEAT_THRESHOLD_			3
+
+#define IS_MASKED_MP(ic, txt, offset) (EFUSE_IsAddressMasked_MP_##ic##txt(offset))
+#define IS_MASKED_TC(ic, txt, offset) (EFUSE_IsAddressMasked_TC_##ic##txt(offset))
+#define GET_MASK_ARRAY_LEN_MP(ic, txt) (EFUSE_GetArrayLen_MP_##ic##txt())
+#define GET_MASK_ARRAY_LEN_TC(ic, txt) (EFUSE_GetArrayLen_TC_##ic##txt())
+#define GET_MASK_ARRAY_MP(ic, txt, offset) (EFUSE_GetMaskArray_MP_##ic##txt(offset))
+#define GET_MASK_ARRAY_TC(ic, txt, offset) (EFUSE_GetMaskArray_TC_##ic##txt(offset))
+
+
+#define IS_MASKED(ic, txt, offset) ( IS_MASKED_MP(ic,txt, offset) )
+#define GET_MASK_ARRAY_LEN(ic, txt) ( GET_MASK_ARRAY_LEN_MP(ic,txt) )
+#define GET_MASK_ARRAY(ic, txt, out) do { GET_MASK_ARRAY_MP(ic,txt, out);} while(0)
 
 //=============================================
 //	The following is for BT Efuse definition
@@ -68,16 +81,16 @@ enum _EFUSE_DEF_TYPE {
 /*--------------------------Define Parameters-------------------------------*/
 #define		EFUSE_MAX_WORD_UNIT			4
 
-/*------------------------------Define structure----------------------------*/ 
-typedef struct PG_PKT_STRUCT_A{
+/*------------------------------Define structure----------------------------*/
+typedef struct PG_PKT_STRUCT_A {
 	u8 offset;
 	u8 word_en;
-	u8 data[8];	
+	u8 data[8];
 	u8 word_cnts;
-}PGPKT_STRUCT,*PPGPKT_STRUCT;
+} PGPKT_STRUCT,*PPGPKT_STRUCT;
 
-/*------------------------------Define structure----------------------------*/ 
-typedef struct _EFUSE_HAL{
+/*------------------------------Define structure----------------------------*/
+typedef struct _EFUSE_HAL {
 	u8	fakeEfuseBank;
 	u32	fakeEfuseUsedBytes;
 	u8	fakeEfuseContent[EFUSE_MAX_HW_SIZE];
@@ -94,8 +107,9 @@ typedef struct _EFUSE_HAL{
 	u8	fakeBTEfuseContent[EFUSE_MAX_BT_BANK][EFUSE_MAX_HW_SIZE];
 	u8	fakeBTEfuseInitMap[EFUSE_BT_MAX_MAP_LEN];
 	u8	fakeBTEfuseModifiedMap[EFUSE_BT_MAX_MAP_LEN];
-}EFUSE_HAL, *PEFUSE_HAL;
+} EFUSE_HAL, *PEFUSE_HAL;
 
+extern u8 maskfileBuffer[32];
 
 /*------------------------Export global variable----------------------------*/
 extern u8 fakeEfuseBank;
@@ -130,14 +144,19 @@ void	EFUSE_GetEfuseDefinition(PADAPTER pAdapter, u8 efuseType, u8 type, void *pO
 u8	efuse_OneByteRead(PADAPTER pAdapter, u16 addr, u8 *data, BOOLEAN	 bPseudoTest);
 u8	efuse_OneByteWrite(PADAPTER pAdapter, u16 addr, u8 data, BOOLEAN	 bPseudoTest);
 
+void	BTEfuse_PowerSwitch(PADAPTER pAdapter,u8	bWrite,u8	 PwrState);
 void	Efuse_PowerSwitch(PADAPTER pAdapter,u8	bWrite,u8	 PwrState);
 int 	Efuse_PgPacketRead(PADAPTER pAdapter, u8 offset, u8 *data, BOOLEAN bPseudoTest);
 int 	Efuse_PgPacketWrite(PADAPTER pAdapter, u8 offset, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
-void	efuse_WordEnableDataRead(u8 word_en, u8 *sourdata, u8 *targetdata);
+void	efuse_WordEnableDataRead(u8 word_en, const u8 *sourdata, u8 *targetdata);
 u8	Efuse_WordEnableDataWrite(PADAPTER pAdapter, u16 efuse_addr, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
 
 u8	EFUSE_Read1Byte(PADAPTER pAdapter, u16 Address);
 void	EFUSE_ShadowMapUpdate(PADAPTER pAdapter, u8 efuseType, BOOLEAN bPseudoTest);
 void	EFUSE_ShadowRead(PADAPTER pAdapter, u8 Type, u16 Offset, u32 *Value);
+void Rtw_Hal_ReadMACAddrFromFile(PADAPTER padapter);
+u32 Rtw_Hal_readPGDataFromConfigFile(PADAPTER	padapter);
+u8 rtw_efuse_file_read(PADAPTER padapter,u8 *filepatch,u8 *buf, u32 len);
+
 #endif
 

@@ -26,41 +26,41 @@
 //3 The value of cmd: 4 bits
 /*---------------------------------------------*/
 #define PWR_CMD_READ			0x00
-     // offset: the read register offset
-     // msk: the mask of the read value
-     // value: N/A, left by 0
-     // note: dirver shall implement this function by read & msk
+// offset: the read register offset
+// msk: the mask of the read value
+// value: N/A, left by 0
+// note: dirver shall implement this function by read & msk
 
 #define PWR_CMD_WRITE			0x01
-     // offset: the read register offset
-     // msk: the mask of the write bits
-     // value: write value
-     // note: driver shall implement this cmd by read & msk after write
+// offset: the read register offset
+// msk: the mask of the write bits
+// value: write value
+// note: driver shall implement this cmd by read & msk after write
 
 #define PWR_CMD_POLLING			0x02
-     // offset: the read register offset
-     // msk: the mask of the polled value
-     // value: the value to be polled, masked by the msd field.
-     // note: driver shall implement this cmd by
-     // do{
-     // if( (Read(offset) & msk) == (value & msk) )
-     // break;
-     // } while(not timeout);
+// offset: the read register offset
+// msk: the mask of the polled value
+// value: the value to be polled, masked by the msd field.
+// note: driver shall implement this cmd by
+// do{
+// if( (Read(offset) & msk) == (value & msk) )
+// break;
+// } while(not timeout);
 
 #define PWR_CMD_DELAY			0x03
-     // offset: the value to delay
-     // msk: N/A
-     // value: the unit of delay, 0: us, 1: ms
+// offset: the value to delay
+// msk: N/A
+// value: the unit of delay, 0: us, 1: ms
 
 #define PWR_CMD_END				0x04
-     // offset: N/A
-     // msk: N/A
-     // value: N/A
+// offset: N/A
+// msk: N/A
+// value: N/A
 
 /*---------------------------------------------*/
 //3 The value of base: 4 bits
 /*---------------------------------------------*/
-   // define the base address of each block
+// define the base address of each block
 #define PWR_BASEADDR_MAC		0x00
 #define PWR_BASEADDR_USB		0x01
 #define PWR_BASEADDR_PCIE		0x02
@@ -95,14 +95,12 @@
 #define	PWR_CUT_ALL_MSK			0xFF
 
 
-typedef enum _PWRSEQ_CMD_DELAY_UNIT_
-{
+typedef enum _PWRSEQ_CMD_DELAY_UNIT_ {
 	PWRSEQ_DELAY_US,
 	PWRSEQ_DELAY_MS,
 } PWRSEQ_DELAY_UNIT;
 
-typedef struct _WL_PWR_CFG_
-{
+typedef struct _WL_PWR_CFG_ {
 	u16 offset;
 	u8 cut_msk;
 	u8 fab_msk:4;
@@ -128,11 +126,11 @@ typedef struct _WL_PWR_CFG_
 //	Prototype of protected function.
 //================================================================================
 u8 HalPwrSeqCmdParsing(
-	PADAPTER		padapter,
-	u8				CutVersion,
-	u8				FabVersion,
-	u8				InterfaceType,
-	WLAN_PWR_CFG	PwrCfgCmd[]);
+    PADAPTER		padapter,
+    u8				CutVersion,
+    u8				FabVersion,
+    u8				InterfaceType,
+    WLAN_PWR_CFG	PwrCfgCmd[]);
 
 #endif
 

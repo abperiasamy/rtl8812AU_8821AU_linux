@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -19,6 +19,9 @@
  ******************************************************************************/
 #ifndef __USB_HAL_H__
 #define __USB_HAL_H__
+
+int usb_init_recv_priv(_adapter *padapter, u16 ini_in_buf_sz);
+void usb_free_recv_priv (_adapter *padapter, u16 ini_in_buf_sz);
 
 void rtw_set_hal_ops(_adapter *padapter);
 
@@ -46,7 +49,12 @@ void rtl8812au_set_hal_ops(_adapter * padapter);
 void rtl8192eu_set_hal_ops(_adapter * padapter);
 #endif
 
-#ifdef CONFIG_INTEL_PROXIM	
+
+#ifdef CONFIG_RTL8723B
+void rtl8723bu_set_hal_ops(_adapter * padapter);
+#endif
+
+#ifdef CONFIG_INTEL_PROXIM
 extern _adapter  *rtw_usb_get_sw_pointer(void);
 #endif	//CONFIG_INTEL_PROXIM
 #endif //__USB_HAL_H__

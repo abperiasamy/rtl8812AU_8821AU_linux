@@ -21,13 +21,9 @@
 #define __RTL8812A_HAL_H__
 
 //#include "hal_com.h"
-#if 1
 #include "hal_data.h"
-#else
-#include "../hal/OUTSRC/odm_precomp.h"
-#endif
 
-//include HAL Related header after HAL Related compiling flags 
+//include HAL Related header after HAL Related compiling flags
 #include "rtl8812a_spec.h"
 #include "rtl8812a_rf.h"
 #include "rtl8812a_dm.h"
@@ -47,32 +43,33 @@
 //---------------------------------------------------------------------
 //		RTL8812AU From header
 //---------------------------------------------------------------------
-		#define RTL8812_FW_IMG						"rtl8812AU\\rtl8812Ufw.bin"
-		#define RTL8812_FW_WW_IMG				"rtl8812AU\\rtl8812Ufwww.bin"
-		#define RTL8812_PHY_REG					"rtl8812AU\\PHY_REG.txt" 
-		#define RTL8812_PHY_RADIO_A				"rtl8812AU\\RadioA.txt"
-		#define RTL8812_PHY_RADIO_B				"rtl8812AU\\RadioB.txt"
-		#define RTL8812_TXPWR_TRACK				"rtl8812AU\\TxPowerTrack.txt"			
-		#define RTL8812_AGC_TAB					"rtl8812AU\\AGC_TAB.txt"
-		#define RTL8812_PHY_MACREG 				"rtl8812AU\\MAC_REG.txt"
-		#define RTL8812_PHY_REG_PG					"rtl8812AU\\PHY_REG_PG.txt"
-		#define RTL8812_PHY_REG_MP 				"rtl8812AU\\PHY_REG_MP.txt" 
-		#define RTL8812_TXPWR_LMT					"rtl8812AU\\TXPWR_LMT.txt" 
+#define RTL8812_FW_IMG						"rtl8812a/FW_NIC.bin"
+#define RTL8812_FW_WW_IMG				"rtl8812a/FW_WoWLAN.bin"
+#define RTL8812_PHY_REG					"rtl8812a/PHY_REG.txt"
+#define RTL8812_PHY_RADIO_A				"rtl8812a/RadioA.txt"
+#define RTL8812_PHY_RADIO_B				"rtl8812a/RadioB.txt"
+#define RTL8812_TXPWR_TRACK				"rtl8812a/TxPowerTrack.txt"
+#define RTL8812_AGC_TAB					"rtl8812a/AGC_TAB.txt"
+#define RTL8812_PHY_MACREG 				"rtl8812a/MAC_REG.txt"
+#define RTL8812_PHY_REG_PG					"rtl8812a/PHY_REG_PG.txt"
+#define RTL8812_PHY_REG_MP 				"rtl8812a/PHY_REG_MP.txt"
+#define RTL8812_TXPWR_LMT					"rtl8812a/TXPWR_LMT.txt"
+#define RTL8812_WIFI_ANT_ISOLATION		"rtl8812a/wifi_ant_isolation.txt"
 
 //---------------------------------------------------------------------
 //		RTL8821U From file
 //---------------------------------------------------------------------
-		#define RTL8821_FW_IMG						"rtl8821AU\\rtl8821Ufw.bin"
-		#define RTL8821_FW_WW_IMG				"rtl8821AU\\rtl8821Ufwww.bin"
-		#define RTL8821_PHY_REG					"rtl8821AU\\PHY_REG.txt" 
-		#define RTL8821_PHY_RADIO_A				"rtl8821AU\\RadioA.txt"
-		#define RTL8821_PHY_RADIO_B				"rtl8821AU\\RadioB.txt" 
-		#define RTL8821_TXPWR_TRACK				"rtl8821AU\\TxPowerTrack.txt"		
-		#define RTL8821_AGC_TAB					"rtl8821AU\\AGC_TAB.txt"
-		#define RTL8821_PHY_MACREG 				"rtl8821AU\\MAC_REG.txt"
-		#define RTL8821_PHY_REG_PG					"rtl8821AU\\PHY_REG_PG.txt"
-		#define RTL8821_PHY_REG_MP 				"rtl8821AU\\PHY_REG_MP.txt"
-		#define RTL8821_TXPWR_LMT					"rtl8821AU\\TXPWR_LMT.txt" 
+#define RTL8821_FW_IMG						"rtl8821a/FW_NIC.bin"
+#define RTL8821_FW_WW_IMG				"rtl8821a/FW_WoWLAN.bin"
+#define RTL8821_PHY_REG					"rtl8821a/PHY_REG.txt"
+#define RTL8821_PHY_RADIO_A				"rtl8821a/RadioA.txt"
+#define RTL8821_PHY_RADIO_B				"rtl8821a/RadioB.txt"
+#define RTL8821_TXPWR_TRACK				"rtl8821a/TxPowerTrack.txt"
+#define RTL8821_AGC_TAB					"rtl8821a/AGC_TAB.txt"
+#define RTL8821_PHY_MACREG 				"rtl8821a/MAC_REG.txt"
+#define RTL8821_PHY_REG_PG					"rtl8821a/PHY_REG_PG.txt"
+#define RTL8821_PHY_REG_MP 				"rtl8821a/PHY_REG_MP.txt"
+#define RTL8821_TXPWR_LMT					"rtl8821a/TXPWR_LMT.txt"
 
 //---------------------------------------------------------------------
 //		RTL8812 Power Configuration CMDs for PCIe interface
@@ -85,7 +82,7 @@
 #define Rtl8812_NIC_RESUME_FLOW				rtl8812_resume_flow
 #define Rtl8812_NIC_PDN_FLOW					rtl8812_hwpdn_flow
 #define Rtl8812_NIC_LPS_ENTER_FLOW			rtl8812_enter_lps_flow
-#define Rtl8812_NIC_LPS_LEAVE_FLOW				rtl8812_leave_lps_flow		
+#define Rtl8812_NIC_LPS_LEAVE_FLOW				rtl8812_leave_lps_flow
 
 //---------------------------------------------------------------------
 //		RTL8821 Power Configuration CMDs for PCIe interface
@@ -98,7 +95,7 @@
 #define Rtl8821A_NIC_RESUME_FLOW				rtl8821A_resume_flow
 #define Rtl8821A_NIC_PDN_FLOW					rtl8821A_hwpdn_flow
 #define Rtl8821A_NIC_LPS_ENTER_FLOW			rtl8821A_enter_lps_flow
-#define Rtl8821A_NIC_LPS_LEAVE_FLOW			rtl8821A_leave_lps_flow	
+#define Rtl8821A_NIC_LPS_LEAVE_FLOW			rtl8821A_leave_lps_flow
 
 
 #if 1 // download firmware related data structure
@@ -116,11 +113,6 @@ typedef struct _RT_FIRMWARE_8812 {
 	u8			szFwBuffer[FW_SIZE_8812];
 #endif
 	u32			ulFwLength;
-
-#ifdef CONFIG_WOWLAN
-	u8*			szWoWLANFwBuffer;
-	u32			ulWoWLANFwLength;
-#endif //CONFIG_WOWLAN
 } RT_FIRMWARE_8812, *PRT_FIRMWARE_8812;
 
 //
@@ -139,7 +131,7 @@ typedef struct _RT_FIRMWARE_8812 {
 #define GET_FIRMWARE_HDR_FUNCTION_8812(__FwHdr)		LE_BITS_TO_4BYTE(__FwHdr, 24, 8) // Reserved for different FW function indcation, for further use when driver needs to download different FW in different conditions
 #define GET_FIRMWARE_HDR_VERSION_8812(__FwHdr)		LE_BITS_TO_4BYTE(__FwHdr+4, 0, 16)// FW Version
 #define GET_FIRMWARE_HDR_SUB_VER_8812(__FwHdr)		LE_BITS_TO_4BYTE(__FwHdr+4, 16, 8) // FW Subversion, default 0x00
-#define GET_FIRMWARE_HDR_RSVD1_8812(__FwHdr)			LE_BITS_TO_4BYTE(__FwHdr+4, 24, 8) 		
+#define GET_FIRMWARE_HDR_RSVD1_8812(__FwHdr)			LE_BITS_TO_4BYTE(__FwHdr+4, 24, 8)
 
 //--- LONG WORD 1 ----
 #define GET_FIRMWARE_HDR_MONTH_8812(__FwHdr)			LE_BITS_TO_4BYTE(__FwHdr+8, 0, 8) // Release time Month field
@@ -164,26 +156,39 @@ typedef struct _RT_FIRMWARE_8812 {
 #define BCN_DMA_ATIME_INT_TIME_8812		0x02
 
 //for 8812
+// TX 128K, RX 16K, Page size 512B for TX, 128B for RX
 #define MAX_RX_DMA_BUFFER_SIZE_8812	0x3E80   //0x3FFF	// RX 16K
+#ifdef CONFIG_FW_C2H_DEBUG
+#define RX_DMA_RESERVED_SIZE_8812	0x100	// 256B, reserved for c2h debug message
+#else
+#define RX_DMA_RESERVED_SIZE_8812	0x0	// 0B
+#endif
+#define RX_DMA_BOUNDARY_8812		(MAX_RX_DMA_BUFFER_SIZE_8812 - RX_DMA_RESERVED_SIZE_8812 - 1)
 
-#define TX_TOTAL_PAGE_NUMBER_8812		0xF8
+#define BCNQ_PAGE_NUM_8812		0x07
 
+//For WoWLan , more reserved page
+//ARP Rsp:1, RWC:1, GTK Info:1,GTK RSP:1,GTK EXT MEM:1, PNO: 6
+#ifdef CONFIG_WOWLAN
+#define WOWLAN_PAGE_NUM_8812	0x05
+#else
+#define WOWLAN_PAGE_NUM_8812	0x00
+#endif
+
+#define TX_TOTAL_PAGE_NUMBER_8812	(0xFF - BCNQ_PAGE_NUM_8812 - WOWLAN_PAGE_NUM_8812)
 #define TX_PAGE_BOUNDARY_8812			(TX_TOTAL_PAGE_NUMBER_8812 + 1)
-#define TX_PAGE_LOAD_FW_BOUNDARY_8812		0x47 //0xA5
+
 #define TX_PAGE_BOUNDARY_WOWLAN_8812		0xE0
 
-// For Normal Chip Setting
-// (HPQ + LPQ + NPQ + PUBQ) shall be TX_TOTAL_PAGE_NUMBER_92C
-#define NORMAL_PAGE_NUM_PUBQ_8812			0xD8
-#define NORMAL_PAGE_NUM_LPQ_8812				0x10
-#define NORMAL_PAGE_NUM_HPQ_8812			0x10
-#define NORMAL_PAGE_NUM_NPQ_8812				0x00
-
-//Note: For WMM Normal Chip Setting ,modify later
-#define WMM_NORMAL_TX_TOTAL_PAGE_NUMBER_8812	0xFB
+#define WMM_NORMAL_TX_TOTAL_PAGE_NUMBER_8812	TX_PAGE_BOUNDARY_8812
 #define WMM_NORMAL_TX_PAGE_BOUNDARY_8812		(WMM_NORMAL_TX_TOTAL_PAGE_NUMBER_8812 + 1)
 
-#define WMM_NORMAL_PAGE_NUM_PUBQ_8812		0x8B
+// For Normal Chip Setting
+// (HPQ + LPQ + NPQ + PUBQ) shall be TX_TOTAL_PAGE_NUMBER_8812
+#define NORMAL_PAGE_NUM_LPQ_8812				0x10
+#define NORMAL_PAGE_NUM_HPQ_8812			0x10
+#define NORMAL_PAGE_NUM_NPQ_8812			0x00
+
 #define WMM_NORMAL_PAGE_NUM_HPQ_8812		0x30
 #define WMM_NORMAL_PAGE_NUM_LPQ_8812		0x20
 #define WMM_NORMAL_PAGE_NUM_NPQ_8812		0x20
@@ -195,23 +200,41 @@ typedef struct _RT_FIRMWARE_8812 {
 #define PAGE_SIZE_RX_8821A					128
 
 #define MAX_RX_DMA_BUFFER_SIZE_8821			0x3E80	// RX 16K
+#ifdef CONFIG_FW_C2H_DEBUG
+#define RX_DMA_RESERVED_SIZE_8821	0x100	// 256B, reserved for c2h debug message
+#else
+#define RX_DMA_RESERVED_SIZE_8821	0x0	// 0B
+#endif
+#define RX_DMA_BOUNDARY_8821		(MAX_RX_DMA_BUFFER_SIZE_8821 - RX_DMA_RESERVED_SIZE_8821 - 1)
 
-// For Normal Chip Setting
-#define TX_TOTAL_PAGE_NUMBER_8821			0xF7
+#define BCNQ_PAGE_NUM_8821		0x08
+#ifdef CONFIG_CONCURRENT_MODE
+#define BCNQ1_PAGE_NUM_8821		0x04
+#else
+#define BCNQ1_PAGE_NUM_8821		0x00
+#endif
+
+//For WoWLan , more reserved page
+//ARP Rsp:1, RWC:1, GTK Info:1,GTK RSP:1,GTK EXT MEM:1, PNO: 6
+#ifdef CONFIG_WOWLAN
+#define WOWLAN_PAGE_NUM_8821	0x06
+#else
+#define WOWLAN_PAGE_NUM_8821	0x00
+#endif
+
+#define TX_TOTAL_PAGE_NUMBER_8821	(0xFF - BCNQ_PAGE_NUM_8821 - BCNQ1_PAGE_NUM_8821 - WOWLAN_PAGE_NUM_8821)
 #define TX_PAGE_BOUNDARY_8821				(TX_TOTAL_PAGE_NUMBER_8821 + 1)
 //#define TX_PAGE_BOUNDARY_WOWLAN_8821		0xE0
 
-// (HPQ + LPQ + NPQ + PUBQ) shall be TX_TOTAL_PAGE_NUMBER
-#define NORMAL_PAGE_NUM_PUBQ_8821			0xE7
-#define NORMAL_PAGE_NUM_LPQ_8821			0x08
-#define NORMAL_PAGE_NUM_HPQ_8821			0x08
-#define NORMAL_PAGE_NUM_NPQ_8821			0x00
-
-// For WMM Normal Chip Setting
-#define WMM_NORMAL_TX_TOTAL_PAGE_NUMBER_8821	0xFB
+#define WMM_NORMAL_TX_TOTAL_PAGE_NUMBER_8821	TX_TOTAL_PAGE_NUMBER_8821
 #define WMM_NORMAL_TX_PAGE_BOUNDARY_8821		(WMM_NORMAL_TX_TOTAL_PAGE_NUMBER_8821 + 1)
 
-#define WMM_NORMAL_PAGE_NUM_PUBQ_8821		0x8B
+
+// (HPQ + LPQ + NPQ + PUBQ) shall be TX_TOTAL_PAGE_NUMBER
+#define NORMAL_PAGE_NUM_LPQ_8821			0x08//0x10
+#define NORMAL_PAGE_NUM_HPQ_8821		0x08//0x10
+#define NORMAL_PAGE_NUM_NPQ_8821		0x00
+
 #define WMM_NORMAL_PAGE_NUM_HPQ_8821		0x30
 #define WMM_NORMAL_PAGE_NUM_LPQ_8821		0x20
 #define WMM_NORMAL_PAGE_NUM_NPQ_8821		0x20
@@ -243,14 +266,12 @@ typedef struct _RT_FIRMWARE_8812 {
 #define EFUSE_OOB_PROTECT_BYTES_JAGUAR		18 	// PG data exclude header, dummy 7 bytes frome CP test and reserved 1byte.
 #define EFUSE_PROTECT_BYTES_BANK_JAGUAR		16
 // Added for different registry settings to adjust TxPwr index. added by Roger, 2010.03.09.
-typedef enum _TX_PWR_PERCENTAGE{
+typedef enum _TX_PWR_PERCENTAGE {
 	TX_PWR_PERCENTAGE_0 = 0x01, // 12.5%
 	TX_PWR_PERCENTAGE_1 = 0x02, // 25%
 	TX_PWR_PERCENTAGE_2 = 0x04, // 50%
-	TX_PWR_PERCENTAGE_3 = 0x08, //100%, default target output power.	
+	TX_PWR_PERCENTAGE_3 = 0x08, //100%, default target output power.
 } TX_PWR_PERCENTAGE;
-
-#define GET_RF_TYPE(priv)			(GET_HAL_DATA(priv)->rf_type)
 
 #define INCLUDE_MULTI_FUNC_BT(_Adapter)	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_BT)
 #define INCLUDE_MULTI_FUNC_GPS(_Adapter)	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_GPS)
@@ -259,23 +280,13 @@ typedef enum _TX_PWR_PERCENTAGE{
 
 //#define RT_IS_FUNC_DISABLED(__pAdapter, __FuncBits) ( (__pAdapter)->DisabledFunctions & (__FuncBits) )
 
-#define GetRegTxBBSwing_2G(_Adapter)	(_Adapter->registrypriv.TxBBSwing_2G)
-#define GetRegTxBBSwing_5G(_Adapter)	(_Adapter->registrypriv.TxBBSwing_5G)
-
-#define GetRegAmplifierType2G(_Adapter)	(_Adapter->registrypriv.AmplifierType_2G)
-#define GetRegAmplifierType5G(_Adapter)	(_Adapter->registrypriv.AmplifierType_5G)
-
-#define GetRegbENRFEType(_Adapter)	(_Adapter->registrypriv.bEn_RFE)
-#define GetRegRFEType(_Adapter)	(_Adapter->registrypriv.RFE_Type)
-
-#define GetDefaultAdapter(padapter)	padapter
-
 // rtl8812_hal_init.c
 void	_8051Reset8812(PADAPTER padapter);
 s32	FirmwareDownload8812(PADAPTER Adapter, BOOLEAN bUsedWoWLANFw);
 void	InitializeFirmwareVars8812(PADAPTER padapter);
 
-s32	InitLLTTable8812(PADAPTER padapter, u8 txpktbuf_bndy);
+s32	_LLTWrite_8812A(PADAPTER Adapter, u32 address, u32 data);
+s32	InitLLTTable8812A(PADAPTER padapter, u8 txpktbuf_bndy);
 void InitRDGSetting8812A(PADAPTER padapter);
 
 void CheckAutoloadState8812A(PADAPTER padapter);
@@ -285,20 +296,23 @@ u8	GetEEPROMSize8812A(PADAPTER padapter);
 void InitPGData8812A(PADAPTER padapter);
 void	Hal_EfuseParseIDCode8812A(PADAPTER padapter, u8 *hwinfo);
 void	Hal_ReadPROMVersion8812A(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-void	Hal_ReadTxPowerInfo8812A(PADAPTER padapter,u8* hwinfo,BOOLEAN	AutoLoadFail);
-void	Hal_ReadBoardType8812A(PADAPTER pAdapter,u8* hwinfo,BOOLEAN AutoLoadFail);
-void	Hal_ReadThermalMeter_8812A(PADAPTER	Adapter,u8* PROMContent,BOOLEAN 	AutoloadFail);
+void	Hal_ReadTxPowerInfo8812A(PADAPTER padapter, u8* hwinfo,BOOLEAN	AutoLoadFail);
+void	Hal_ReadBoardType8812A(PADAPTER pAdapter, u8* hwinfo,BOOLEAN AutoLoadFail);
+void	Hal_ReadThermalMeter_8812A(PADAPTER	Adapter, u8* PROMContent,BOOLEAN 	AutoloadFail);
 void	Hal_ReadChannelPlan8812A(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-void	Hal_EfuseParseXtal_8812A(PADAPTER pAdapter,u8* hwinfo,BOOLEAN AutoLoadFail);
+void	Hal_EfuseParseXtal_8812A(PADAPTER pAdapter, u8* hwinfo,BOOLEAN AutoLoadFail);
 void	Hal_ReadAntennaDiversity8812A(PADAPTER pAdapter,u8* PROMContent,BOOLEAN AutoLoadFail);
-void	Hal_ReadPAType_8812A(PADAPTER Adapter,u8* PROMContent, BOOLEAN AutoloadFail);
+void	Hal_ReadAntennaDiversity8821A(PADAPTER pAdapter, u8* PROMContent, BOOLEAN AutoLoadFail);
+void	Hal_ReadAmplifierType_8812A(PADAPTER Adapter,u8* PROMContent, BOOLEAN AutoloadFail);
 void	Hal_ReadPAType_8821A(PADAPTER Adapter,u8* PROMContent, BOOLEAN AutoloadFail);
 void	Hal_ReadRFEType_8812A(PADAPTER Adapter,u8* PROMContent, BOOLEAN AutoloadFail);
 void	Hal_EfuseParseBTCoexistInfo8812A(PADAPTER Adapter, u8* hwinfo, BOOLEAN AutoLoadFail);
 void	hal_ReadUsbType_8812AU(PADAPTER Adapter, u8 *PROMContent, BOOLEAN AutoloadFail);
+int 	FirmwareDownloadBT(PADAPTER Adapter, PRT_MP_FIRMWARE pFirmware);
+void	Hal_ReadRemoteWakeup_8812A(PADAPTER padapter, u8* hwinfo, BOOLEAN AutoLoadFail);
 
 BOOLEAN HalDetectPwrDownMode8812(PADAPTER Adapter);
-	
+
 #ifdef CONFIG_WOWLAN
 void Hal_DetectWoWMode(PADAPTER pAdapter);
 #endif //CONFIG_WOWLAN
@@ -309,17 +323,28 @@ void SetBeaconRelatedRegisters8812A(PADAPTER padapter);
 void ReadRFType8812A(PADAPTER padapter);
 void InitDefaultValue8821A(PADAPTER padapter);
 
-void SetHwReg8812A(PADAPTER padapter, u8 variable, u8 *pval);
+void SetHwReg8812A(PADAPTER padapter, u8 variable, const u8 *pval);
 void GetHwReg8812A(PADAPTER padapter, u8 variable, u8 *pval);
 u8 SetHalDefVar8812A(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
 u8 GetHalDefVar8812A(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
+s32 c2h_id_filter_ccx_8812a(u8 *buf);
 void rtl8812_set_hal_ops(struct hal_ops *pHalFunc);
 
 // register
 void SetBcnCtrlReg(PADAPTER padapter, u8 SetBits, u8 ClearBits);
 
-void rtl8812_clone_haldata(PADAPTER dst_adapter, PADAPTER src_adapter);
 void rtl8812_start_thread(PADAPTER padapter);
 void rtl8812_stop_thread(PADAPTER padapter);
+
+#ifdef CONFIG_PCI_HCI
+BOOLEAN	InterruptRecognized8812AE(PADAPTER Adapter);
+VOID	UpdateInterruptMask8812AE(PADAPTER Adapter, u32 AddMSR, u32 AddMSR1, u32 RemoveMSR, u32 RemoveMSR1);
+#endif
+
+#ifdef CONFIG_BT_COEXIST
+void rtl8812a_combo_card_WifiOnlyHwInit(PADAPTER Adapter);
+#endif
+
+
 #endif //__RTL8188E_HAL_H__
 

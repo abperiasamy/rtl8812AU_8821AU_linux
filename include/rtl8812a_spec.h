@@ -35,7 +35,10 @@
 //	0x0000h ~ 0x00FFh	System Configuration
 //
 //-----------------------------------------------------
-
+#define REG_HSIMR_8812					0x0058
+#define REG_HSISR_8812					0x005c
+#define REG_GPIO_EXT_CTRL				0x0060
+#define REG_GPIO_STATUS_8812			0x006C
 #define REG_SDIO_CTRL_8812				0x0070
 #define REG_OPT_CTRL_8812				0x0074
 #define REG_RF_B_CTRL_8812				0x0076
@@ -56,6 +59,7 @@
 #define REG_PKTBUF_DBG_ADDR 			(REG_PKTBUF_DBG_CTRL)
 #define REG_RXPKTBUF_DBG				(REG_PKTBUF_DBG_CTRL+2)
 #define REG_TXPKTBUF_DBG				(REG_PKTBUF_DBG_CTRL+3)
+#define REG_WOWLAN_WAKE_REASON			REG_MCUTST_WOWLAN
 
 #define REG_RSVD3_8812					0x0168
 #define REG_C2HEVT_CMD_SEQ_88XX		0x01A1
@@ -72,13 +76,15 @@
 //	0x0200h ~ 0x027Fh	TXDMA Configuration
 //
 //-----------------------------------------------------
-#define REG_TDECTRL1_8812				0x0228
+#define REG_DWBCN0_CTRL_8812				REG_TDECTRL
+#define REG_DWBCN1_CTRL_8812				0x0228
 
 //-----------------------------------------------------
 //
 //	0x0280h ~ 0x02FFh	RXDMA Configuration
 //
 //-----------------------------------------------------
+#define REG_RXDMA_CONTROL_8812		0x0286 // Control the RX DMA.
 #define REG_RXDMA_PRO_8812			0x0290
 #define REG_EARLY_MODE_CONTROL_8812	0x02BC
 #define REG_RSVD5_8812					0x02F0
@@ -92,6 +98,13 @@
 //	0x0300h ~ 0x03FFh	PCIe
 //
 //-----------------------------------------------------
+#define	REG_DBI_WDATA_8812			0x0348	// DBI Write Data
+#define	REG_DBI_RDATA_8812			0x034C	// DBI Read Data
+#define	REG_DBI_ADDR_8812				0x0350	// DBI Address
+#define	REG_DBI_FLAG_8812				0x0352	// DBI Read/Write Flag
+#define	REG_MDIO_WDATA_8812			0x0354	// MDIO for Write PCIE PHY
+#define	REG_MDIO_RDATA_8812			0x0356	// MDIO for Reads PCIE PHY
+#define	REG_MDIO_CTL_8812				0x0358	// MDIO for Control
 #define	REG_PCIE_MULTIFET_CTRL_8812	0x036A	//PCIE Multi-Fethc Control
 
 //-----------------------------------------------------
@@ -100,6 +113,7 @@
 //
 //-----------------------------------------------------
 #define REG_TXBF_CTRL_8812				0x042C
+#define REG_ARFR0_8812					0x0444
 #define REG_ARFR1_8812					0x044C
 #define REG_CCK_CHECK_8812				0x0454
 #define REG_AMPDU_MAX_TIME_8812		0x0456
@@ -109,6 +123,10 @@
 #define REG_TXPKTBUF_WMAC_LBK_BF_HD_8812	0x045D
 #define REG_NDPA_OPT_CTRL_8812		0x045F
 #define REG_DATA_SC_8812				0x0483
+#ifdef CONFIG_WOWLAN
+#define REG_TXPKTBUF_IV_LOW             0x0484
+#define REG_TXPKTBUF_IV_HIGH            0x0488
+#endif
 #define REG_ARFR2_8812					0x048C
 #define REG_ARFR3_8812					0x0494
 #define REG_TXRPT_START_OFFSET		0x04AC
@@ -162,28 +180,28 @@
 #define	IMR_DISABLED_8812					0
 // IMR DW0(0x00B0-00B3) Bit 0-31
 #define	IMR_TIMER2_8812					BIT31		// Timeout interrupt 2
-#define	IMR_TIMER1_8812					BIT30		// Timeout interrupt 1	
+#define	IMR_TIMER1_8812					BIT30		// Timeout interrupt 1
 #define	IMR_PSTIMEOUT_8812				BIT29		// Power Save Time Out Interrupt
-#define	IMR_GTINT4_8812					BIT28		// When GTIMER4 expires, this bit is set to 1	
-#define	IMR_GTINT3_8812					BIT27		// When GTIMER3 expires, this bit is set to 1	
-#define	IMR_TXBCN0ERR_8812				BIT26		// Transmit Beacon0 Error			
-#define	IMR_TXBCN0OK_8812					BIT25		// Transmit Beacon0 OK			
-#define	IMR_TSF_BIT32_TOGGLE_8812		BIT24		// TSF Timer BIT32 toggle indication interrupt			
-#define	IMR_BCNDMAINT0_8812				BIT20		// Beacon DMA Interrupt 0			
-#define	IMR_BCNDERR0_8812					BIT16		// Beacon Queue DMA OK0			
+#define	IMR_GTINT4_8812					BIT28		// When GTIMER4 expires, this bit is set to 1
+#define	IMR_GTINT3_8812					BIT27		// When GTIMER3 expires, this bit is set to 1
+#define	IMR_TXBCN0ERR_8812				BIT26		// Transmit Beacon0 Error
+#define	IMR_TXBCN0OK_8812					BIT25		// Transmit Beacon0 OK
+#define	IMR_TSF_BIT32_TOGGLE_8812		BIT24		// TSF Timer BIT32 toggle indication interrupt
+#define	IMR_BCNDMAINT0_8812				BIT20		// Beacon DMA Interrupt 0
+#define	IMR_BCNDERR0_8812					BIT16		// Beacon Queue DMA OK0
 #define	IMR_HSISR_IND_ON_INT_8812		BIT15		// HSISR Indicator (HSIMR & HSISR is true, this bit is set to 1)
-#define	IMR_BCNDMAINT_E_8812				BIT14		// Beacon DMA Interrupt Extension for Win7			
+#define	IMR_BCNDMAINT_E_8812				BIT14		// Beacon DMA Interrupt Extension for Win7
 #define	IMR_ATIMEND_8812					BIT12		// CTWidnow End or ATIM Window End
-#define	IMR_C2HCMD_8812					BIT10		// CPU to Host Command INT Status, Write 1 clear	
-#define	IMR_CPWM2_8812					BIT9			// CPU power Mode exchange INT Status, Write 1 clear	
-#define	IMR_CPWM_8812						BIT8			// CPU power Mode exchange INT Status, Write 1 clear	
-#define	IMR_HIGHDOK_8812					BIT7			// High Queue DMA OK	
-#define	IMR_MGNTDOK_8812					BIT6			// Management Queue DMA OK	
-#define	IMR_BKDOK_8812					BIT5			// AC_BK DMA OK		
-#define	IMR_BEDOK_8812					BIT4			// AC_BE DMA OK	
-#define	IMR_VIDOK_8812					BIT3			// AC_VI DMA OK		
-#define	IMR_VODOK_8812					BIT2			// AC_VO DMA OK	
-#define	IMR_RDU_8812						BIT1			// Rx Descriptor Unavailable	
+#define	IMR_C2HCMD_8812					BIT10		// CPU to Host Command INT Status, Write 1 clear
+#define	IMR_CPWM2_8812					BIT9			// CPU power Mode exchange INT Status, Write 1 clear
+#define	IMR_CPWM_8812						BIT8			// CPU power Mode exchange INT Status, Write 1 clear
+#define	IMR_HIGHDOK_8812					BIT7			// High Queue DMA OK
+#define	IMR_MGNTDOK_8812					BIT6			// Management Queue DMA OK
+#define	IMR_BKDOK_8812					BIT5			// AC_BK DMA OK
+#define	IMR_BEDOK_8812					BIT4			// AC_BE DMA OK
+#define	IMR_VIDOK_8812					BIT3			// AC_VI DMA OK
+#define	IMR_VODOK_8812					BIT2			// AC_VO DMA OK
+#define	IMR_RDU_8812						BIT1			// Rx Descriptor Unavailable
 #define	IMR_ROK_8812						BIT0			// Receive DMA OK
 
 // IMR DW1(0x00B4-00B7) Bit 0-31
@@ -208,8 +226,18 @@
 #define	IMR_RXFOVW_8812					BIT8			// Receive FIFO Overflow
 
 
+#ifdef CONFIG_PCI_HCI
+//#define IMR_RX_MASK		(IMR_ROK_8812|IMR_RDU_8812|IMR_RXFOVW_8812)
+#define IMR_TX_MASK			(IMR_VODOK_8812|IMR_VIDOK_8812|IMR_BEDOK_8812|IMR_BKDOK_8812|IMR_MGNTDOK_8812|IMR_HIGHDOK_8812)
+
+#define RT_BCN_INT_MASKS	(IMR_BCNDMAINT0_8812 | IMR_TXBCN0OK_8812 | IMR_TXBCN0ERR_8812 | IMR_BCNDERR0_8812)
+
+#define RT_AC_INT_MASKS	(IMR_VIDOK_8812 | IMR_VODOK_8812 | IMR_BEDOK_8812|IMR_BKDOK_8812)
+#endif
+
+
 //============================================================================
-//       Regsiter Bit and Content definition 
+//       Regsiter Bit and Content definition
 //============================================================================
 
 //2 ACMHWCTRL 0x05C0
@@ -221,5 +249,16 @@
 #define	AcmHw_ViqStatus_8812			BIT(6)
 #define	AcmHw_BeqStatus_8812			BIT(7)
 
-#endif //__RTL8188E_SPEC_H__
+//========================================================
+// General definitions
+//========================================================
+
+#define MACID_NUM_8812A 128
+#define CAM_ENTRY_NUM_8812A 64
+
+#endif /* __RTL8812A_SPEC_H__ */
+
+#ifdef CONFIG_RTL8821A
+#include "rtl8821a_spec.h"
+#endif /* CONFIG_RTL8821A */
 

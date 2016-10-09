@@ -31,11 +31,7 @@ s32 rtl8723as_init_recv_priv(PADAPTER padapter);
 void rtl8723as_free_recv_priv(PADAPTER padapter);
 #endif
 
-void rtl8192c_query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy_stat);
-void rtl8192c_process_phy_info(PADAPTER padapter, void *prframe);
-#ifdef CONFIG_USB_HCI
-void update_recvframe_attrib(union recv_frame *precvframe, struct recv_stat *prxstat);
-void update_recvframe_phyinfo(union recv_frame *precvframe, struct phy_stat *pphy_info);
-#endif
-#endif
+void rtl8723a_query_rx_desc_status(union recv_frame *precvframe, struct recv_stat *prxstat);
+
+#endif /* __RTL8723A_RECV_H__ */
 

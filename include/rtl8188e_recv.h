@@ -24,8 +24,7 @@
 
 #define TX_RPT1_PKT_LEN 8
 
-typedef struct rxreport_8188e
-{
+typedef struct rxreport_8188e {
 	//Offset 0
 	u32 pktlen:14;
 	u32 crc32:1;
@@ -94,7 +93,7 @@ typedef struct rxreport_8188e
 	u32 pattern9match:1;
 	u32 patternamatch:1;
 	u32 patternbmatch:1;
-	u32 patterncmatch:1;	
+	u32 patterncmatch:1;
 	u32 rsvd1613:19;
 	*/
 	u32 rsvd16;
@@ -109,7 +108,7 @@ typedef struct rxreport_8188e
 } RXREPORT, *PRXREPORT;
 
 
-#ifdef CONFIG_SDIO_HCI
+#if defined (CONFIG_SDIO_HCI)||defined(CONFIG_GSPI_HCI)
 s32 rtl8188es_init_recv_priv(PADAPTER padapter);
 void rtl8188es_free_recv_priv(PADAPTER padapter);
 void rtl8188es_recv_hdl(PADAPTER padapter, struct recv_buf *precvbuf);
@@ -122,7 +121,6 @@ s32 rtl8188eu_init_recv_priv(PADAPTER padapter);
 void rtl8188eu_free_recv_priv(PADAPTER padapter);
 void rtl8188eu_recv_hdl(PADAPTER padapter, struct recv_buf *precvbuf);
 void rtl8188eu_recv_tasklet(void *priv);
-
 #endif
 
 #ifdef CONFIG_PCI_HCI
@@ -130,10 +128,7 @@ s32 rtl8188ee_init_recv_priv(PADAPTER padapter);
 void rtl8188ee_free_recv_priv(PADAPTER padapter);
 #endif
 
-void rtl8188e_query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy_stat);
-void rtl8188e_process_phy_info(PADAPTER padapter, void *prframe);
-void update_recvframe_phyinfo_88e(union recv_frame	*precvframe,struct phy_stat *pphy_status);
-void update_recvframe_attrib_88e(	union recv_frame *precvframe,	struct recv_stat *prxstat);
+void rtl8188e_query_rx_desc_status(union recv_frame *precvframe, struct recv_stat *prxstat);
 
-#endif
+#endif /* __RTL8188E_RECV_H__ */
 

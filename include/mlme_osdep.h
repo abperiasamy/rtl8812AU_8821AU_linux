@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -32,8 +32,6 @@ void rtw_os_indicate_scan_done( _adapter *padapter, bool aborted);
 extern void rtw_report_sec_ie(_adapter *adapter,u8 authmode,u8 *sec_ie);
 
 void rtw_reset_securitypriv( _adapter *adapter );
-
-u8 rtw_handle_tkip_countermeasure(_adapter* padapter);
 
 #endif	//_MLME_OSDEP_H_
 

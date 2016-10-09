@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -21,13 +21,7 @@
 #define __RTL8192C_HAL_H__
 
 //#include "hal_com.h"
-
-#if 1
 #include "hal_data.h"
-#else
-#include "../hal/OUTSRC/odm_precomp.h"
-#endif
-
 
 #include "drv_types.h"
 #include "rtl8192c_spec.h"
@@ -45,186 +39,186 @@
 
 
 #ifdef CONFIG_PCI_HCI
-	
-	#define RTL819X_DEFAULT_RF_TYPE			RF_2T2R
-	//#define RTL819X_DEFAULT_RF_TYPE			RF_1T2R
-	#define RTL819X_TOTAL_RF_PATH				2
 
-	//2TODO:  The following need to check!!
-	#define RTL8192C_FW_TSMC_IMG				"rtl8192CE\\rtl8192cfwT.bin"
-	#define RTL8192C_FW_UMC_IMG				"rtl8192CE\\rtl8192cfwU.bin"
-	#define RTL8192C_FW_UMC_B_IMG				"rtl8192CE\\rtl8192cfwU_B.bin"
+#define RTL819X_DEFAULT_RF_TYPE			RF_2T2R
+//#define RTL819X_DEFAULT_RF_TYPE			RF_1T2R
+#define RTL819X_TOTAL_RF_PATH				2
 
-	#define RTL8188C_PHY_REG					"rtl8192CE\\PHY_REG_1T.txt"
-	#define RTL8188C_PHY_RADIO_A				"rtl8192CE\\radio_a_1T.txt"
-	#define RTL8188C_PHY_RADIO_B				"rtl8192CE\\radio_b_1T.txt"
-	#define RTL8188C_AGC_TAB					"rtl8192CE\\AGC_TAB_1T.txt"
-	#define RTL8188C_PHY_MACREG				"rtl8192CE\\MACREG_1T.txt"
+//2TODO:  The following need to check!!
+#define RTL8192C_FW_TSMC_IMG				"rtl8192CE\\rtl8192cfwT.bin"
+#define RTL8192C_FW_UMC_IMG				"rtl8192CE\\rtl8192cfwU.bin"
+#define RTL8192C_FW_UMC_B_IMG				"rtl8192CE\\rtl8192cfwU_B.bin"
 
-	#define RTL8192C_PHY_REG					"rtl8192CE\\PHY_REG_2T.txt"
-	#define RTL8192C_PHY_RADIO_A				"rtl8192CE\\radio_a_2T.txt"
-	#define RTL8192C_PHY_RADIO_B				"rtl8192CE\\radio_b_2T.txt"
-	#define RTL8192C_AGC_TAB					"rtl8192CE\\AGC_TAB_2T.txt"
-	#define RTL8192C_PHY_MACREG				"rtl8192CE\\MACREG_2T.txt"
+#define RTL8188C_PHY_REG					"rtl8192CE\\PHY_REG_1T.txt"
+#define RTL8188C_PHY_RADIO_A				"rtl8192CE\\radio_a_1T.txt"
+#define RTL8188C_PHY_RADIO_B				"rtl8192CE\\radio_b_1T.txt"
+#define RTL8188C_AGC_TAB					"rtl8192CE\\AGC_TAB_1T.txt"
+#define RTL8188C_PHY_MACREG				"rtl8192CE\\MACREG_1T.txt"
 
-	#define RTL819X_PHY_MACPHY_REG			"rtl8192CE\\MACPHY_reg.txt"
-	#define RTL819X_PHY_MACPHY_REG_PG		"rtl8192CE\\MACPHY_reg_PG.txt"
-	#define RTL819X_PHY_MACREG				"rtl8192CE\\MAC_REG.txt"
-	#define RTL819X_PHY_REG					"rtl8192CE\\PHY_REG.txt"
-	#define RTL819X_PHY_REG_1T2R				"rtl8192CE\\PHY_REG_1T2R.txt"
-	#define RTL819X_PHY_REG_to1T1R				"rtl8192CE\\phy_to1T1R_a.txt"
-	#define RTL819X_PHY_REG_to1T2R				"rtl8192CE\\phy_to1T2R.txt"
-	#define RTL819X_PHY_REG_to2T2R				"rtl8192CE\\phy_to2T2R.txt"
-	#define RTL819X_PHY_REG_PG					"rtl8192CE\\PHY_REG_PG.txt"
-	#define RTL819X_AGC_TAB					"rtl8192CE\\AGC_TAB.txt"
-	#define RTL819X_PHY_RADIO_A				"rtl8192CE\\radio_a.txt"
-	#define RTL819X_PHY_RADIO_A_1T			"rtl8192CE\\radio_a_1t.txt"
-	#define RTL819X_PHY_RADIO_A_2T			"rtl8192CE\\radio_a_2t.txt"
-	#define RTL819X_PHY_RADIO_B				"rtl8192CE\\radio_b.txt"
-	#define RTL819X_PHY_RADIO_B_GM			"rtl8192CE\\radio_b_gm.txt"
-	#define RTL819X_PHY_RADIO_C				"rtl8192CE\\radio_c.txt"
-	#define RTL819X_PHY_RADIO_D				"rtl8192CE\\radio_d.txt"
-	#define RTL819X_EEPROM_MAP				"rtl8192CE\\8192ce.map"
-	#define RTL819X_EFUSE_MAP					"rtl8192CE\\8192ce.map"
+#define RTL8192C_PHY_REG					"rtl8192CE\\PHY_REG_2T.txt"
+#define RTL8192C_PHY_RADIO_A				"rtl8192CE\\radio_a_2T.txt"
+#define RTL8192C_PHY_RADIO_B				"rtl8192CE\\radio_b_2T.txt"
+#define RTL8192C_AGC_TAB					"rtl8192CE\\AGC_TAB_2T.txt"
+#define RTL8192C_PHY_MACREG				"rtl8192CE\\MACREG_2T.txt"
+
+#define RTL819X_PHY_MACPHY_REG			"rtl8192CE\\MACPHY_reg.txt"
+#define RTL819X_PHY_MACPHY_REG_PG		"rtl8192CE\\MACPHY_reg_PG.txt"
+#define RTL819X_PHY_MACREG				"rtl8192CE\\MAC_REG.txt"
+#define RTL819X_PHY_REG					"rtl8192CE\\PHY_REG.txt"
+#define RTL819X_PHY_REG_1T2R				"rtl8192CE\\PHY_REG_1T2R.txt"
+#define RTL819X_PHY_REG_to1T1R				"rtl8192CE\\phy_to1T1R_a.txt"
+#define RTL819X_PHY_REG_to1T2R				"rtl8192CE\\phy_to1T2R.txt"
+#define RTL819X_PHY_REG_to2T2R				"rtl8192CE\\phy_to2T2R.txt"
+#define RTL819X_PHY_REG_PG					"rtl8192CE\\PHY_REG_PG.txt"
+#define RTL819X_AGC_TAB					"rtl8192CE\\AGC_TAB.txt"
+#define RTL819X_PHY_RADIO_A				"rtl8192CE\\radio_a.txt"
+#define RTL819X_PHY_RADIO_A_1T			"rtl8192CE\\radio_a_1t.txt"
+#define RTL819X_PHY_RADIO_A_2T			"rtl8192CE\\radio_a_2t.txt"
+#define RTL819X_PHY_RADIO_B				"rtl8192CE\\radio_b.txt"
+#define RTL819X_PHY_RADIO_B_GM			"rtl8192CE\\radio_b_gm.txt"
+#define RTL819X_PHY_RADIO_C				"rtl8192CE\\radio_c.txt"
+#define RTL819X_PHY_RADIO_D				"rtl8192CE\\radio_d.txt"
+#define RTL819X_EEPROM_MAP				"rtl8192CE\\8192ce.map"
+#define RTL819X_EFUSE_MAP					"rtl8192CE\\8192ce.map"
 
 //---------------------------------------------------------------------
 //		RTL8723E From file
 //---------------------------------------------------------------------
 
-	// The file name "_2T" is for 92CE, "_1T"  is for 88CE. Modified by tynli. 2009.11.24.
-	#define Rtl819XFwTSMCImageArray			Rtl8192CEFwTSMCImgArray
-	#define Rtl819XFwUMCACutImageArray			Rtl8192CEFwUMCACutImgArray
-	#define Rtl819XFwUMCBCutImageArray			Rtl8192CEFwUMCBCutImgArray
-	
-//	#define Rtl8723FwUMCImageArray				Rtl8192CEFwUMC8723ImgArray
-	#define Rtl819XMAC_Array					Rtl8192CEMAC_2T_Array
-	#define Rtl819XAGCTAB_2TArray				Rtl8192CEAGCTAB_2TArray
-	#define Rtl819XAGCTAB_1TArray				Rtl8192CEAGCTAB_1TArray
-	#define Rtl819XPHY_REG_2TArray				Rtl8192CEPHY_REG_2TArray
-	#define Rtl819XPHY_REG_1TArray				Rtl8192CEPHY_REG_1TArray
-	#define Rtl819XRadioA_2TArray				Rtl8192CERadioA_2TArray
-	#define Rtl819XRadioA_1TArray				Rtl8192CERadioA_1TArray
-	#define Rtl819XRadioB_2TArray				Rtl8192CERadioB_2TArray
-	#define Rtl819XRadioB_1TArray				Rtl8192CERadioB_1TArray
-	#define Rtl819XPHY_REG_Array_PG 			Rtl8192CEPHY_REG_Array_PG
-	#define Rtl819XPHY_REG_Array_MP 			Rtl8192CEPHY_REG_Array_MP
+// The file name "_2T" is for 92CE, "_1T"  is for 88CE. Modified by tynli. 2009.11.24.
+#define Rtl819XFwTSMCImageArray			Rtl8192CEFwTSMCImgArray
+#define Rtl819XFwUMCACutImageArray			Rtl8192CEFwUMCACutImgArray
+#define Rtl819XFwUMCBCutImageArray			Rtl8192CEFwUMCBCutImgArray
 
-	#define PHY_REG_2TArrayLength 				Rtl8192CEPHY_REG_2TArrayLength 
-	#define PHY_REG_1TArrayLength 				Rtl8192CEPHY_REG_1TArrayLength 
-	#define PHY_ChangeTo_1T1RArrayLength 		Rtl8192CEPHY_ChangeTo_1T1RArrayLength 
-	#define PHY_ChangeTo_1T2RArrayLength  		Rtl8192CEPHY_ChangeTo_1T2RArrayLength 
-	#define PHY_ChangeTo_2T2RArrayLength  		Rtl8192CEPHY_ChangeTo_2T2RArrayLength 
-	#define PHY_REG_Array_PGLength  			Rtl8192CEPHY_REG_Array_PGLength 
-	//#define PHY_REG_Array_PG_mCardLength 		Rtl8192CEPHY_REG_Array_PG_mCardLength 
-	#define PHY_REG_Array_MPLength 			Rtl8192CEPHY_REG_Array_MPLength 
-	#define PHY_REG_Array_MPLength 			Rtl8192CEPHY_REG_Array_MPLength 
-	//#define PHY_REG_1T_mCardArrayLength 		Rtl8192CEPHY_REG_1T_mCardArrayLength 
-	//#define PHY_REG_2T_mCardArrayLength  		Rtl8192CEPHY_REG_2T_mCardArrayLength 
-	//#define PHY_REG_Array_PG_HPLength 			Rtl8192CEPHY_REG_Array_PG_HPLength 
-	#define RadioA_2TArrayLength  				Rtl8192CERadioA_2TArrayLength 
-	#define RadioB_2TArrayLength 				Rtl8192CERadioB_2TArrayLength 
-	#define RadioA_1TArrayLength  				Rtl8192CERadioA_1TArrayLength 
-	#define RadioB_1TArrayLength 				Rtl8192CERadioB_1TArrayLength 
-	//#define RadioA_1T_mCardArrayLength 			Rtl8192CERadioA_1T_mCardArrayLength 
-	//#define RadioB_1T_mCardArrayLength 			Rtl8192CERadioB_1T_mCardArrayLength 
-	//#define RadioA_1T_HPArrayLength 				Rtl8192CERadioA_1T_HPArrayLength 
-	#define RadioB_GM_ArrayLength 				Rtl8192CERadioB_GM_ArrayLength 
-	#define MAC_2T_ArrayLength					Rtl8192CEMAC_2T_ArrayLength 
-	#define MACPHY_Array_PGLength 				Rtl8192CEMACPHY_Array_PGLength 
-	#define AGCTAB_2TArrayLength 				Rtl8192CEAGCTAB_2TArrayLength 
-	#define AGCTAB_1TArrayLength 				Rtl8192CEAGCTAB_1TArrayLength 
-	//#define AGCTAB_1T_HPArrayLength 			Rtl8192CEAGCTAB_1T_HPArrayLength 	
+//	#define Rtl8723FwUMCImageArray				Rtl8192CEFwUMC8723ImgArray
+#define Rtl819XMAC_Array					Rtl8192CEMAC_2T_Array
+#define Rtl819XAGCTAB_2TArray				Rtl8192CEAGCTAB_2TArray
+#define Rtl819XAGCTAB_1TArray				Rtl8192CEAGCTAB_1TArray
+#define Rtl819XPHY_REG_2TArray				Rtl8192CEPHY_REG_2TArray
+#define Rtl819XPHY_REG_1TArray				Rtl8192CEPHY_REG_1TArray
+#define Rtl819XRadioA_2TArray				Rtl8192CERadioA_2TArray
+#define Rtl819XRadioA_1TArray				Rtl8192CERadioA_1TArray
+#define Rtl819XRadioB_2TArray				Rtl8192CERadioB_2TArray
+#define Rtl819XRadioB_1TArray				Rtl8192CERadioB_1TArray
+#define Rtl819XPHY_REG_Array_PG 			Rtl8192CEPHY_REG_Array_PG
+#define Rtl819XPHY_REG_Array_MP 			Rtl8192CEPHY_REG_Array_MP
+
+#define PHY_REG_2TArrayLength 				Rtl8192CEPHY_REG_2TArrayLength
+#define PHY_REG_1TArrayLength 				Rtl8192CEPHY_REG_1TArrayLength
+#define PHY_ChangeTo_1T1RArrayLength 		Rtl8192CEPHY_ChangeTo_1T1RArrayLength
+#define PHY_ChangeTo_1T2RArrayLength  		Rtl8192CEPHY_ChangeTo_1T2RArrayLength
+#define PHY_ChangeTo_2T2RArrayLength  		Rtl8192CEPHY_ChangeTo_2T2RArrayLength
+#define PHY_REG_Array_PGLength  			Rtl8192CEPHY_REG_Array_PGLength
+//#define PHY_REG_Array_PG_mCardLength 		Rtl8192CEPHY_REG_Array_PG_mCardLength
+#define PHY_REG_Array_MPLength 			Rtl8192CEPHY_REG_Array_MPLength
+#define PHY_REG_Array_MPLength 			Rtl8192CEPHY_REG_Array_MPLength
+//#define PHY_REG_1T_mCardArrayLength 		Rtl8192CEPHY_REG_1T_mCardArrayLength
+//#define PHY_REG_2T_mCardArrayLength  		Rtl8192CEPHY_REG_2T_mCardArrayLength
+//#define PHY_REG_Array_PG_HPLength 			Rtl8192CEPHY_REG_Array_PG_HPLength
+#define RadioA_2TArrayLength  				Rtl8192CERadioA_2TArrayLength
+#define RadioB_2TArrayLength 				Rtl8192CERadioB_2TArrayLength
+#define RadioA_1TArrayLength  				Rtl8192CERadioA_1TArrayLength
+#define RadioB_1TArrayLength 				Rtl8192CERadioB_1TArrayLength
+//#define RadioA_1T_mCardArrayLength 			Rtl8192CERadioA_1T_mCardArrayLength
+//#define RadioB_1T_mCardArrayLength 			Rtl8192CERadioB_1T_mCardArrayLength
+//#define RadioA_1T_HPArrayLength 				Rtl8192CERadioA_1T_HPArrayLength
+#define RadioB_GM_ArrayLength 				Rtl8192CERadioB_GM_ArrayLength
+#define MAC_2T_ArrayLength					Rtl8192CEMAC_2T_ArrayLength
+#define MACPHY_Array_PGLength 				Rtl8192CEMACPHY_Array_PGLength
+#define AGCTAB_2TArrayLength 				Rtl8192CEAGCTAB_2TArrayLength
+#define AGCTAB_1TArrayLength 				Rtl8192CEAGCTAB_1TArrayLength
+//#define AGCTAB_1T_HPArrayLength 			Rtl8192CEAGCTAB_1T_HPArrayLength
 
 #elif defined(CONFIG_USB_HCI)
 
 
-	//2TODO: We should define 8192S firmware related macro settings here!!
-	#define RTL819X_DEFAULT_RF_TYPE			RF_1T2R
-	#define RTL819X_TOTAL_RF_PATH				2
+//2TODO: We should define 8192S firmware related macro settings here!!
+#define RTL819X_DEFAULT_RF_TYPE			RF_1T2R
+#define RTL819X_TOTAL_RF_PATH				2
 
-	//TODO:  The following need to check!!
-	#define RTL8192C_FW_TSMC_IMG				"rtl8192CU\\rtl8192cfwT.bin"
-	#define RTL8192C_FW_UMC_IMG				"rtl8192CU\\rtl8192cfwU.bin"
-	#define RTL8192C_FW_UMC_B_IMG				"rtl8192CU\\rtl8192cfwU_B.bin"
+//TODO:  The following need to check!!
+#define RTL8192C_FW_TSMC_IMG				"rtl8192CU\\rtl8192cfwT.bin"
+#define RTL8192C_FW_UMC_IMG				"rtl8192CU\\rtl8192cfwU.bin"
+#define RTL8192C_FW_UMC_B_IMG				"rtl8192CU\\rtl8192cfwU_B.bin"
 
-	//#define RTL819X_FW_BOOT_IMG   				"rtl8192CU\\boot.img"
-	//#define RTL819X_FW_MAIN_IMG				"rtl8192CU\\main.img"
-	//#define RTL819X_FW_DATA_IMG				"rtl8192CU\\data.img"
+//#define RTL819X_FW_BOOT_IMG   				"rtl8192CU\\boot.img"
+//#define RTL819X_FW_MAIN_IMG				"rtl8192CU\\main.img"
+//#define RTL819X_FW_DATA_IMG				"rtl8192CU\\data.img"
 
-	#define RTL8188C_PHY_REG					"rtl8188CU\\PHY_REG.txt"
-	#define RTL8188C_PHY_RADIO_A				"rtl8188CU\\radio_a.txt"
-	#define RTL8188C_PHY_RADIO_B				"rtl8188CU\\radio_b.txt"
-	#define RTL8188C_PHY_RADIO_A_mCard		"rtl8192CU\\radio_a_1T_mCard.txt"
-	#define RTL8188C_PHY_RADIO_B_mCard		"rtl8192CU\\radio_b_1T_mCard.txt" 
-	#define RTL8188C_PHY_RADIO_A_HP			"rtl8192CU\\radio_a_1T_HP.txt"
-	#define RTL8188C_AGC_TAB					"rtl8188CU\\AGC_TAB.txt"
-	#define RTL8188C_PHY_MACREG				"rtl8188CU\\MACREG.txt"
+#define RTL8188C_PHY_REG					"rtl8188CU\\PHY_REG.txt"
+#define RTL8188C_PHY_RADIO_A				"rtl8188CU\\radio_a.txt"
+#define RTL8188C_PHY_RADIO_B				"rtl8188CU\\radio_b.txt"
+#define RTL8188C_PHY_RADIO_A_mCard		"rtl8192CU\\radio_a_1T_mCard.txt"
+#define RTL8188C_PHY_RADIO_B_mCard		"rtl8192CU\\radio_b_1T_mCard.txt"
+#define RTL8188C_PHY_RADIO_A_HP			"rtl8192CU\\radio_a_1T_HP.txt"
+#define RTL8188C_AGC_TAB					"rtl8188CU\\AGC_TAB.txt"
+#define RTL8188C_PHY_MACREG				"rtl8188CU\\MACREG.txt"
 
-	#define RTL8192C_PHY_REG					"rtl8192CU\\PHY_REG.txt"
-	#define RTL8192C_PHY_RADIO_A				"rtl8192CU\\radio_a.txt"
-	#define RTL8192C_PHY_RADIO_B				"rtl8192CU\\radio_b.txt"
-	#define RTL8192C_AGC_TAB					"rtl8192CU\\AGC_TAB.txt"
-	#define RTL8192C_PHY_MACREG				"rtl8192CU\\MACREG.txt"
+#define RTL8192C_PHY_REG					"rtl8192CU\\PHY_REG.txt"
+#define RTL8192C_PHY_RADIO_A				"rtl8192CU\\radio_a.txt"
+#define RTL8192C_PHY_RADIO_B				"rtl8192CU\\radio_b.txt"
+#define RTL8192C_AGC_TAB					"rtl8192CU\\AGC_TAB.txt"
+#define RTL8192C_PHY_MACREG				"rtl8192CU\\MACREG.txt"
 
-	#define RTL819X_PHY_REG_PG					"rtl8192CU\\PHY_REG_PG.txt"
+#define RTL819X_PHY_REG_PG					"rtl8192CU\\PHY_REG_PG.txt"
 
 //---------------------------------------------------------------------
 //		RTL8723U From file
 //---------------------------------------------------------------------
 
-	// The file name "_2T" is for 92CU, "_1T"  is for 88CU. Modified by tynli. 2009.11.24.
-	#define Rtl819XFwImageArray					Rtl8192CUFwTSMCImgArray
-	#define Rtl819XFwTSMCImageArray			Rtl8192CUFwTSMCImgArray
-	#define Rtl819XFwUMCACutImageArray			Rtl8192CUFwUMCACutImgArray
-	#define Rtl819XFwUMCBCutImageArray			Rtl8192CUFwUMCBCutImgArray
+// The file name "_2T" is for 92CU, "_1T"  is for 88CU. Modified by tynli. 2009.11.24.
+#define Rtl819XFwImageArray					Rtl8192CUFwTSMCImgArray
+#define Rtl819XFwTSMCImageArray			Rtl8192CUFwTSMCImgArray
+#define Rtl819XFwUMCACutImageArray			Rtl8192CUFwUMCACutImgArray
+#define Rtl819XFwUMCBCutImageArray			Rtl8192CUFwUMCBCutImgArray
 
-	#define Rtl819XMAC_Array					Rtl8192CUMAC_2T_Array
-	#define Rtl819XAGCTAB_2TArray				Rtl8192CUAGCTAB_2TArray
-	#define Rtl819XAGCTAB_1TArray				Rtl8192CUAGCTAB_1TArray
-	#define Rtl819XAGCTAB_1T_HPArray			Rtl8192CUAGCTAB_1T_HPArray
-	#define Rtl819XPHY_REG_2TArray				Rtl8192CUPHY_REG_2TArray
-	#define Rtl819XPHY_REG_1TArray				Rtl8192CUPHY_REG_1TArray
-	#define Rtl819XPHY_REG_1T_mCardArray		Rtl8192CUPHY_REG_1T_mCardArray 					
-	#define Rtl819XPHY_REG_2T_mCardArray		Rtl8192CUPHY_REG_2T_mCardArray	
-	#define Rtl819XPHY_REG_1T_HPArray			Rtl8192CUPHY_REG_1T_HPArray
-	#define Rtl819XRadioA_2TArray				Rtl8192CURadioA_2TArray
-	#define Rtl819XRadioA_1TArray				Rtl8192CURadioA_1TArray
-	#define Rtl819XRadioA_1T_mCardArray			Rtl8192CURadioA_1T_mCardArray			
-	#define Rtl819XRadioB_2TArray				Rtl8192CURadioB_2TArray
-	#define Rtl819XRadioB_1TArray				Rtl8192CURadioB_1TArray	
-	#define Rtl819XRadioB_1T_mCardArray			Rtl8192CURadioB_1T_mCardArray
-	#define Rtl819XRadioA_1T_HPArray			Rtl8192CURadioA_1T_HPArray	
-	#define Rtl819XPHY_REG_Array_PG 			Rtl8192CUPHY_REG_Array_PG
-	#define Rtl819XPHY_REG_Array_PG_mCard 		Rtl8192CUPHY_REG_Array_PG_mCard			
-	#define Rtl819XPHY_REG_Array_PG_HP			Rtl8192CUPHY_REG_Array_PG_HP
-	#define Rtl819XPHY_REG_Array_MP 			Rtl8192CUPHY_REG_Array_MP
+#define Rtl819XMAC_Array					Rtl8192CUMAC_2T_Array
+#define Rtl819XAGCTAB_2TArray				Rtl8192CUAGCTAB_2TArray
+#define Rtl819XAGCTAB_1TArray				Rtl8192CUAGCTAB_1TArray
+#define Rtl819XAGCTAB_1T_HPArray			Rtl8192CUAGCTAB_1T_HPArray
+#define Rtl819XPHY_REG_2TArray				Rtl8192CUPHY_REG_2TArray
+#define Rtl819XPHY_REG_1TArray				Rtl8192CUPHY_REG_1TArray
+#define Rtl819XPHY_REG_1T_mCardArray		Rtl8192CUPHY_REG_1T_mCardArray
+#define Rtl819XPHY_REG_2T_mCardArray		Rtl8192CUPHY_REG_2T_mCardArray
+#define Rtl819XPHY_REG_1T_HPArray			Rtl8192CUPHY_REG_1T_HPArray
+#define Rtl819XRadioA_2TArray				Rtl8192CURadioA_2TArray
+#define Rtl819XRadioA_1TArray				Rtl8192CURadioA_1TArray
+#define Rtl819XRadioA_1T_mCardArray			Rtl8192CURadioA_1T_mCardArray
+#define Rtl819XRadioB_2TArray				Rtl8192CURadioB_2TArray
+#define Rtl819XRadioB_1TArray				Rtl8192CURadioB_1TArray
+#define Rtl819XRadioB_1T_mCardArray			Rtl8192CURadioB_1T_mCardArray
+#define Rtl819XRadioA_1T_HPArray			Rtl8192CURadioA_1T_HPArray
+#define Rtl819XPHY_REG_Array_PG 			Rtl8192CUPHY_REG_Array_PG
+#define Rtl819XPHY_REG_Array_PG_mCard 		Rtl8192CUPHY_REG_Array_PG_mCard
+#define Rtl819XPHY_REG_Array_PG_HP			Rtl8192CUPHY_REG_Array_PG_HP
+#define Rtl819XPHY_REG_Array_MP 			Rtl8192CUPHY_REG_Array_MP
 
-	#define PHY_REG_2TArrayLength 				Rtl8192CUPHY_REG_2TArrayLength 
-	#define PHY_REG_1TArrayLength 				Rtl8192CUPHY_REG_1TArrayLength 
-	#define PHY_ChangeTo_1T1RArrayLength 		Rtl8192CUPHY_ChangeTo_1T1RArrayLength 
-	#define PHY_ChangeTo_1T2RArrayLength  		Rtl8192CUPHY_ChangeTo_1T2RArrayLength 
-	#define PHY_ChangeTo_2T2RArrayLength  		Rtl8192CUPHY_ChangeTo_2T2RArrayLength 
-	#define PHY_REG_Array_PGLength  			Rtl8192CUPHY_REG_Array_PGLength 
-	#define PHY_REG_Array_PG_mCardLength 		Rtl8192CUPHY_REG_Array_PG_mCardLength 
-	#define PHY_REG_Array_MPLength 			Rtl8192CUPHY_REG_Array_MPLength 
-	#define PHY_REG_Array_MPLength 			Rtl8192CUPHY_REG_Array_MPLength 
-	#define PHY_REG_1T_mCardArrayLength 		Rtl8192CUPHY_REG_1T_mCardArrayLength 
-	#define PHY_REG_2T_mCardArrayLength  		Rtl8192CUPHY_REG_2T_mCardArrayLength 
-	#define PHY_REG_Array_PG_HPLength 			Rtl8192CUPHY_REG_Array_PG_HPLength 
-	#define RadioA_2TArrayLength  				Rtl8192CURadioA_2TArrayLength 
-	#define RadioB_2TArrayLength 				Rtl8192CURadioB_2TArrayLength 
-	#define RadioA_1TArrayLength  				Rtl8192CURadioA_1TArrayLength 
-	#define RadioB_1TArrayLength 				Rtl8192CURadioB_1TArrayLength 
-	#define RadioA_1T_mCardArrayLength 			Rtl8192CURadioA_1T_mCardArrayLength 
-	#define RadioB_1T_mCardArrayLength 			Rtl8192CURadioB_1T_mCardArrayLength 
-	#define RadioA_1T_HPArrayLength 				Rtl8192CURadioA_1T_HPArrayLength 
-	#define RadioB_GM_ArrayLength 				Rtl8192CURadioB_GM_ArrayLength 
-	#define MAC_2T_ArrayLength					Rtl8192CUMAC_2T_ArrayLength 
-	#define MACPHY_Array_PGLength 				Rtl8192CUMACPHY_Array_PGLength 
-	#define AGCTAB_2TArrayLength 				Rtl8192CUAGCTAB_2TArrayLength 
-	#define AGCTAB_1TArrayLength 				Rtl8192CUAGCTAB_1TArrayLength 
-	#define AGCTAB_1T_HPArrayLength 			Rtl8192CUAGCTAB_1T_HPArrayLength 
-	#define PHY_REG_1T_HPArrayLength			Rtl8192CUPHY_REG_1T_HPArrayLength
+#define PHY_REG_2TArrayLength 				Rtl8192CUPHY_REG_2TArrayLength
+#define PHY_REG_1TArrayLength 				Rtl8192CUPHY_REG_1TArrayLength
+#define PHY_ChangeTo_1T1RArrayLength 		Rtl8192CUPHY_ChangeTo_1T1RArrayLength
+#define PHY_ChangeTo_1T2RArrayLength  		Rtl8192CUPHY_ChangeTo_1T2RArrayLength
+#define PHY_ChangeTo_2T2RArrayLength  		Rtl8192CUPHY_ChangeTo_2T2RArrayLength
+#define PHY_REG_Array_PGLength  			Rtl8192CUPHY_REG_Array_PGLength
+#define PHY_REG_Array_PG_mCardLength 		Rtl8192CUPHY_REG_Array_PG_mCardLength
+#define PHY_REG_Array_MPLength 			Rtl8192CUPHY_REG_Array_MPLength
+#define PHY_REG_Array_MPLength 			Rtl8192CUPHY_REG_Array_MPLength
+#define PHY_REG_1T_mCardArrayLength 		Rtl8192CUPHY_REG_1T_mCardArrayLength
+#define PHY_REG_2T_mCardArrayLength  		Rtl8192CUPHY_REG_2T_mCardArrayLength
+#define PHY_REG_Array_PG_HPLength 			Rtl8192CUPHY_REG_Array_PG_HPLength
+#define RadioA_2TArrayLength  				Rtl8192CURadioA_2TArrayLength
+#define RadioB_2TArrayLength 				Rtl8192CURadioB_2TArrayLength
+#define RadioA_1TArrayLength  				Rtl8192CURadioA_1TArrayLength
+#define RadioB_1TArrayLength 				Rtl8192CURadioB_1TArrayLength
+#define RadioA_1T_mCardArrayLength 			Rtl8192CURadioA_1T_mCardArrayLength
+#define RadioB_1T_mCardArrayLength 			Rtl8192CURadioB_1T_mCardArrayLength
+#define RadioA_1T_HPArrayLength 				Rtl8192CURadioA_1T_HPArrayLength
+#define RadioB_GM_ArrayLength 				Rtl8192CURadioB_GM_ArrayLength
+#define MAC_2T_ArrayLength					Rtl8192CUMAC_2T_ArrayLength
+#define MACPHY_Array_PGLength 				Rtl8192CUMACPHY_Array_PGLength
+#define AGCTAB_2TArrayLength 				Rtl8192CUAGCTAB_2TArrayLength
+#define AGCTAB_1TArrayLength 				Rtl8192CUAGCTAB_1TArrayLength
+#define AGCTAB_1T_HPArrayLength 			Rtl8192CUAGCTAB_1T_HPArrayLength
+#define PHY_REG_1T_HPArrayLength			Rtl8192CUPHY_REG_1T_HPArrayLength
 
 #endif
 
@@ -238,7 +232,7 @@
 									(le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x2300)
 
 
-typedef struct _RT_FIRMWARE_8192C{
+typedef struct _RT_FIRMWARE_8192C {
 	FIRMWARE_SOURCE	eFWSource;
 	u8*			szFwBuffer;
 	u32			ulFwLength;
@@ -248,7 +242,7 @@ typedef struct _RT_FIRMWARE_8192C{
 // This structure must be cared byte-ordering
 //
 // Added by tynli. 2009.12.04.
-typedef struct _RT_8192C_FIRMWARE_HDR {//8-byte alinment required
+typedef struct _RT_8192C_FIRMWARE_HDR { //8-byte alinment required
 
 	//--- LONG WORD 0 ----
 	u16		Signature;	// 92C0: test chip; 92C, 88C0: test chip; 88C1: MP A-cut; 92C1: MP A-cut
@@ -275,7 +269,7 @@ typedef struct _RT_8192C_FIRMWARE_HDR {//8-byte alinment required
 	u32		Rsvd4;
 	u32		Rsvd5;
 
-}RT_8192C_FIRMWARE_HDR, *PRT_8192C_FIRMWARE_HDR;
+} RT_8192C_FIRMWARE_HDR, *PRT_8192C_FIRMWARE_HDR;
 
 #define DRIVER_EARLY_INT_TIME_8192C		0x05
 #define BCN_DMA_ATIME_INT_TIME_8192C		0x02
@@ -339,7 +333,7 @@ typedef struct _RT_8192C_FIRMWARE_HDR {//8-byte alinment required
 // <Roger_Notes> To prevent out of boundary programming case, leave 1byte and program full section
 // 9bytes + 1byt + 5bytes and pre 1byte.
 // For worst case:
-// | 1byte|----8bytes----|1byte|--5bytes--| 
+// | 1byte|----8bytes----|1byte|--5bytes--|
 // |         |            Reserved(14bytes)	      |
 //
 #define		EFUSE_OOB_PROTECT_BYTES 		15	// PG data exclude header, dummy 6 bytes frome CP test and reserved 1byte.
@@ -391,8 +385,6 @@ void InterruptRecognized8192CE(PADAPTER Adapter, PRT_ISR_CONTENT pIsrContent);
 VOID UpdateInterruptMask8192CE(PADAPTER Adapter, u32 AddMSR, u32 AddMSR1, u32 RemoveMSR, u32 RemoveMSR1);
 #endif
 
-#define GET_RF_TYPE(priv)	(GET_HAL_DATA(priv)->rf_type)
-
 #define INCLUDE_MULTI_FUNC_BT(_Adapter)	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_BT)
 #define INCLUDE_MULTI_FUNC_GPS(_Adapter)	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_GPS)
 
@@ -404,11 +396,15 @@ void rtl8192c_EfuseParseChnlPlan(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoad
 
 HAL_VERSION rtl8192c_ReadChipVersion(IN PADAPTER Adapter);
 void rtl8192c_ReadBluetoothCoexistInfo(PADAPTER Adapter, u8 *PROMContent, BOOLEAN AutoloadFail);
-//void rtl8192c_free_hal_data(_adapter * padapter);
-VOID rtl8192c_EfuseParseIDCode(PADAPTER pAdapter, u8 *hwinfo);
-void rtl8192c_set_hal_ops(struct hal_ops *pHalFunc);
-void	rtl8192c_clone_haldata(_adapter* dst_adapter, _adapter* src_adapter);
 
-s32 c2h_id_filter_ccx_8192c(u8 id);
+VOID rtl8192c_EfuseParseIDCode(PADAPTER pAdapter, u8 *hwinfo);
+void rtl8192c_init_default_value(_adapter *adapter);
+void rtl8192c_set_hal_ops(struct hal_ops *pHalFunc);
+
+s32 c2h_id_filter_ccx_8192c(u8 *buf);
+
+void SetHwReg8192C(PADAPTER padapter, u8 variable, u8 *val);
+void GetHwReg8192C(PADAPTER padapter, u8 variable, u8 *val);
+
 #endif
 

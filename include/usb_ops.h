@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -26,7 +26,7 @@
 #define REALTEK_USB_VENQT_CMD_REQ	0x05
 #define REALTEK_USB_VENQT_CMD_IDX	0x00
 
-enum{
+enum {
 	VENDOR_WRITE = 0x00,
 	VENDOR_READ = 0x01,
 };
@@ -35,18 +35,18 @@ enum{
 #define MAX_USB_IO_CTL_SIZE		(MAX_VENDOR_REQ_CMD_SIZE +ALIGNMENT_UNIT)
 
 #ifdef PLATFORM_LINUX
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,12)) 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,12))
 #define rtw_usb_control_msg(dev, pipe, request, requesttype, value, index, data, size, timeout_ms) \
-	usb_control_msg((dev), (pipe), (request), (requesttype), (value), (index), (data), (size), (timeout_ms)) 
+	usb_control_msg((dev), (pipe), (request), (requesttype), (value), (index), (data), (size), (timeout_ms))
 #define rtw_usb_bulk_msg(usb_dev, pipe, data, len, actual_length, timeout_ms) \
 	usb_bulk_msg((usb_dev), (pipe), (data), (len), (actual_length), (timeout_ms))
 #else
 #define rtw_usb_control_msg(dev, pipe, request, requesttype, value, index, data, size,timeout_ms) \
 	usb_control_msg((dev), (pipe), (request), (requesttype), (value), (index), (data), (size), \
-		((timeout_ms) == 0) ||((timeout_ms)*HZ/1000>0)?((timeout_ms)*HZ/1000):1) 
+		((timeout_ms) == 0) ||((timeout_ms)*HZ/1000>0)?((timeout_ms)*HZ/1000):1)
 #define rtw_usb_bulk_msg(usb_dev, pipe, data, len, actual_length, timeout_ms) \
 	usb_bulk_msg((usb_dev), (pipe), (data), (len), (actual_length), \
-		((timeout_ms) == 0) ||((timeout_ms)*HZ/1000>0)?((timeout_ms)*HZ/1000):1) 
+		((timeout_ms) == 0) ||((timeout_ms)*HZ/1000>0)?((timeout_ms)*HZ/1000):1)
 #endif
 #include <usb_ops_linux.h>
 #endif //PLATFORM_LINUX
@@ -94,31 +94,14 @@ void rtl8812au_set_intf_ops(struct _io_ops *pops);
 void rtl8192eu_set_hw_type(_adapter *padapter);
 void rtl8192eu_set_intf_ops(struct _io_ops *pops);
 #endif
-/*
-* Increase and check if the continual_urb_error of this @param dvobjprive is larger than MAX_CONTINUAL_URB_ERR
-* @return _TRUE:
-* @return _FALSE:
-*/
-static inline int rtw_inc_and_chk_continual_urb_error(struct dvobj_priv *dvobj)
-{
-	int ret = _FALSE;
-	int value;
-	if( (value=ATOMIC_INC_RETURN(&dvobj->continual_urb_error)) > MAX_CONTINUAL_URB_ERR) {
-		DBG_871X("[dvobj:%p][ERROR] continual_urb_error:%d > %d\n", dvobj, value, MAX_CONTINUAL_URB_ERR);
-		ret = _TRUE;
-	} else {
-		//DBG_871X("[dvobj:%p] continual_urb_error:%d\n", dvobj, value);
-	}
-	return ret;
-}
 
-/*
-* Set the continual_urb_error of this @param dvobjprive to 0
-*/
-static inline void rtw_reset_continual_urb_error(struct dvobj_priv *dvobj)
-{
-	ATOMIC_SET(&dvobj->continual_urb_error, 0);	
-}
+#ifdef CONFIG_RTL8723B
+void rtl8723bu_set_hw_type(_adapter *padapter);
+void rtl8723bu_set_intf_ops(struct _io_ops *pops);
+void rtl8723bu_recv_tasklet(void *priv);
+void rtl8723bu_xmit_tasklet(void *priv);
+#endif
+
 
 enum RTW_USB_SPEED {
 	RTW_USB_SPEED_UNKNOWN	= 0,
@@ -142,9 +125,9 @@ static inline u8 rtw_usb_bulk_size_boundary(_adapter * padapter,int buf_len)
 	if (IS_SUPER_SPEED_USB(padapter))
 		rst = (0 == (buf_len) % USB_SUPER_SPEED_BULK_SIZE)?_TRUE:_FALSE;
 	if (IS_HIGH_SPEED_USB(padapter))
-		rst = (0 == (buf_len) % USB_HIGH_SPEED_BULK_SIZE)?_TRUE:_FALSE;	
-	else	
-		rst = (0 == (buf_len) % USB_FULL_SPEED_BULK_SIZE)?_TRUE:_FALSE;		
+		rst = (0 == (buf_len) % USB_HIGH_SPEED_BULK_SIZE)?_TRUE:_FALSE;
+	else
+		rst = (0 == (buf_len) % USB_FULL_SPEED_BULK_SIZE)?_TRUE:_FALSE;
 	return rst;
 }
 

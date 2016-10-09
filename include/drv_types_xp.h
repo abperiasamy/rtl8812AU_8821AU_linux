@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -61,8 +61,7 @@
 #endif
 
 
-typedef struct _MP_REG_ENTRY
-{
+typedef struct _MP_REG_ENTRY {
 
 	NDIS_STRING		RegName;	// variable name text
 	BOOLEAN			bRequired;	// 1 -> required, 0 -> optional
@@ -70,7 +69,7 @@ typedef struct _MP_REG_ENTRY
 	u8			Type;		// NdisParameterInteger/NdisParameterHexInteger/NdisParameterStringle/NdisParameterMultiString
 	uint			FieldOffset;	// offset to MP_ADAPTER field
 	uint			FieldSize;	// size (in bytes) of the field
-	
+
 #ifdef UNDER_AMD64
 	u64			Default;
 #else
@@ -82,7 +81,7 @@ typedef struct _MP_REG_ENTRY
 } MP_REG_ENTRY, *PMP_REG_ENTRY;
 
 
-typedef struct _OCTET_STRING{
+typedef struct _OCTET_STRING {
 	u8      *Octet;
 	u16      Length;
 } OCTET_STRING, *POCTET_STRING;

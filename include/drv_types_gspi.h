@@ -22,22 +22,21 @@
 
 // SPI Header Files
 #ifdef PLATFORM_LINUX
-	#include <linux/platform_device.h>
-	#include <linux/spi/spi.h>
-	#include <linux/gpio.h>
-	//#include <mach/ldo.h>
-	#include <asm/mach-types.h>
-	#include <asm/gpio.h>
-	#include <asm/io.h>
-	#include <mach/board.h>
-	#include <mach/hardware.h>
-	#include <mach/irqs.h>
-	#include <custom_gpio.h>
+#include <linux/platform_device.h>
+#include <linux/spi/spi.h>
+#include <linux/gpio.h>
+//#include <mach/ldo.h>
+#include <asm/mach-types.h>
+#include <asm/gpio.h>
+#include <asm/io.h>
+#include <mach/board.h>
+#include <mach/hardware.h>
+#include <mach/irqs.h>
+#include <custom_gpio.h>
 #endif
 
 
-typedef struct gspi_data
-{
+typedef struct gspi_data {
 	u8  func_number;
 
 	u8  tx_block_mode;
