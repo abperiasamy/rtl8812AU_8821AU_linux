@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -30,6 +30,18 @@ void rtl8192de_set_hal_ops(_adapter * padapter);
 
 #ifdef CONFIG_RTL8188E
 void rtl8188ee_set_hal_ops(_adapter * padapter);
+#endif
+
+#if defined(CONFIG_RTL8812A) || defined(CONFIG_RTL8821A)
+void rtl8812ae_set_hal_ops(_adapter * padapter);
+#endif
+
+#if defined(CONFIG_RTL8192E)
+void rtl8192ee_set_hal_ops(_adapter * padapter);
+#endif
+
+#ifdef CONFIG_RTL8723B
+void rtl8723be_set_hal_ops(_adapter * padapter);
 #endif
 
 void rtw_set_hal_ops(_adapter *padapter);

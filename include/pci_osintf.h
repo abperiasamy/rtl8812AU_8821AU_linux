@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -21,9 +21,12 @@
 #define __PCI_OSINTF_H
 
 
-void rtw_pci_disable_aspm(_adapter *padapter);
-void rtw_pci_enable_aspm(_adapter *padapter);
-
+void	rtw_pci_disable_aspm(_adapter *padapter);
+void	rtw_pci_enable_aspm(_adapter *padapter);
+void	PlatformClearPciPMEStatus(PADAPTER Adapter);
+#ifdef CONFIG_64BIT_DMA
+u8	PlatformEnableDMA64(PADAPTER Adapter);
+#endif
 
 #endif
 

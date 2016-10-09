@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -21,8 +21,7 @@
 #define __RTL8192C_CMD_H_
 
 
-enum cmd_msg_element_id
-{	
+enum cmd_msg_element_id {
 	NONE_CMDMSG_EID,
 	AP_OFFLOAD_EID=0,
 	SET_PWRMODE_EID=1,
@@ -48,27 +47,27 @@ struct cmd_msg_parm {
 	u8 buf[6];
 };
 
-typedef struct _SETPWRMODE_PARM{
+typedef struct _SETPWRMODE_PARM {
 	u8 	Mode;
 	u8 	SmartPS;
 	u8	BcnPassTime;	// unit: 100ms
-}SETPWRMODE_PARM, *PSETPWRMODE_PARM;
+} SETPWRMODE_PARM, *PSETPWRMODE_PARM;
 
-struct H2C_SS_RFOFF_PARAM{
+struct H2C_SS_RFOFF_PARAM {
 	u8 	ROFOn; // 1: on, 0:off
 	u16	gpio_period; // unit: 1024 us
-}__attribute__ ((packed));
+} __attribute__ ((packed));
 
 
-typedef struct JOINBSSRPT_PARM_92C{
+typedef struct JOINBSSRPT_PARM_92C {
 	u8	OpMode;	// RT_MEDIA_STATUS
-}JOINBSSRPT_PARM_92C, *PJOINBSSRPT_PARM_92C;
+} JOINBSSRPT_PARM_92C, *PJOINBSSRPT_PARM_92C;
 
-typedef struct _RSVDPAGE_LOC_92C{
+typedef struct _RSVDPAGE_LOC_92C {
 	u8 	LocProbeRsp;
 	u8 	LocPsPoll;
 	u8	LocNullData;
-}RSVDPAGE_LOC_92C, *PRSVDPAGE_LOC_92C;
+} RSVDPAGE_LOC_92C, *PRSVDPAGE_LOC_92C;
 
 
 // host message to firmware cmd
@@ -78,6 +77,7 @@ u8	rtl8192c_set_rssi_cmd(_adapter*padapter, u8 *param);
 void	rtl8192c_set_raid_cmd(_adapter*padapter, u32 mask, u8* arg);
 void	rtl8192c_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8* arg, u8 rssi_level);
 u8	rtl8192c_set_FwSelectSuspend_cmd(_adapter*padapter,u8 bfwpoll, u16 period);
+int rtl8192c_FillH2CCmd(_adapter* padapter, u8 ElementID, u32 CmdLen, u8* pCmdBuffer);
 #ifdef CONFIG_P2P
 void	rtl8192c_set_p2p_ps_offload_cmd(_adapter* padapter, u8 p2p_ps_state);
 #endif //CONFIG_P2P

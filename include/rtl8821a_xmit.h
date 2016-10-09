@@ -22,8 +22,7 @@
 
 #include <drv_types.h>
 
-typedef struct txdescriptor_8821a
-{
+typedef struct txdescriptor_8821a {
 	// Offset 0
 	u32 pktlen:16;
 	u32 offset:8;
@@ -139,7 +138,7 @@ typedef struct txdescriptor_8821a
 	u32 txbf_path:1;
 	u32 seq:12;
 	u32 final_data_rate:8;
-}TXDESC_8821A, *PTXDESC_8821A;
+} TXDESC_8821A, *PTXDESC_8821A;
 
 #ifdef CONFIG_SDIO_HCI
 s32 InitXmitPriv8821AS(PADAPTER padapter);

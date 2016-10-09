@@ -30,77 +30,77 @@
 
 
 void ConfigureTxpowerTrack_8812A(
-	PTXPWRTRACK_CFG	pConfig
-	);
+    PTXPWRTRACK_CFG	pConfig
+);
 
 VOID
 GetDeltaSwingTable_8812A(
-	IN 	PDM_ODM_T			pDM_Odm,
-	OUT pu1Byte 			*TemperatureUP_A,
-	OUT pu1Byte 			*TemperatureDOWN_A,
-	OUT pu1Byte 			*TemperatureUP_B,
-	OUT pu1Byte 			*TemperatureDOWN_B	
-	);
+    IN 	PDM_ODM_T			pDM_Odm,
+    OUT pu1Byte 			*TemperatureUP_A,
+    OUT pu1Byte 			*TemperatureDOWN_A,
+    OUT pu1Byte 			*TemperatureUP_B,
+    OUT pu1Byte 			*TemperatureDOWN_B
+);
 
 void DoIQK_8812A(
-	PDM_ODM_T	pDM_Odm,
-	u1Byte 		DeltaThermalIndex,
-	u1Byte		ThermalValue,	
-	u1Byte 		Threshold
-	);
+    PDM_ODM_T	pDM_Odm,
+    u1Byte 		DeltaThermalIndex,
+    u1Byte		ThermalValue,
+    u1Byte 		Threshold
+);
 
 VOID
 ODM_TxPwrTrackSetPwr8812A(
-	PDM_ODM_T			pDM_Odm,
-	PWRTRACK_METHOD 	Method,
-	u1Byte 				RFPath,
-	u1Byte 				ChannelMappedIndex
-	);
+    PDM_ODM_T			pDM_Odm,
+    PWRTRACK_METHOD 	Method,
+    u1Byte 				RFPath,
+    u1Byte 				ChannelMappedIndex
+);
 
 //1 7.	IQK
 
-void	
-PHY_IQCalibrate_8812A(	
-	IN	PADAPTER	pAdapter,	
-	IN	BOOLEAN 	bReCovery
+void
+PHY_IQCalibrate_8812A(
+    IN	PADAPTER	pAdapter,
+    IN	BOOLEAN 	bReCovery
 );
 
 
 //
 // LC calibrate
 //
-void	
+void
 PHY_LCCalibrate_8812A(
-	IN PDM_ODM_T		pDM_Odm
+    IN PDM_ODM_T		pDM_Odm
 );
 
 //
 // AP calibrate
 //
-void	
-PHY_APCalibrate_8812A(		
+void
+PHY_APCalibrate_8812A(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+    IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+    IN	PADAPTER	pAdapter,
 #endif
-							IN 	s1Byte		delta);
-void	
+    IN 	s1Byte		delta);
+void
 PHY_DigitalPredistortion_8812A(		IN	PADAPTER	pAdapter);
 
-VOID	                                                 
-PHY_DPCalibrate_8812A(                                   
-	IN 	PDM_ODM_T	pDM_Odm                          
-);           
+VOID
+PHY_DPCalibrate_8812A(
+    IN 	PDM_ODM_T	pDM_Odm
+);
 VOID PHY_SetRFPathSwitch_8812A(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+    IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+    IN	PADAPTER	pAdapter,
 #endif
-	IN	BOOLEAN		bMain
-	);
+    IN	BOOLEAN		bMain
+);
 
-								
-#endif	// #ifndef __HAL_PHY_RF_8812A_H__								
+
+#endif	// #ifndef __HAL_PHY_RF_8812A_H__
 

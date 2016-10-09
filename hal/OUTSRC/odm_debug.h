@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -27,11 +27,11 @@
 //	Define the debug levels
 //
 //	1.	DBG_TRACE and DBG_LOUD are used for normal cases.
-//	So that, they can help SW engineer to develope or trace states changed 
-//	and also help HW enginner to trace every operation to and from HW, 
-//	e.g IO, Tx, Rx. 
+//	So that, they can help SW engineer to develope or trace states changed
+//	and also help HW enginner to trace every operation to and from HW,
+//	e.g IO, Tx, Rx.
 //
-//	2.	DBG_WARNNING and DBG_SERIOUS are used for unusual or error cases, 
+//	2.	DBG_WARNNING and DBG_SERIOUS are used for unusual or error cases,
 //	which help us to debug SW or HW.
 //
 //-----------------------------------------------------------------------------
@@ -41,8 +41,8 @@
 #define ODM_DBG_OFF					1
 
 //
-//	Fatal bug. 
-//	For example, Tx/Rx/IO locked up, OS hangs, memory access violation, 
+//	Fatal bug.
+//	For example, Tx/Rx/IO locked up, OS hangs, memory access violation,
 //	resource allocation failed, unexpected HW behavior, HW BUG and so on.
 //
 #define ODM_DBG_SERIOUS				2
@@ -54,8 +54,8 @@
 #define ODM_DBG_WARNING				3
 
 //
-//	Normal case with useful information about current SW or HW state. 
-//	For example, Tx/Rx descriptor to fill, Tx/Rx descriptor completed status, 
+//	Normal case with useful information about current SW or HW state.
+//	For example, Tx/Rx descriptor to fill, Tx/Rx descriptor completed status,
 //	SW protocol state change, dynamic mechanism state change and so on.
 //
 #define ODM_DBG_LOUD					4
@@ -70,8 +70,8 @@
 //
 //-----------------------------------------------------------------------------
 //BB Functions
-#define ODM_COMP_DIG				BIT0	
-#define ODM_COMP_RA_MASK			BIT1	
+#define ODM_COMP_DIG				BIT0
+#define ODM_COMP_RA_MASK			BIT1
 #define ODM_COMP_DYNAMIC_TXPWR		BIT2
 #define ODM_COMP_FA_CNT				BIT3
 #define ODM_COMP_RSSI_MONITOR		BIT4
@@ -83,7 +83,7 @@
 #define ODM_COMP_PATH_DIV			BIT10
 #define ODM_COMP_PSD				BIT11
 #define ODM_COMP_DYNAMIC_PRICCA		BIT12
-#define ODM_COMP_RXHP				BIT13			
+#define ODM_COMP_RXHP				BIT13
 #define ODM_COMP_MP					BIT14
 #define ODM_COMP_DYNAMIC_ATC			BIT15
 //MAC Functions
@@ -160,7 +160,7 @@
 #endif
 
 
-VOID 
+VOID
 ODM_InitDebugSetting(
 	IN		PDM_ODM_T		pDM_Odm
 	);
@@ -256,9 +256,9 @@ ODM_InitDebugSetting(
 				DbgPrint(_TitleString);												\
 				DbgPrint(": %d, <%s>\n", _Len, buffer);									\
 			}
-			
+
 #else	// of #if DBG
-#define DbgPrint(...)	
+#define DbgPrint(...)
 #define PRINT_DATA(_TitleString, _HexData, _HexDataLen)
 #define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen)
 #define RT_PRINT_ADDR(_Comp, _Level, _TitleString, _Ptr)
@@ -266,7 +266,7 @@ ODM_InitDebugSetting(
 #define RT_PRINT_STR(_Comp, _Level, _TitleString, _Ptr, _Len)
 #endif	// of #if DBG
 
-#endif	
+#endif
 
 
 #if 0
@@ -289,7 +289,7 @@ typedef struct tag_ODM_DBGP_Service_Module_Header_Name_Structure
 typedef enum tag_ODM_DBGP_Flag_Type_Definition
 {
 	ODM_FTX				= 0,
-	ODM_FRX				,	
+	ODM_FRX				,
 	ODM_FPHY				,
 	ODM_FPWR				,
 	ODM_FDM				,
@@ -305,7 +305,7 @@ typedef enum tag_ODM_DBGP_Flag_Type_Definition
 #define		ODM_TX_PATH			BIT2
 
 // Define RX relative debug  bit				--> FRX
-#define		ODM_RX_DATA				BIT0	
+#define		ODM_RX_DATA				BIT0
 #define		ODM_RX_PHY_STS			BIT1
 #define		ODM_RX_PHY_SS				BIT2
 #define		ODM_RX_PHY_SQ				BIT3
@@ -346,11 +346,11 @@ extern	u8Byte ODM_GlobalDebugComponents;
 //	Define the debug levels
 //
 //	1.	DBG_TRACE and DBG_LOUD are used for normal cases.
-//	So that, they can help SW engineer to develope or trace states changed 
-//	and also help HW enginner to trace every operation to and from HW, 
-//	e.g IO, Tx, Rx. 
+//	So that, they can help SW engineer to develope or trace states changed
+//	and also help HW enginner to trace every operation to and from HW,
+//	e.g IO, Tx, Rx.
 //
-//	2.	DBG_WARNNING and DBG_SERIOUS are used for unusual or error cases, 
+//	2.	DBG_WARNNING and DBG_SERIOUS are used for unusual or error cases,
 //	which help us to debug SW or HW.
 //
 //-----------------------------------------------------------------------------
@@ -360,14 +360,14 @@ extern	u8Byte ODM_GlobalDebugComponents;
 #define DBG_OFF					0
 
 //
-//	Deprecated! Don't use it! 
+//	Deprecated! Don't use it!
 //	TODO: fix related debug message!
 //
 //#define DBG_SEC					1
 
 //
-//	Fatal bug. 
-//	For example, Tx/Rx/IO locked up, OS hangs, memory access violation, 
+//	Fatal bug.
+//	For example, Tx/Rx/IO locked up, OS hangs, memory access violation,
 //	resource allocation failed, unexpected HW behavior, HW BUG and so on.
 //
 #define DBG_SERIOUS				2
@@ -379,8 +379,8 @@ extern	u8Byte ODM_GlobalDebugComponents;
 #define DBG_WARNING				3
 
 //
-//	Normal case with useful information about current SW or HW state. 
-//	For example, Tx/Rx descriptor to fill, Tx/Rx descriptor completed status, 
+//	Normal case with useful information about current SW or HW state.
+//	For example, Tx/Rx descriptor to fill, Tx/Rx descriptor completed status,
 //	SW protocol state change, dynamic mechanism state change and so on.
 //
 #define DBG_LOUD				4
@@ -414,19 +414,19 @@ extern	u8Byte ODM_GlobalDebugComponents;
 #define COMP_QOS				BIT15	// For QoS.
 #define COMP_AUTHENTICATOR			BIT16	// For AP mode Authenticator. Added by Annie, 2006-01-30.
 #define COMP_BEACON				BIT17	// For Beacon related, by rcnjko.
-#define COMP_ANTENNA				BIT18	// For Antenna diversity related, by rcnjko. 
+#define COMP_ANTENNA				BIT18	// For Antenna diversity related, by rcnjko.
 #define COMP_RATE				BIT19	// For Rate Adaptive mechanism, 2006.07.02, by rcnjko. #define COMP_EVENTS				0x00000080	// Event handling
 #define COMP_EVENTS				BIT20	// Event handling
-#define COMP_FPGA				BIT21	// For FPGA verfication 
-#define COMP_RM					BIT22	// For Radio Measurement. 
+#define COMP_FPGA				BIT21	// For FPGA verfication
+#define COMP_RM					BIT22	// For Radio Measurement.
 #define COMP_MP					BIT23	// For mass production test, by shien chang, 2006.07.13
 #define COMP_RXDESC				BIT24	// Show Rx desc information for SD3 debug. Added by Annie, 2006-07-15.
 #define COMP_CKIP				BIT25	// For CCX 1 S13: CKIP. Added by Annie, 2006-08-14.
 #define COMP_DIG				BIT26	// For DIG, 2006.09.25, by rcnjko.
-#define COMP_TXAGC				BIT27	// For Tx power, 060928, by rcnjko. 
-#define COMP_HIPWR				BIT28	// For High Power Mechanism, 060928, by rcnjko. 
-#define COMP_HALDM				BIT29	// For HW Dynamic Mechanism, 061010, by rcnjko. 
-#define COMP_RSNA				BIT30	// For RSNA IBSS , 061201, by CCW. 
+#define COMP_TXAGC				BIT27	// For Tx power, 060928, by rcnjko.
+#define COMP_HIPWR				BIT28	// For High Power Mechanism, 060928, by rcnjko.
+#define COMP_HALDM				BIT29	// For HW Dynamic Mechanism, 061010, by rcnjko.
+#define COMP_RSNA				BIT30	// For RSNA IBSS , 061201, by CCW.
 #define COMP_INDIC				BIT31	// For link indication
 #define COMP_LED				BIT32	// For LED.
 #define COMP_RF					BIT33	// For RF.
@@ -438,8 +438,8 @@ extern	u8Byte ODM_GlobalDebugComponents;
 #define COMP_POWER_TRACKING			BIT35	//FOR 8190 TX POWER TRACKING
 #define COMP_RX_REORDER				BIT36	// 8190 Rx Reorder
 #define COMP_AMSDU				BIT37	// For A-MSDU Debugging
-#define COMP_WPS				BIT38   //WPS Debug Message 
-#define COMP_RATR				BIT39	
+#define COMP_WPS				BIT38   //WPS Debug Message
+#define COMP_RATR				BIT39
 #define COMP_RESET				BIT40
 // For debug command to print on dbgview!!
 #define COMP_CMD				BIT41
@@ -469,14 +469,14 @@ extern	u8Byte ODM_GlobalDebugComponents;
 /*------------------------------Define structure----------------------------*/
 /* 2007/07/13 MH  *//*------For DeBuG Print modeue------*/
 
-/* Defnie structure to store different debug flag variable. Every debug flag 
+/* Defnie structure to store different debug flag variable. Every debug flag
      is a UINT32 integer and you can assign 32 different events. */
 typedef struct tag_DBGP_Debug_Flag_Structure
 {
 	u4Byte	Mans;			/* Main Scheduler module. */
 	u4Byte	Rtos;			/* RTOS module. */
-	u4Byte	Alarm;		/* Alarm module. */	
-	u4Byte	Pm;			/* Performance monitor module. */	
+	u4Byte	Alarm;		/* Alarm module. */
+	u4Byte	Pm;			/* Performance monitor module. */
 }DBGP_FLAG_T;
 
 /* Define debug print header for every service module.*/
@@ -497,9 +497,9 @@ typedef struct tag_DBGP_Service_Module_Header_Name_Structure
 // Each module has independt 32 bit debug flag you cnn define the flag as yout require.
 typedef enum tag_DBGP_Flag_Type_Definition
 {
-	FQoS				= 0,	
+	FQoS				= 0,
 	FTX					= 1,
-	FRX					= 2,	
+	FRX					= 2,
 	FSEC				= 3,
 	FMGNT				= 4,
 	FMLME				= 5,
@@ -531,7 +531,7 @@ typedef enum tag_DBGP_Flag_Type_Definition
 #define		TX_PATH			BIT2
 
 // Define RX relative debug  bit				--> FRX
-#define		RX_DATA				BIT0	
+#define		RX_DATA				BIT0
 #define		RX_PHY_STS				BIT1
 #define		RX_PHY_SS				BIT2
 #define		RX_PHY_SQ				BIT3
@@ -638,7 +638,7 @@ typedef enum tag_DBGP_Flag_Type_Definition
 #define		IOCTL_BT_RX_ACLDATA_DETAIL	BIT19
 #define		IOCTL_BT_TP					BIT20
 // section 4 : BT connection state machine.
-#define 		IOCTL_STATE					BIT21	
+#define 		IOCTL_STATE					BIT21
 #define		IOCTL_BT_LOGO					BIT22
 // section 5 : BT function trace
 #define		IOCTL_CALLBACK_FUN			BIT24
@@ -780,9 +780,9 @@ typedef enum tag_DBGP_Flag_Type_Definition
 				DbgPrint(_TitleString);												\
 				DbgPrint(": %d, <%s>\n", _Len, buffer);									\
 			}
-			
+
 #else	// of #if DBG
-#define DbgPrint(...)	
+#define DbgPrint(...)
 #define PRINT_DATA(_TitleString, _HexData, _HexDataLen)
 #define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen)
 #define RT_PRINT_ADDR(_Comp, _Level, _TitleString, _Ptr)
@@ -798,7 +798,7 @@ typedef enum tag_DBGP_Flag_Type_Definition
 
 // Please add new OS's print API by yourself
 
-//#if (RT_PLATFORM==PLATFORM_WINDOWS) 
+//#if (RT_PLATFORM==PLATFORM_WINDOWS)
 #if (DEBUG_PRINT == 1) && DBG
 #define	RT_DISP(dbgtype, dbgflag, printstr)\
 {\
@@ -866,9 +866,9 @@ extern	void	DBGP_Flag_Init(void);
 extern	void	DBG_PrintAllFlag(void);
 extern	void	DBG_PrintAllComp(void);
 extern	void	DBG_PrintFlagEvent(u1Byte	DbgFlag);
-extern	void	DBG_DumpMem(const u1Byte DbgComp, 
-							const u1Byte DbgLevel, 
-							pu1Byte pMem, 
+extern	void	DBG_DumpMem(const u1Byte DbgComp,
+							const u1Byte DbgLevel,
+							pu1Byte pMem,
 							u2Byte Len);
 
 /*--------------------------Exported Function prototype---------------------*/

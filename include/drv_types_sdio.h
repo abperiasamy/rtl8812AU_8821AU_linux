@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -22,20 +22,17 @@
 
 // SDIO Header Files
 #ifdef PLATFORM_LINUX
-	#include <linux/mmc/sdio_func.h> 
-	#include <linux/mmc/sdio_ids.h>
+#include <linux/mmc/sdio_func.h>
+#include <linux/mmc/sdio_ids.h>
 
-#if defined(CONFIG_WOWLAN) || defined(CONFIG_PLATFORM_SPRD)
-	#include <linux/mmc/host.h>
-	#include <linux/mmc/card.h>
+#if defined(CONFIG_WOWLAN) || defined(CONFIG_AP_WOWLAN) || defined(CONFIG_PLATFORM_SPRD)
+#include <linux/mmc/host.h>
+#include <linux/mmc/card.h>
 #endif
 
 #ifdef CONFIG_PLATFORM_SPRD
-	#include <linux/gpio.h>
-	#include <custom_gpio.h>
-#ifdef CONFIG_RTL8188E
-	#include <mach/ldo.h>
-#endif
+#include <linux/gpio.h>
+#include <custom_gpio.h>
 #endif // CONFIG_PLATFORM_SPRD
 #endif
 
@@ -49,10 +46,9 @@
 #endif
 
 
-typedef struct sdio_data
-{
+typedef struct sdio_data {
 	u8  func_number;
- 
+
 	u8  tx_block_mode;
 	u8  rx_block_mode;
 	u32 block_transfer_len;

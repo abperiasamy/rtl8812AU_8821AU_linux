@@ -48,7 +48,7 @@
 
 //OFFSET 8
 #define AGG_EN		BIT(29)
-
+#define AMPDU_DENSITY_SHT 20
 //OFFSET 12
 #define SEQ_SHT		16
 
@@ -63,8 +63,7 @@
 //OFFSET 20
 #define SGI		BIT(6)
 
-typedef struct txdesc_8723a
-{
+typedef struct txdesc_8723a {
 	u32 pktlen:16;
 	u32 offset:8;
 	u32 bmc:1;
@@ -161,7 +160,7 @@ typedef struct txdesc_8723a
 	u32 mcsg5_max_len:4;
 	u32 mcsg6_max_len:4;
 	u32 mcs15_sgi_max_len:4;
-}TXDESC_8723A, *PTXDESC_8723A;
+} TXDESC_8723A, *PTXDESC_8723A;
 
 
 #define txdesc_set_ccx_sw_8723a(txdesc, value) \
@@ -217,7 +216,8 @@ void handle_txrpt_ccx_8723a(_adapter *adapter, void *buf);
 #endif //CONFIG_XMIT_ACK
 
 void rtl8723a_update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem);
-void rtl8723a_fill_fake_txdesc(PADAPTER padapter, u8 *pDesc, u32 BufferLen, u8 IsPsPoll, u8 IsBTQosNull);
+void rtl8723a_fill_fake_txdesc(PADAPTER padapter, u8 *pDesc, u32 BufferLen,
+                               u8 IsPsPoll, u8 IsBTQosNull, u8 IsDataFrame);
 
 #if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 s32 rtl8723as_init_xmit_priv(PADAPTER padapter);

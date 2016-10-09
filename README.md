@@ -1,23 +1,21 @@
-# rtl8812AU_8821AU_linux
+# rtl8812au
 
-rtl8812AU_8821AU linux kernel driver for AC1200 (801.11ac) Wireless Dual-Band USB Adapter
+Realtek 8812AU/8821AU USB WiFi driver.
 
-## Compiling on Ubuntu 16.04
+for AC1200 (801.11ac) Wireless Dual-Band USB Adapter
 
-```cd``` into folder.
+This code is base on version 4.3.14 from https://github.com/diederikdehaas/rtl8812AU
 
-```sh
-# sudo make
-# sudo make install
+## Known Supported Devices:
+
+```
+* COMFAST 1200Mbps USB Wireless Adapter(Model: CF-912AC)
 ```
 
 ## Compiling with DKMS
 
 ```sh
-# sudo cp -R . /usr/src/rtl8812AU_8821AU_linux-1.0
-# sudo dkms add -m rtl8812AU_8821AU_linux -v 1.0
-# sudo dkms build -m rtl8812AU_8821AU_linux -v 1.0
-# sudo dkms install -m rtl8812AU_8821AU_linux -v 1.0
+# sudo make -f Makefile.dkms install
 ```
 
 ### Compiling for Raspberry Pi
@@ -43,11 +41,11 @@ CONFIG_PLATFORM_ARM_RPI = y
 ```
 
 ```sh
-# cd /usr/src/rtl8812AU_8821AU_linux
+# cd /usr/src/rtl8812au
 # sudo make clean
 # sudo make
 # sudo make install
-# sudo modprobe -a 8812au
+# sudo modprobe -a rtl8812au
 ```
 
 ## Contributors
@@ -62,14 +60,25 @@ CONFIG_PLATFORM_ARM_RPI = y
 - bits3rpent
 - Chen Minqiang
 - Daiki Tamada
+- Fjodor42
+- gremsto
 - HackDefendr
 - Harshavardhana
+- jjones-jr
+- Joe
 - Joe Acosta
 - John Lenz
+- Jos Dehaes
 - Karl-Philipp Richter
 - Marco Milanesi
+- Mauro Ribeiro
+- Maximilian Schwerin
 - mpoly
+- Nick Bartos
+- Peter H. Li
 - pgroenbech
 - scrivy
+- Taehan Stott
 - Vicent Llongo
 - Victor Azizi
+- 赵迤晨 (Zhao, Yichen)

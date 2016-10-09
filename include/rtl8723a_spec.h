@@ -74,6 +74,8 @@
 //
 //-----------------------------------------------------
 
+#define REG_BT_COEX_TABLE_1		0x06C0
+#define REG_BT_COEX_TABLE_2		0x06C4
 
 //============================================================================
 //	8723 Regsiter Bit and Content definition
@@ -96,6 +98,8 @@
 //	General definitions
 //============================================================================
 
+#define MACID_NUM_8723A 32
+#define CAM_ENTRY_NUM_8723A 32
 
-#endif
+#endif /* __RTL8723A_SPEC_H__ */
 

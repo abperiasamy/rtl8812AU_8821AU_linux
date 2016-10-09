@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -54,35 +54,35 @@ struct wpa_ie_hdr {
 	u8 len;
 	u8 oui[4]; /* 24-bit OUI followed by 8-bit OUI type */
 	u8 version[2]; /* little endian */
-}__attribute__ ((packed));
+} __attribute__ ((packed));
 
 struct rsn_ie_hdr {
 	u8 elem_id; /* WLAN_EID_RSN */
 	u8 len;
 	u8 version[2]; /* little endian */
-}__attribute__ ((packed));
+} __attribute__ ((packed));
 
 struct wme_ac_parameter {
 #if defined(CONFIG_LITTLE_ENDIAN)
 	/* byte 1 */
 	u8 	aifsn:4,
-		acm:1,
-	 	aci:2,
-	 	reserved:1;
+	acm:1,
+	aci:2,
+	reserved:1;
 
 	/* byte 2 */
 	u8 	eCWmin:4,
-	 	eCWmax:4;
+	eCWmax:4;
 #elif defined(CONFIG_BIG_ENDIAN)
 	/* byte 1 */
 	u8 	reserved:1,
-	 	aci:2,
-	 	acm:1,
-	 	aifsn:4;
+	aci:2,
+	acm:1,
+	aifsn:4;
 
 	/* byte 2 */
 	u8 	eCWmax:4,
-	 	eCWmin:4;
+	eCWmin:4;
 #else
 #error	"Please fix <endian.h>"
 #endif
@@ -183,14 +183,14 @@ enum ieee80211_back_actioncode {
 /* HT features action code */
 enum ieee80211_ht_actioncode {
 	WLAN_ACTION_NOTIFY_CH_WIDTH = 0,
-       WLAN_ACTION_SM_PS = 1,
-       WLAN_ACTION_PSPM = 2,
-       WLAN_ACTION_PCO_PHASE = 3,
-       WLAN_ACTION_MIMO_CSI_MX = 4,
-       WLAN_ACTION_MIMO_NONCP_BF = 5,
-       WLAN_ACTION_MIMP_CP_BF = 6,
-       WLAN_ACTION_ASEL_INDICATES_FB = 7,
-       WLAN_ACTION_HI_INFO_EXCHG = 8,
+	WLAN_ACTION_SM_PS = 1,
+	WLAN_ACTION_PSPM = 2,
+	WLAN_ACTION_PCO_PHASE = 3,
+	WLAN_ACTION_MIMO_CSI_MX = 4,
+	WLAN_ACTION_MIMO_NONCP_BF = 5,
+	WLAN_ACTION_MIMP_CP_BF = 6,
+	WLAN_ACTION_ASEL_INDICATES_FB = 7,
+	WLAN_ACTION_HI_INFO_EXCHG = 8,
 };
 
 /* BACK (block-ack) parties */
@@ -273,13 +273,13 @@ struct ieee80211_mgmt {
 					u8 variable[0];
 				}  __attribute__ ((packed)) wme_action;
 #if 0
-				struct{
+				struct {
 					u8 action_code;
 					u8 element_id;
 					u8 length;
 					struct ieee80211_channel_sw_ie sw_elem;
 				}  __attribute__ ((packed)) chan_switch;
-				struct{
+				struct {
 					u8 action_code;
 					u8 dialog_token;
 					u8 element_id;
@@ -287,26 +287,26 @@ struct ieee80211_mgmt {
 					struct ieee80211_msrment_ie msr_elem;
 				}  __attribute__ ((packed)) measurement;
 #endif
-				struct{
+				struct {
 					u8 action_code;
 					u8 dialog_token;
 					u16 capab;
 					u16 timeout;
 					u16 start_seq_num;
 				}  __attribute__ ((packed)) addba_req;
-				struct{
+				struct {
 					u8 action_code;
 					u8 dialog_token;
 					u16 status;
 					u16 capab;
 					u16 timeout;
 				}  __attribute__ ((packed)) addba_resp;
-				struct{
+				struct {
 					u8 action_code;
 					u16 params;
 					u16 reason_code;
 				}  __attribute__ ((packed)) delba;
-				struct{
+				struct {
 					u8 action_code;
 					/* capab_info for open and confirm,
 					 * reason for close
@@ -319,14 +319,14 @@ struct ieee80211_mgmt {
 					 */
 					u8 variable[0];
 				}  __attribute__ ((packed)) plink_action;
-				struct{
+				struct {
 					u8 action_code;
 					u8 variable[0];
 				}  __attribute__ ((packed)) mesh_action;
 			} __attribute__ ((packed)) u;
 		}  __attribute__ ((packed)) action;
 	} __attribute__ ((packed)) u;
-}__attribute__ ((packed));
+} __attribute__ ((packed));
 
 #endif
 
@@ -376,7 +376,7 @@ struct ieee80211_mgmt {
 		struct {
 			u16 reason_code;
 		}  disassoc;
-#if 0		
+#if 0
 		struct {
 			__le64 timestamp;
 			u16 beacon_int;
@@ -389,7 +389,7 @@ struct ieee80211_mgmt {
 			/* only variable items: SSID, Supported rates */
 			u8 variable[0];
 		}  probe_req;
-		
+
 		struct {
 			__le64 timestamp;
 			u16 beacon_int;
@@ -398,7 +398,7 @@ struct ieee80211_mgmt {
 			 * FH Params, DS Params, CF Params, IBSS Params */
 			u8 variable[0];
 		}  probe_resp;
-#endif	
+#endif
 		struct {
 			u8 category;
 			union {
@@ -408,41 +408,41 @@ struct ieee80211_mgmt {
 					u8 status_code;
 					u8 variable[0];
 				}  wme_action;
-/*				
-				struct{
-					u8 action_code;
-					u8 element_id;
-					u8 length;
-					struct ieee80211_channel_sw_ie sw_elem;
-				}  chan_switch;
-				struct{
-					u8 action_code;
-					u8 dialog_token;
-					u8 element_id;
-					u8 length;
-					struct ieee80211_msrment_ie msr_elem;
-				}  measurement;
-*/				
-				struct{
+				/*
+								struct{
+									u8 action_code;
+									u8 element_id;
+									u8 length;
+									struct ieee80211_channel_sw_ie sw_elem;
+								}  chan_switch;
+								struct{
+									u8 action_code;
+									u8 dialog_token;
+									u8 element_id;
+									u8 length;
+									struct ieee80211_msrment_ie msr_elem;
+								}  measurement;
+				*/
+				struct {
 					u8 action_code;
 					u8 dialog_token;
 					u16 capab;
 					u16 timeout;
 					u16 start_seq_num;
 				}  addba_req;
-				struct{
+				struct {
 					u8 action_code;
 					u8 dialog_token;
 					u16 status;
 					u16 capab;
 					u16 timeout;
 				}  addba_resp;
-				struct{
+				struct {
 					u8 action_code;
 					u16 params;
 					u16 reason_code;
 				}  delba;
-				struct{
+				struct {
 					u8 action_code;
 					/* capab_info for open and confirm,
 					 * reason for close
@@ -455,7 +455,7 @@ struct ieee80211_mgmt {
 					 */
 					u8 variable[0];
 				}  plink_action;
-				struct{
+				struct {
 					u8 action_code;
 					u8 variable[0];
 				}  mesh_action;

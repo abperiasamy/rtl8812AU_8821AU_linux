@@ -1,0 +1,27 @@
+modname := rtl8812au
+DKMS := dkms
+modver := 4.3.14
+
+# directory in which generated files are stored
+DKMS_DEST := /usr/src/$(modname)-$(modver)
+
+all: install
+
+src_install:
+	make clean
+	mkdir -p '$(DKMS_DEST)'
+	cp -r dkms.conf Kconfig Makefile.dkms Makefile platform core hal include os_dep '$(DKMS_DEST)'
+	cp Makefile '$(DKMS_DEST)/Makefile'
+	sed 's/#MODULE_VERSION#/$(modver)/' dkms.conf > '$(DKMS_DEST)/dkms.conf'
+
+build: src_install
+	$(DKMS) add -m $(modname) -v $(modver) 2>/dev/null || true
+	$(DKMS) build -m $(modname) -v $(modver)
+
+install: build
+	$(DKMS) install -m $(modname) -v $(modver)
+
+uninstall:
+	$(DKMS) remove -m $(modname) -v $(modver) --all
+
+.PHONY: all src_install build install uninstall
