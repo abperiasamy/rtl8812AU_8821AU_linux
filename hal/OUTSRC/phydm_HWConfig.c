@@ -32,7 +32,7 @@
 #if (TESTCHIP_SUPPORT == 1)
 #define READ_AND_CONFIG(ic, txt) do {\
                                             if (pDM_Odm->bIsMPChip)\
-												READ_AND_CONFIG_MP(ic,txt);\
+                                                READ_AND_CONFIG_MP(ic,txt);\
                                             else\
                                                 READ_AND_CONFIG_TC(ic,txt);\
                                     } while(0)
