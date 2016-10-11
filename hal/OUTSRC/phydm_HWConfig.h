@@ -32,7 +32,7 @@
 
 #define AGC_DIFF_CONFIG(ic, band) do {\
                                             if (pDM_Odm->bIsMPChip)\
-												AGC_DIFF_CONFIG_MP(ic,band);\
+                                                AGC_DIFF_CONFIG_MP(ic,band);\
                                             else\
                                                 AGC_DIFF_CONFIG_TC(ic,band);\
                                     } while(0)
