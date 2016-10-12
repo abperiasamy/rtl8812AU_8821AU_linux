@@ -102,7 +102,10 @@ int rtw_os_alloc_recvframe(_adapter *padapter, union recv_frame *precvframe, u8 
 #endif
 	}
 
+#ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
+#else
 exit_rtw_os_recv_resource_alloc:
+#endif
 
 	return res;
 
@@ -157,8 +160,10 @@ int rtw_os_recvbuf_resource_alloc(_adapter *padapter, struct recv_buf *precvbuf)
 	int res=_SUCCESS;
 
 #ifdef CONFIG_USB_HCI
-	//struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
-	//struct usb_device	*pusbd = pdvobjpriv->pusbdev;
+#ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
+	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
+	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
+#endif
 
 	precvbuf->irp_pending = _FALSE;
 	precvbuf->purb = usb_alloc_urb(0, GFP_KERNEL);

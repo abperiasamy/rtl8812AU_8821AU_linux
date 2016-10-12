@@ -1297,9 +1297,9 @@ u8 convert_ip_addr(u8 hch, u8 mch, u8 lch)
 int rtw_get_mac_addr_intel(unsigned char *buf)
 {
 	int ret = 0;
-	int i;
-	struct file *fp = NULL;
-	mm_segment_t oldfs;
+	//int i;
+	//struct file *fp = NULL;
+	//mm_segment_t oldfs;
 	unsigned char c_mac[MAC_ADDRESS_LEN];
 	char fname[]="/config/wifi/mac.txt";
 	int jj,kk;

@@ -2558,7 +2558,9 @@ static int netdev_close(struct net_device *pnetdev)
 {
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(padapter);
+#ifndef CONFIG_PLATFORM_INTEL_BYT
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
+#endif
 #ifdef CONFIG_BT_COEXIST_SOCKET_TRX
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
 #endif //CONFIG_BT_COEXIST_SOCKET_TRX
