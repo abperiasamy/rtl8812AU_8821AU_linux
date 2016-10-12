@@ -1559,7 +1559,7 @@ endif
 
 obj-$(CONFIG_RTL8812AU) := $(MODULE_NAME).o
 
-endif
+else
 
 export CONFIG_RTL8812AU = m
 
@@ -1588,3 +1588,4 @@ config_r:
 
 clean:
 	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd) clean
+endif
