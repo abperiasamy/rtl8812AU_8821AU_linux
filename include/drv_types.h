@@ -333,6 +333,10 @@ struct registry_priv {
 	u8 adaptivity_dml;
 	u8 boffefusemask;
 	BOOLEAN bFileMaskEfuse;
+
+#ifdef CONFIG_SW_LED
+	u8 led_enable;
+#endif
 };
 
 
