@@ -45,7 +45,14 @@
 #include <linux/semaphore.h>
 #endif
 #include <linux/sem.h>
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
+#define HAVE_SIGNAL_FUNCTIONS_OWN_HEADER
+#endif
+#ifdef HAVE_SIGNAL_FUNCTIONS_OWN_HEADER
+#include <linux/sched/signal.h>
+#else
 #include <linux/sched.h>
+#endif
 #include <linux/etherdevice.h>
 #include <linux/wireless.h>
 #include <net/iw_handler.h>
