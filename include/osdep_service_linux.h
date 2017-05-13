@@ -45,7 +45,7 @@
 #include <linux/semaphore.h>
 #endif
 #include <linux/sem.h>
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0))
 #define HAVE_SIGNAL_FUNCTIONS_OWN_HEADER
 #endif
 #ifdef HAVE_SIGNAL_FUNCTIONS_OWN_HEADER
