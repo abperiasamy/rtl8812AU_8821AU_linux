@@ -579,6 +579,7 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 	//u8	chgTx = 0, chgRx = 0;
 	u32	r_ant_select_ofdm_val = 0;
 
+	u32 reg0xC50 = 0;
 
 	p_ofdm_tx = (R_ANTENNA_SELECT_OFDM *)&r_ant_select_ofdm_val;
 	p_cck_txrx = (R_ANTENNA_SELECT_CCK *)&r_ant_select_cck_val;
@@ -613,7 +614,6 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 	}
 
 	switch (pAdapter->mppriv.antenna_rx) {
-		u32 reg0xC50 = 0;
 	case ANTENNA_A:
 		PHY_SetBBReg(pAdapter, rRxPath_Jaguar, bMaskByte0, 0x11);
 		PHY_SetRFReg(pAdapter, ODM_RF_PATH_B, RF_AC_Jaguar, 0xF0000, 0x1); // RF_B_0x0[19:16] = 1, Standby mode
