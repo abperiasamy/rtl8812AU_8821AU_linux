@@ -298,6 +298,7 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
 	{USB_DEVICE(0x20F4, 0x805B),.driver_info = RTL8812}, /* TRENDnet - Cameo */
 	{USB_DEVICE(0x2357, 0x0101),.driver_info = RTL8812}, /* TP-Link - Archer T4U */
 	{USB_DEVICE(0x2357, 0x010D),.driver_info = RTL8812}, /* TP-Link - Archer T4U AC1300 */
+	{USB_DEVICE(0x2357, 0x010E),.driver_info = RTL8812}, /* TP-Link - Archer T4UH AC1300 */
 	{USB_DEVICE(0x2357, 0x0103),.driver_info = RTL8812}, /* TP-Link - T4UH */
 	{USB_DEVICE(0x2357, 0x010F),.driver_info = RTL8812}, /* TP-Link - T4UHP */
 	{USB_DEVICE(0x148F, 0x9097),.driver_info = RTL8812}, /* Amped Wireless ACA1 */
