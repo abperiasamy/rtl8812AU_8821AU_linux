@@ -47,6 +47,7 @@
 #ifdef __KERNEL__
 #include <linux/ipv6.h>
 #include <linux/icmpv6.h>
+#include <net/ip6_checksum.h>
 #include <net/ndisc.h>
 #include <net/checksum.h>
 #endif
