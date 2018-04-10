@@ -10,6 +10,7 @@ This code is base on version 4.3.14 from https://github.com/diederikdehaas/rtl88
 
 ```
 * COMFAST 1200Mbps USB Wireless Adapter(Model: CF-912AC)
+* TP-LINK AC1200 Wireless Dual Band USB Adapter(Model: Archer-T4U)
 ```
 
 ## Compiling with DKMS
