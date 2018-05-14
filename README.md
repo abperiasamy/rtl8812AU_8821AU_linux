@@ -10,6 +10,7 @@ This code is base on version 4.3.14 from https://github.com/diederikdehaas/rtl88
 
 ```
 * COMFAST 1200Mbps USB Wireless Adapter(Model: CF-912AC)
+* TP-LINK AC1200 Wireless Dual Band USB Adapter(Model: Archer-T4U)
 ```
 
 ## Compiling with DKMS
@@ -46,6 +47,48 @@ CONFIG_PLATFORM_ARM_RPI = y
 # sudo make
 # sudo make install
 # sudo modprobe -a rtl8812au
+```
+
+### Compiling for Ubuntu (16.04)
+
+Download archive into temp directory
+
+```sh
+# mkdir -p /tmp/t4u
+# cd /tmp/t4u
+# wget https://github.com/abperiasamy/rtl8812AU_8821AU_linux/archive/master.zip
+```
+
+Unzip
+
+```sh
+# unzip master.zip
+# cd rtl8812AU_8821AU_linux-master
+```
+
+Compile and install from source
+
+```sh
+# make
+# sudo make install
+```
+
+Load module
+
+```sh
+# sudo modprobe -a rtl8812au
+```
+
+Setup DKMS
+
+```sh
+# sudo apt-get update
+# sudo apt-get install dkms
+# cd /tmp/t4u/rtl8812AU_8821AU_linux-master/
+# sudo cp -R . /usr/src/rtl8812AU_8821AU_linux-1.0
+# sudo dkms add -m rtl8812AU_8821AU_linux -v 1.0
+# sudo dkms build -m rtl8812AU_8821AU_linux -v 1.0
+# sudo dkms install -m rtl8812AU_8821AU_linux -v 1.0
 ```
 
 ## Contributors
