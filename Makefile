@@ -880,8 +880,12 @@ CROSS_COMPILE ?=
 ifndef KVER
 KVER ?= $(shell uname -r)
 endif
+ifndef KSRC
 KSRC := /lib/modules/$(KVER)/build
+endif
+ifndef MODDESTDIR
 MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
+endif
 INSTALL_PREFIX :=
 endif
 
