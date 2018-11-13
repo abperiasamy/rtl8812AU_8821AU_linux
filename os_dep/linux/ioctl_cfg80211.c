@@ -5836,10 +5836,6 @@ void rtw_cfg80211_init_wiphy(_adapter *padapter)
 
 	/* init regulary domain */
 	rtw_regd_init(padapter);
-
-	/* copy mac_addr to wiphy */
-	_rtw_memcpy(wiphy->perm_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
-
 }
 
 /*
@@ -5957,6 +5953,10 @@ static void rtw_cfg80211_preinit_wiphy(_adapter *padapter, struct wiphy *wiphy)
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
 	//wiphy->flags |= WIPHY_FLAG_SUPPORTS_FW_ROAM;
 #endif
+
+
+	/* copy mac_addr to wiphy */
+	_rtw_memcpy(wiphy->perm_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0)) || defined(RTW_VENDOR_EXT_SUPPORT)
 	rtw_cfgvendor_attach(wiphy);
