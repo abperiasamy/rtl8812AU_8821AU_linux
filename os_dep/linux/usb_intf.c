@@ -330,6 +330,7 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
 	{USB_DEVICE(0x0411, 0x029B),.driver_info = RTL8821}, /* BUFFALO - WI-U2-433DHP */
 	{USB_DEVICE(0x056E, 0x4007),.driver_info = RTL8821}, /* ELECOM - WDC-433DU2H */
 	{USB_DEVICE(0x0BDA, 0xA811),.driver_info = RTL8821}, /* Comfast - CF-915AC, CF-916AC */
+	{USB_DEVICE(0x3823, 0x6249),.driver_info = RTL8821}, /* Obihai - OBiWiFi */
 #endif
 
 #ifdef CONFIG_RTL8192E
