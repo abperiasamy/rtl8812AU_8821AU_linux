@@ -85,7 +85,7 @@ Setup DKMS
 # sudo apt-get update
 # sudo apt-get install dkms
 # cd /tmp/t4u/rtl8812AU_8821AU_linux-master/
-# sudo cp -R . /usr/src/rtl8812AU_8821AU_linux-1.0
+# sudo cp -R . /usr/src/rtl18812AU_8821AU_linux-1.0
 # sudo dkms add -m rtl8812AU_8821AU_linux -v 1.0
 # sudo dkms build -m rtl8812AU_8821AU_linux -v 1.0
 # sudo dkms install -m rtl8812AU_8821AU_linux -v 1.0
