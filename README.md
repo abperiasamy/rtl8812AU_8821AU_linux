@@ -70,6 +70,7 @@ Compile and install from source
 
 ```sh
 # make
+## in case of issues during make, install correct dependencies and run a make clean
 # sudo make install
 ```
 
