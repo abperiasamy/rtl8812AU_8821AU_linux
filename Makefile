@@ -880,7 +880,7 @@ EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 #EXTRA_CFLAGS += -DCONFIG_P2P_IPS
 endif
 ifndef ARCH
-SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc64le/powerpc/)
+SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/ppc64le/powerpc/ -e s/aarch64/arm64/)
 ARCH ?= $(SUBARCH)
 endif
 ifndef CROSS_COMPILE
