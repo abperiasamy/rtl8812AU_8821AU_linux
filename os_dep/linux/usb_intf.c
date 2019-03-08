@@ -1314,17 +1314,9 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	if (rtw_handle_dualmac(padapter, 1) != _SUCCESS)
 		goto free_adapter;
 
-	if((pnetdev = rtw_init_netdev(padapter)) == NULL) {
-		goto handle_dualmac;
-	}
-	SET_NETDEV_DEV(pnetdev, dvobj_to_dev(dvobj));
-	padapter = rtw_netdev_priv(pnetdev);
-
-#ifdef CONFIG_IOCTL_CFG80211
-	if(rtw_wdev_alloc(padapter, dvobj_to_dev(dvobj)) != 0) {
-		goto handle_dualmac;
-	}
-#endif
+	/* Code used to call rtw_init_netdev here, but MAC has not been probed
+	 * yet, so  moving it lower. --Ben
+	 */
 
 	//step 2. hook HalFunc, allocate HalData
 	//hal_set_hal_ops(padapter);
@@ -1348,6 +1340,19 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 
 	//step read efuse/eeprom data and get mac_addr
 	rtw_hal_read_chip_info(padapter);
+
+	/* Now that we have MAC, init the wiphy and such. --Ben */
+	if((pnetdev = rtw_init_netdev(padapter)) == NULL) {
+		goto handle_dualmac;
+	}
+	SET_NETDEV_DEV(pnetdev, dvobj_to_dev(dvobj));
+	padapter = rtw_netdev_priv(pnetdev);
+
+#ifdef CONFIG_IOCTL_CFG80211
+	if(rtw_wdev_alloc(padapter, dvobj_to_dev(dvobj)) != 0) {
+		goto handle_dualmac;
+	}
+#endif
 
 	//step 5.
 	if(rtw_init_drv_sw(padapter) ==_FAIL) {

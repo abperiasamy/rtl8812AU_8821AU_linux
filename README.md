@@ -79,6 +79,13 @@ Load module
 # sudo modprobe -a rtl8812au
 ```
 
+#  Cross-compiling.  You can now specify variables on the command line w/out editing
+#  makefile.  For instance, this builds against recent OpenWRT neo2 platform.  Your
+#  Cross-compile binaries should be in your PATH.
+
+KSRC=/home/greearb/git/openwrt-neo2-dev/build_dir/target-aarch64_cortex-a53_musl/linux-sunxi_cortexa53/linux-4.14.78 EXT_EXTRA_CFLAGS=-DCONFIG_LITTLE_ENDIAN ARCH=arm64 CROSS_COMPILE=aarch64-openwrt-linux- MODDESTDIR=/tmp make V=1
+
+
 Setup DKMS
 
 ```sh

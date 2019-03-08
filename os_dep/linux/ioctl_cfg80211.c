@@ -349,6 +349,9 @@ static int rtw_ieee80211_channel_to_frequency(int chan, int band)
 
 static u64 rtw_get_systime_us(void)
 {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
+	return ktime_to_us(ktime_get_boottime());
+#else
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
 	struct timespec ts;
 	get_monotonic_boottime(&ts);
@@ -357,6 +360,7 @@ static u64 rtw_get_systime_us(void)
 	struct timeval tv;
 	do_gettimeofday(&tv);
 	return ((u64)tv.tv_sec*1000000) + tv.tv_usec;
+#endif
 #endif
 }
 
@@ -5837,10 +5841,6 @@ void rtw_cfg80211_init_wiphy(_adapter *padapter)
 
 	/* init regulary domain */
 	rtw_regd_init(padapter);
-
-	/* copy mac_addr to wiphy */
-	_rtw_memcpy(wiphy->perm_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
-
 }
 
 /*
@@ -5958,6 +5958,10 @@ static void rtw_cfg80211_preinit_wiphy(_adapter *padapter, struct wiphy *wiphy)
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
 	//wiphy->flags |= WIPHY_FLAG_SUPPORTS_FW_ROAM;
 #endif
+
+
+	/* copy mac_addr to wiphy */
+	_rtw_memcpy(wiphy->perm_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0)) || defined(RTW_VENDOR_EXT_SUPPORT)
 	rtw_cfgvendor_attach(wiphy);
