@@ -24,7 +24,7 @@ This code is base on version 4.3.14 from https://github.com/diederikdehaas/rtl88
 Install kernel headers and other dependencies.
 
 ```sh
-# sudo apt-get install linux-image-rpi-rpfv linux-headers-rpi-rpfv dkms build-essential bc
+# sudo apt-get install linux-image-rpi-rpfv linux-headers-rpi-rpfv raspberrypi-kernel-headers dkms build-essential bc
 ```
 
 Append following at the end of your ``/boot/config.txt``, reboot your Pi
