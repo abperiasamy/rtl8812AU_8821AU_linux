@@ -32,6 +32,10 @@ atomic_t _malloc_size = ATOMIC_INIT(0);
 #endif
 #endif /* DBG_MEMORY_LEAK */
 
+/* For kernel >= 5.1.0 define get_ds() for backward compatibility */
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
+  #define get_ds() (KERNEL_OS)
+#endif
 
 #if defined(PLATFORM_LINUX)
 /*
