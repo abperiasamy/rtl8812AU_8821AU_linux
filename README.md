@@ -49,7 +49,7 @@ CONFIG_PLATFORM_ARM_RPI = y
 # sudo modprobe -a rtl8812au
 ```
 
-### Compiling for Ubuntu (16.04)
+### Compiling for Ubuntu (16.04) and Debian (9)
 
 Download archive into temp directory
 
@@ -64,6 +64,11 @@ Unzip
 ```sh
 # unzip master.zip
 # cd rtl8812AU_8821AU_linux-master
+```
+Install kernel headers 
+
+```sh
+# sudo apt install linux-headers-$(uname -r)
 ```
 
 Compile and install from source
