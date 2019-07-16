@@ -6,6 +6,10 @@ for AC1200 (801.11ac) Wireless Dual-Band USB Adapter
 
 This code is base on version 4.3.14 from https://github.com/diederikdehaas/rtl8812AU
 
+### Update for NVidia Jestson Nano support
+
+This code was forked from https://github.com/abperiasamy/rtl8812AU_8821AU_linux
+
 ## Known Supported Devices:
 
 ```
@@ -17,6 +21,12 @@ This code is base on version 4.3.14 from https://github.com/diederikdehaas/rtl88
 
 ```sh
 # sudo make -f Makefile.dkms install
+```
+
+### Compiling for NVidia Jeston Nano
+
+```sh
+# CONFIG_PLATFORM_ARM_JET_NANO = y
 ```
 
 ### Compiling for Raspberry Pi
