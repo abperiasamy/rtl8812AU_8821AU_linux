@@ -15,6 +15,7 @@ This code was forked from https://github.com/abperiasamy/rtl8812AU_8821AU_linux
 ```
 * COMFAST 1200Mbps USB Wireless Adapter(Model: CF-912AC)
 * TP-LINK AC1200 Wireless Dual Band USB Adapter(Model: Archer-T4U)
+* TP-LINK AC600 Wireless Dual Band USB Adapter(Model: Archer-T2U Nano)
 ```
 
 ## Compiling with DKMS
