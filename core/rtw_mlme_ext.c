@@ -672,8 +672,6 @@ static void _mgt_dispatcher(_adapter *padapter, struct mlme_handler *ptable, uni
 
 void mgt_dispatcher(_adapter *padapter, union recv_frame *precv_frame)
 {
-	int subtype;
-
 	int index;
 	struct mlme_handler *ptable;
 #ifdef CONFIG_AP_MODE
@@ -753,61 +751,50 @@ void mgt_dispatcher(_adapter *padapter, union recv_frame *precv_frame)
 #endif
 
 #ifdef CONFIG_AP_MODE
-	subtype = GetFrameSubType(pframe);
-	if ((subtype == WIFI_AUTH) ||
-	    (subtype == WIFI_ASSOCREQ) ||
-	    (subtype == WIFI_REASSOCREQ))
-	{
+	switch (GetFrameSubType(pframe)) {
+	case WIFI_AUTH:
 		if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
-		{
 			ptable->func = &OnAuth;
-		}
 		else
-		{
 			ptable->func = &OnAuthClient;
-		}
-
-		// fallthrough
-		if ((subtype == WIFI_ASSOCREQ) ||
-		    (subtype == WIFI_REASSOCREQ))
-		{
-			_mgt_dispatcher(padapter, ptable, precv_frame);
-
-			if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
-			{
-				rtw_hostapd_mlme_rx(padapter, precv_frame);
-			}
-		}
-	}
-	else if (subtype == WIFI_PROBEREQ)
-	{
-		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE) {
-			#ifdef CONFIG_HOSTAPD_MLME
-				rtw_hostapd_mlme_rx(padapter, precv_frame);
-			#else
-				_mgt_dispatcher(padapter, ptable, precv_frame);
-			#endif
-		}
-		else
-		{
-			_mgt_dispatcher(padapter, ptable, precv_frame);
-		}
-	} else if (subtype == WIFI_BEACON ||
-	           subtype == WIFI_ACTION)
-	{
+	//pass through
+	case WIFI_ASSOCREQ:
+	case WIFI_REASSOCREQ:
 		_mgt_dispatcher(padapter, ptable, precv_frame);
-	}
-	else
-	{
+#ifdef CONFIG_HOSTAPD_MLME
+		if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
+			rtw_hostapd_mlme_rx(padapter, precv_frame);
+#endif
+		break;
+	case WIFI_PROBEREQ:
+		if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE) {
+#ifdef CONFIG_HOSTAPD_MLME
+			rtw_hostapd_mlme_rx(padapter, precv_frame);
+#else
+			_mgt_dispatcher(padapter, ptable, precv_frame);
+#endif
+		} else
+			_mgt_dispatcher(padapter, ptable, precv_frame);
+		break;
+	case WIFI_BEACON:
+		_mgt_dispatcher(padapter, ptable, precv_frame);
+		break;
+	case WIFI_ACTION:
+		//if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
+		_mgt_dispatcher(padapter, ptable, precv_frame);
+		break;
+	default:
 		_mgt_dispatcher(padapter, ptable, precv_frame);
 		if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
-		{
 			rtw_hostapd_mlme_rx(padapter, precv_frame);
-		}
+		break;
 	}
 #else
+
 	_mgt_dispatcher(padapter, ptable, precv_frame);
+
 #endif
+
 }
 
 #ifdef CONFIG_P2P
