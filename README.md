@@ -30,7 +30,7 @@ This code was forked from https://github.com/abperiasamy/rtl8812AU_8821AU_linux
 # CONFIG_PLATFORM_ARM_JET_NANO = y
 ```
 
-### Compiling for Raspberry Pi
+### Compiling for Raspberry Pi (3)
 
 Install kernel headers and other dependencies.
 
@@ -38,11 +38,11 @@ Install kernel headers and other dependencies.
 # sudo apt-get install linux-image-rpi-rpfv linux-headers-rpi-rpfv raspberrypi-kernel-headers dkms build-essential bc
 ```
 
-Append following at the end of your ``/boot/config.txt``, reboot your Pi
+Install kernel headers: https://github.com/notro/rpi-source/wiki
 
 ```sh
-kernel=vmlinuz-3.10-3-rpi
-initramfs initrd.img-3.10-3-rpi followkernel
+sudo wget https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O /usr/local/bin/rpi-source && sudo chmod +x /usr/local/bin/rpi-source && /usr/local/bin/rpi-source -q --tag-update
+rpi-source
 ```
 
 Edit Makefile and turn on ``CONFIG_PLATFORM_ARM_RPI``, turn off ``CONFIG_PLATFORM_I386_PC``
@@ -55,7 +55,7 @@ CONFIG_PLATFORM_ARM_RPI = y
 ```sh
 # cd /usr/src/rtl8812au
 # sudo make clean
-# sudo make
+# sudo make -j4
 # sudo make install
 # sudo modprobe -a rtl8812au
 ```
