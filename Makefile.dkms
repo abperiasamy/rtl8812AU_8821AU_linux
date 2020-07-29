@@ -8,7 +8,7 @@ DKMS_DEST := /usr/src/$(modname)-$(modver)
 all: install
 
 src_install:
-	make clean
+	make -f Makefile.dkms clean
 	mkdir -p '$(DKMS_DEST)'
 	cp -r dkms.conf Kconfig Makefile.dkms Makefile platform core hal include os_dep '$(DKMS_DEST)'
 	cp Makefile '$(DKMS_DEST)/Makefile'
