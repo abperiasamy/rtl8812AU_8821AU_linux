@@ -33,6 +33,15 @@ static const char *_security_type_str[] = {
 	"BIP",
 };
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
+struct sha256_state {
+        u64 length;
+        u32 state[8], curlen;
+        u8 buf[64];
+};
+#endif
+
+
 const char *security_type_str(u8 value)
 {
 #ifdef CONFIG_IEEE80211W
