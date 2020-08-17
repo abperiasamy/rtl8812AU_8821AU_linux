@@ -104,6 +104,7 @@ struct rtw_wdev_priv {
 	ATOMIC_T switch_ch_to;
 #endif
 
+    u32 mgmt_mask;
 };
 
 #define wiphy_to_adapter(x) (*((_adapter**)wiphy_priv(x)))
