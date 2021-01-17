@@ -3325,7 +3325,9 @@ static s32 _halReadPGDataFromFile(PADAPTER padapter, u8 *pbuf)
 {
 	u32 i;
 	struct file *fp;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t fs;
+#endif
 	u8 temp[3];
 	loff_t pos = 0;
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
@@ -3341,14 +3343,18 @@ static s32 _halReadPGDataFromFile(PADAPTER padapter, u8 *pbuf)
 		return _FAIL;
 	}
 
+#ifndef RTW_NO_SET_FS
 	fs = get_fs();
 	set_fs(KERNEL_DS);
+#endif
 	for (i=0; i<HWSET_MAX_SIZE_JAGUAR; i++) {
 		vfs_read(fp, temp, 2, &pos);
 		pbuf[i] = simple_strtoul(temp, NULL, 16);
 		pos += 1; // Filter the space character
 	}
+#ifndef RTW_NO_SET_FS
 	set_fs(fs);
+#endif
 	filp_close(fp, NULL);
 
 #ifdef CONFIG_DEBUG
@@ -3370,7 +3376,9 @@ static s32 _halReadPGDataFromFile(PADAPTER padapter, u8 *pbuf)
 static s32 _halReadMACAddrFromFile(PADAPTER padapter, u8 *pbuf)
 {
 	struct file *fp;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t fs;
+#endif
 	loff_t pos = 0;
 	u8 source_addr[18];
 	u8 *head, *end;
@@ -3392,8 +3400,10 @@ static s32 _halReadMACAddrFromFile(PADAPTER padapter, u8 *pbuf)
 		ret = _FAIL;
 		DBG_8192C("%s: Error, Read MAC address file FAIL!\n", __FUNCTION__);
 	} else {
+#ifndef RTW_NO_SET_FS
 		fs = get_fs();
 		set_fs(KERNEL_DS);
+#endif
 
 		vfs_read(fp, source_addr, 18, &pos);
 		source_addr[17] = ':';
@@ -3413,7 +3423,9 @@ static s32 _halReadMACAddrFromFile(PADAPTER padapter, u8 *pbuf)
 				head = end;
 			}
 		}
+#ifndef RTW_NO_SET_FS
 		set_fs(fs);
+#endif
 		filp_close(fp, NULL);
 
 		DBG_8192C("%s: Read MAC address from file [%s]\n", __FUNCTION__, WIFIMAC_PATH);
