@@ -1415,7 +1415,9 @@ u8 rtw_btcoex_sendmsgbysocket(_adapter *padapter, u8 *msg, u8 msg_size)
 {
 	u8 error;
 	struct msghdr	udpmsg;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t	oldfs;
+#endif
 	struct iovec	iov;
 	struct bt_coex_info *pcoex_info = &padapter->coex_info;
 
@@ -1432,11 +1434,15 @@ u8 rtw_btcoex_sendmsgbysocket(_adapter *padapter, u8 *msg, u8 msg_size)
 		udpmsg.msg_control	= NULL;
 		udpmsg.msg_controllen = 0;
 		udpmsg.msg_flags	= MSG_DONTWAIT | MSG_NOSIGNAL;
+#ifndef RTW_NO_SET_FS
 		oldfs = get_fs();
 		set_fs(KERNEL_DS);
+#endif
 		error = sock_sendmsg(pcoex_info->udpsock, &udpmsg, msg_size);
 		//rtw_msleep_os(20);
+#ifndef RTW_NO_SET_FS
 		set_fs(oldfs);
+#endif
 		if(error < 0) {
 			DBG_871X("Error when sendimg msg, error:%d\n",error);
 			return _FAIL;

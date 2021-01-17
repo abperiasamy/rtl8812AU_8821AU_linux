@@ -32,11 +32,6 @@ atomic_t _malloc_size = ATOMIC_INIT(0);
 #endif
 #endif /* DBG_MEMORY_LEAK */
 
-/* This is to fix get_ds() type mismatch on kernels above 5.1.x */
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
-	#define get_ds() KERNEL_DS
-#endif
-
 #if defined(PLATFORM_LINUX)
 /*
 * Translate the OS dependent @param error_code to OS independent RTW_STATUS_CODE
@@ -1941,20 +1936,26 @@ static int isFileReadable(char *path)
 {
 	struct file *fp;
 	int ret = 0;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t oldfs;
+#endif
 	char buf;
 
 	fp=filp_open(path, O_RDONLY, 0);
 	if(IS_ERR(fp)) {
 		ret = PTR_ERR(fp);
 	} else {
+#ifndef RTW_NO_SET_FS
 		oldfs = get_fs();
 		set_fs(get_ds());
+#endif
 
 		if(1!=readFile(fp, &buf, 1))
 			ret = PTR_ERR(fp);
 
+#ifndef RTW_NO_SET_FS
 		set_fs(oldfs);
+#endif
 		filp_close(fp,NULL);
 	}
 	return ret;
@@ -1970,17 +1971,23 @@ static int isFileReadable(char *path)
 static int retriveFromFile(char *path, u8* buf, u32 sz)
 {
 	int ret =-1;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t oldfs;
+#endif
 	struct file *fp;
 
 	if(path && buf) {
 		if( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ) {
 			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
 
+#ifndef RTW_NO_SET_FS
 			oldfs = get_fs();
 			set_fs(get_ds());
+#endif
 			ret=readFile(fp, buf, sz);
+#ifndef RTW_NO_SET_FS
 			set_fs(oldfs);
+#endif
 			closeFile(fp);
 
 			DBG_871X("%s readFile, ret:%d\n",__FUNCTION__, ret);
@@ -2005,17 +2012,23 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
 static int storeToFile(char *path, u8* buf, u32 sz)
 {
 	int ret =0;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t oldfs;
+#endif
 	struct file *fp;
 
 	if(path && buf) {
 		if( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
 			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
 
+#ifndef RTW_NO_SET_FS
 			oldfs = get_fs();
 			set_fs(get_ds());
+#endif
 			ret=writeFile(fp, buf, sz);
+#ifndef RTW_NO_SET_FS
 			set_fs(oldfs);
+#endif
 			closeFile(fp);
 
 			DBG_871X("%s writeFile, ret:%d\n",__FUNCTION__, ret);

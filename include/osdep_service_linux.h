@@ -127,6 +127,14 @@ typedef struct urb *  PURB;
 #endif
 #endif
 
+/* set_fs(KERNEL_DS) uneeded and removed above 5.10 */
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0))
+	#define RTW_NO_SET_FS
+/* This is to fix get_ds() type mismatch on kernels above 5.1.x */
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
+	#define get_ds() KERNEL_DS
+#endif
+
 typedef struct 	semaphore _sema;
 typedef	spinlock_t	_lock;
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
