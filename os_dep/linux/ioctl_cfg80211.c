@@ -5177,7 +5177,41 @@ exit:
 	return ret;
 }
 
-static void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
+
+static void cfg80211_rtw_update_mgmt_frame_register(struct wiphy *wiphy,
+        struct wireless_dev *wdev,
+        struct mgmt_frame_regs *upd)
+{
+	u32 rtw_mask = BIT(IEEE80211_STYPE_PROBE_REQ >> 4);
+	struct net_device *ndev = wdev_to_ndev(wdev);
+	struct rtw_wdev_priv *wd;
+	_adapter *adapter;
+
+	if (ndev == NULL)
+		goto exit;
+
+	adapter = (_adapter *)rtw_netdev_priv(ndev);
+	wd = adapter_wdev_data(adapter);
+
+#ifdef CONFIG_DEBUG_CFG80211
+	DBG_871X(FUNC_ADPT_FMT" frame_type:%x, reg:%d\n", FUNC_ADPT_ARG(adapter),
+	         frame_type, reg);
+	DBG_871X(FUNC_ADPT_FMT " old_regs:%x new_regs:%x\n",
+			FUNC_ADPT_ARG(adapter), wd->mgmt_mask, upd->interface_stypes);
+#endif
+
+	if ((upd->interface_stypes & rtw_mask) == (wd->mgmt_mask & rtw_mask))
+		return;
+	wd->mgmt_mask = upd->interface_stypes;
+exit:
+	return;
+
+}
+
+#else
+
+static inline void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0))
         struct wireless_dev *wdev,
 #else
@@ -5205,6 +5239,8 @@ static void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
 exit:
 	return;
 }
+
+#endif
 
 #if defined(CONFIG_TDLS) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
 static int cfg80211_rtw_tdls_mgmt(struct wiphy *wiphy,
@@ -6019,7 +6055,10 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 	.cancel_remain_on_channel = cfg80211_rtw_cancel_remain_on_channel,
 #endif
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,8,0))
+    .mgmt_tx = cfg80211_rtw_mgmt_tx,
+    .update_mgmt_frame_registrations = cfg80211_rtw_update_mgmt_frame_register,
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE)
 	.mgmt_tx = cfg80211_rtw_mgmt_tx,
 	.mgmt_frame_register = cfg80211_rtw_mgmt_frame_register,
 #elif  (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,34) && LINUX_VERSION_CODE<=KERNEL_VERSION(2,6,35))
