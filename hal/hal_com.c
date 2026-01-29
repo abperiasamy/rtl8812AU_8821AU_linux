@@ -6069,7 +6069,9 @@ u32 Hal_readPGDataFromConfigFile(
     struct file *fp)
 {
 	u32 i;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t fs;
+#endif
 	u8 temp[3];
 	loff_t pos = 0;
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
@@ -6077,8 +6079,10 @@ u32 Hal_readPGDataFromConfigFile(
 
 	temp[2] = 0; // add end of string '\0'
 
+#ifndef RTW_NO_SET_FS
 	fs = get_fs();
 	set_fs(KERNEL_DS);
+#endif
 
 	for (i = 0 ; i < HWSET_MAX_SIZE ; i++) {
 		vfs_read(fp, temp, 2, &pos);
@@ -6095,7 +6099,9 @@ u32 Hal_readPGDataFromConfigFile(
 		}
 	}
 
+#ifndef RTW_NO_SET_FS
 	set_fs(fs);
+#endif
 	pEEPROM->bloadfile_fail_flag = _FALSE;
 
 #ifdef CONFIG_DEBUG
@@ -6117,7 +6123,9 @@ void Hal_ReadMACAddrFromFile(
     struct file *fp)
 {
 	u32 i;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t fs;
+#endif
 	u8 source_addr[18];
 	loff_t pos = 0;
 	u32	curtime = rtw_get_current_time();
@@ -6127,8 +6135,10 @@ void Hal_ReadMACAddrFromFile(
 	_rtw_memset(source_addr, 0, 18);
 	_rtw_memset(pEEPROM->mac_addr, 0, ETH_ALEN);
 
+#ifndef RTW_NO_SET_FS
 	fs = get_fs();
 	set_fs(KERNEL_DS);
+#endif
 
 	DBG_871X("wifi mac address:\n");
 	vfs_read(fp, source_addr, 18, &pos);
@@ -6150,7 +6160,9 @@ void Hal_ReadMACAddrFromFile(
 		}
 	}
 
+#ifndef RTW_NO_SET_FS
 	set_fs(fs);
+#endif
 	pEEPROM->bloadmac_fail_flag = _FALSE;
 
 	if (rtw_check_invalid_mac_address(pEEPROM->mac_addr) == _TRUE) {

@@ -2756,7 +2756,9 @@ static int route_dump(u32 *gw_addr ,int* gw_index)
 	struct msghdr msg;
 	struct iovec iov;
 	struct sockaddr_nl nladdr;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t oldfs;
+#endif
 	char *pg;
 	int size = 0;
 
@@ -2792,14 +2794,18 @@ static int route_dump(u32 *gw_addr ,int* gw_index)
 	msg.msg_controllen = 0;
 	msg.msg_flags = MSG_DONTWAIT;
 
+#ifndef RTW_NO_SET_FS
 	oldfs = get_fs();
 	set_fs(KERNEL_DS);
+#endif
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0)
 	err = sock_sendmsg(sock, &msg, sizeof(req));
 #else
 	err = sock_sendmsg(sock, &msg);
 #endif
+#ifndef RTW_NO_SET_FS
 	set_fs(oldfs);
+#endif
 
 	if (size < 0)
 		goto out_sock;
@@ -2820,11 +2826,15 @@ restart:
 		iov.iov_base = pg;
 		iov.iov_len = PAGE_SIZE;
 
+#ifndef RTW_NO_SET_FS
 		oldfs = get_fs();
 		set_fs(KERNEL_DS);
+#endif
 		//err = sock_recvmsg(sock, &msg, PAGE_SIZE, MSG_DONTWAIT);
 		err = sock_recvmsg(sock, &msg, MSG_DONTWAIT);
+#ifndef RTW_NO_SET_FS
 		set_fs(oldfs);
+#endif
 
 		if (err < 0)
 			goto out_sock_pg;
@@ -2898,14 +2908,18 @@ done:
 		msg.msg_controllen = 0;
 		msg.msg_flags=MSG_DONTWAIT;
 
+#ifndef RTW_NO_SET_FS
 		oldfs = get_fs();
 		set_fs(KERNEL_DS);
+#endif
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0)
 		err = sock_sendmsg(sock, &msg, sizeof(req));
 #else
 		err = sock_sendmsg(sock, &msg);
 #endif
+#ifndef RTW_NO_SET_FS
 		set_fs(oldfs);
+#endif
 
 		if (err > 0)
 			goto restart;

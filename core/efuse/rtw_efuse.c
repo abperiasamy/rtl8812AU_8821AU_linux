@@ -1448,7 +1448,9 @@ void Rtw_Hal_ReadMACAddrFromFile(PADAPTER padapter)
 {
 	u32 i;
 	struct file *fp;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t fs;
+#endif
 	u8 source_addr[18];
 	loff_t pos = 0;
 	u32 curtime = rtw_get_current_time();
@@ -1466,8 +1468,10 @@ void Rtw_Hal_ReadMACAddrFromFile(PADAPTER padapter)
 		pEEPROM->bloadmac_fail_flag = _TRUE;
 		DBG_871X("Error, wifi mac address file doesn't exist.\n");
 	} else {
+#ifndef RTW_NO_SET_FS
 		fs = get_fs();
 		set_fs(KERNEL_DS);
+#endif
 
 		DBG_871X("wifi mac address:\n");
 		vfs_read(fp, source_addr, 18, &pos);
@@ -1490,7 +1494,9 @@ void Rtw_Hal_ReadMACAddrFromFile(PADAPTER padapter)
 			DBG_871X("%02x \n", pEEPROM->mac_addr[i]);
 		}
 		DBG_871X("\n");
+#ifndef RTW_NO_SET_FS
 		set_fs(fs);
+#endif
 		pEEPROM->bloadmac_fail_flag = _FALSE;
 		filp_close(fp, NULL);
 	}
@@ -1516,7 +1522,9 @@ u32 Rtw_Hal_readPGDataFromConfigFile(PADAPTER	padapter)
 {
 	u32 i;
 	struct file *fp;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t fs;
+#endif
 	u8 temp[3];
 	loff_t pos = 0;
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
@@ -1532,8 +1540,10 @@ u32 Rtw_Hal_readPGDataFromConfigFile(PADAPTER	padapter)
 		return _FAIL;
 	}
 
+#ifndef RTW_NO_SET_FS
 	fs = get_fs();
 	set_fs(KERNEL_DS);
+#endif
 
 	DBG_871X("Efuse configure file:\n");
 	for (i=0; i< EFUSE_MAP_SIZE  ; i++) {
@@ -1543,7 +1553,9 @@ u32 Rtw_Hal_readPGDataFromConfigFile(PADAPTER	padapter)
 		DBG_871X("%02X \n", PROMContent[i]);
 	}
 	DBG_871X("\n");
+#ifndef RTW_NO_SET_FS
 	set_fs(fs);
+#endif
 
 	filp_close(fp, NULL);
 

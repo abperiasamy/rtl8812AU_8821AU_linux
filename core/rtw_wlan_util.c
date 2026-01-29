@@ -3831,7 +3831,9 @@ int rtw_dev_nlo_info_set(struct pno_nlo_info *nlo_info, pno_ssid_t* ssid,
 
 	int i = 0;
 	struct file *fp;
+#ifndef RTW_NO_SET_FS
 	mm_segment_t fs;
+#endif
 	loff_t pos = 0;
 	u8 *source = NULL;
 	long len = 0;
@@ -3868,8 +3870,10 @@ int rtw_dev_nlo_info_set(struct pno_nlo_info *nlo_info, pno_ssid_t* ssid,
 		return 0;
 	}
 
+#ifndef RTW_NO_SET_FS
 	fs = get_fs();
 	set_fs(KERNEL_DS);
+#endif
 
 	source = rtw_zmalloc(2048);
 
@@ -3879,7 +3883,9 @@ int rtw_dev_nlo_info_set(struct pno_nlo_info *nlo_info, pno_ssid_t* ssid,
 		rtw_mfree(source, 2048);
 	}
 
+#ifndef RTW_NO_SET_FS
 	set_fs(fs);
+#endif
 	filp_close(fp, NULL);
 
 	DBG_871X("-%s-\n", __func__);
